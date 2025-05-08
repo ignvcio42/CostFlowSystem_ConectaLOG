@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Navigate, Outlet, Routes, Route } from "react-router-dom";
 import SignIn from "./pages/auth/sign-in";
 import SignUp from "./pages/auth/sign-up";
@@ -12,26 +12,27 @@ import { Toaster } from "sonner";
 import Navbar from "./components/navbar";
 import Transactions from "./pages/transactions";
 // import Footer from "./components/footer";
+import AdminUsersPage from "./pages/admin/users";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
 
   setAuthToken(user?.token || "");
-
-  console.log(user);
+  console.log("user", user);
 
   return !user ? (
     <Navigate to="sign-in" replace={true} />
   ) : (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="min-h-[cal(h-screen-100px)]">
-        <Outlet />
-      </div>
-      <div>
-        {/* <Footer /> */}
-      </div>
-    </>
+      <main className="flex-grow w-full">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-4 sm:py-6">
+          <Outlet />
+        </div>
+      </main>
+      <div>{/* <Footer /> */}</div>
+    </div>
   );
 };
 
@@ -45,26 +46,35 @@ function App() {
       document.body.classList.remove("dark");
     }
   }, [theme]);
+  
   return (
-    <main>
-      <div className="w-full min-h-screen px-6 bg-gray-100 md:px-20 dark:bg-slate-900">
-        <Routes>
-          <Route element={<RootLayout />}>
-            <Route path="/" element={<Navigate to="/overview" />} />
-            <Route path="/overview" element={<Dashboard />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/transactions" element={<Transactions />} />
-          </Route>
+    <div className="w-full min-h-screen bg-gray-100 dark:bg-slate-900">
+      <Routes>
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<Navigate to="/overview" />} />
+          <Route path="/overview" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/transactions" element={<Transactions />} />
 
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<SignIn />} />
-        </Routes>
-      </div>
+          {/* Ruta protegida solo para rol ADMIN */}
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminUsersPage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-in" element={<SignIn />} />
+      </Routes>
 
       <Toaster richColors position="top-center" />
-    </main>
+    </div>
   );
 }
 

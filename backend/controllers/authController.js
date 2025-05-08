@@ -3,9 +3,9 @@ import { comparePassword, createJWT, hashPassword } from "../libs/index.js";
 
 export const signupUser = async (req, res) => {
     try {
-        const {firstName, email, password} = req.body;
+        const { firstName, email, password, role = 'user' } = req.body;
 
-        if(!(firstName || email || password)){
+        if (!(firstName || email || password)) {
             return res.status(404).json({ status: "error", message: "Please provide all fields" });
         }
 
@@ -21,11 +21,11 @@ export const signupUser = async (req, res) => {
         const hashedPassword = await hashPassword(password);
 
         const user = await pool.query({
-            text: "INSERT INTO tbluser (firstName, email, password) VALUES ($1, $2, $3) RETURNING *",
-            values: [firstName, email, hashedPassword],
+            text: "INSERT INTO tbluser (firstName, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *",
+            values: [firstName, email, hashedPassword, role],
         });
 
-        user.rows[0].password = undefined; // Remove password from the response
+        user.rows[0].password = undefined;
 
         res.status(201).json({ status: "success", message: "User created successfully", user: user.rows[0] });
 
@@ -34,6 +34,7 @@ export const signupUser = async (req, res) => {
         res.status(500).json({ status: "error", message: error.message });
     }
 };
+
 
 
 export const signinUser = async (req, res) => {
@@ -57,7 +58,7 @@ export const signinUser = async (req, res) => {
             return res.status(404).json({ status: "error", message: "Invalid email or password" });
         }
 
-        const token = createJWT(user.id);
+        const token = createJWT(user.id , user.role); // Pass the role to the JWT
 
         user.password = undefined; // Remove password from the response
 

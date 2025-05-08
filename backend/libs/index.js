@@ -17,12 +17,17 @@ export const comparePassword = async (userPassword, password) => {
     }
 };
 
-export const createJWT = (id) => {
-    return jwt.sign({
-        userId: id
-    }, process.env.JWT_SECRET, {
-        expiresIn: "1d"
-    }
+export const createJWT = (id, role) => {
+    return jwt.sign(
+        {
+            userId: id,
+            role: role,  // <- incluimos el rol en el token
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: "1d",
+        }
     );
-}
+};
+
 
