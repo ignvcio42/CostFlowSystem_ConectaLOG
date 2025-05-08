@@ -36,6 +36,8 @@ CREATE INDEX idx_consulta_historica_hash ON tbl_consulta_historica (hash_request
 CREATE INDEX idx_consulta_historica_user_id ON tbl_consulta_historica (user_id);
 
 ------
+
+-- cambiar estado con otra tabla
 CREATE TABLE tbluser (
     id SERIAL PRIMARY KEY,
     email VARCHAR(120) UNIQUE NOT NULL,
