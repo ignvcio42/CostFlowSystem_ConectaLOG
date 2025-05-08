@@ -83,7 +83,7 @@ const SignIn= () => {
               className="space-y-6 px-6 pb-6"
             >
 
-              <div className="space-y-2">
+              <div className="space-y-2 dark:text-white">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -97,7 +97,7 @@ const SignIn= () => {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 dark:text-white">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
@@ -116,7 +116,7 @@ const SignIn= () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition dark:bg-white dark:text-black dark:hover:bg-gray-200"
               >
                 {loading ? "Signing in..." : "Sign in"}
               </button>

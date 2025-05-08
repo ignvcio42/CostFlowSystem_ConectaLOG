@@ -84,7 +84,7 @@ const SignUp = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-6 px-6 pb-6"
             >
-              <div className="space-y-2">
+              <div className="space-y-2 dark:text-white">
                 <Label htmlFor="firstName">Name</Label>
                 <Input
                   id="firstName"
@@ -99,7 +99,7 @@ const SignUp = () => {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 dark:text-white">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -113,7 +113,7 @@ const SignUp = () => {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 dark:text-white">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
@@ -132,7 +132,7 @@ const SignUp = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition dark:bg-white dark:text-black dark:hover:bg-gray-200"  
               >
                 {loading ? "Creating..." : "Create account"}
               </button>
