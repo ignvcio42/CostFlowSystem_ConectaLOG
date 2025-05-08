@@ -1,5 +1,4 @@
 import useStore from "@/store";
-import { Input } from "@headlessui/react";
 import React from "react";
 import { useState } from "react";
 import { set, useForm } from "react-hook-form";
@@ -131,18 +130,23 @@ export const SettingForm = () => {
       </div>
 
       <div className="flex items-center gap-6 justify-end pb-10 border-b-2 border-gray-200 dark:border-gray-800">
-        <Button
+        {/* <Button
+          variant="outline"
           type="reset"
           className="px-6 bg-transparent text-black dark:text-white border border-gray-200 dark:border-gray-700"
         >
           Reset
-        </Button>
+        </Button> */}
         <Button
           type="submit"
           disabled={isLoading}
           className="px-6 bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600"
         >
-          {isLoading  ? <BiLoader className="animate-spin text-white" />  : "Save"}
+          {isLoading ? (
+            <BiLoader className="animate-spin text-white" />
+          ) : (
+            "Save"
+          )}
         </Button>
       </div>
     </form>
