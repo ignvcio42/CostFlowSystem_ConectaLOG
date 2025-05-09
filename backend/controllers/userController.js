@@ -3,7 +3,7 @@ import { pool } from "../libs/database.js";
 
 export const getUser = async (req, res) => {
     try {
-        const {userId} = req.body.user;
+        const {userId} = req.user;
 
         const userExists = await pool.query({
             text: "SELECT * FROM tbluser WHERE id = $1",
@@ -28,7 +28,7 @@ export const getUser = async (req, res) => {
 export const changePassword = async (req, res) => {
     try {
         
-        const {userId} = req.body.user;
+        const {userId} = req.user;
         const {currentPassword, newPassword, confirmPassword} = req.body;
 
         const userExists = await pool.query({
@@ -70,8 +70,8 @@ export const changePassword = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
 
-        const {userId} = req.body.user;
-        const {firstname, lastname, country, currency, contact} = req.body;
+        const {userId} = req.user;
+        const {firstname, lastname, contact} = req.body;
 
         const userExists = await pool.query({
             text: "SELECT * FROM tbluser WHERE id = $1",
@@ -85,8 +85,8 @@ export const updateUser = async (req, res) => {
         }
 
         const updatedUser = await pool.query({
-            text: "UPDATE tbluser SET firstname = $1, lastname = $2, country = $3, currency = $4, contact = $5, updatedat = CURRENT_TIMESTAMP WHERE id = $6 RETURNING *",
-            values: [firstname, lastname, country, currency, contact, userId],
+            text: "UPDATE tbluser SET firstname = $1, lastname = $2, contact = $3, updatedat = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
+            values: [firstname, lastname, contact, userId],
         })
 
         updatedUser.rows[0].password = undefined; // Remove password from the response

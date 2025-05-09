@@ -14,7 +14,7 @@ const authMiddleware = async (req, res, next) => {
   try {
     const decoded = JWT.verify(token, process.env.JWT_SECRET);
 
-    req.body.user = {
+    req.user = {
       userId: decoded.userId, // Agrega el userId al objeto user
       role: decoded.role, // Agrega el rol al objeto user
     };

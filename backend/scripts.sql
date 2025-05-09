@@ -1,42 +1,3 @@
-CREATE TABLE tbluser (
-	id SERIAL NOT NULL PRIMARY KEY,
-	email VARCHAR(120) UNIQUE NOT NULL,
-	firstName VARCHAR(50) NOT NULL,
-	lastName VARCHAR(50),
-	contact VARCHAR(15),
-	accounts TEXT[],
-	password TEXT,
-	provider VARCHAR(10) NULL,
-	country TEXT,
-	currency VARCHAR(5) NOT NULL DEFAULT 'USD',
-	createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE TABLE tbl_consulta_historica (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES tbluser(id) ON DELETE SET NULL,
-    fecha_consulta TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    producto_api VARCHAR(50),
-    carga_api INTEGER,
-    modo_api VARCHAR(50),
-    toneladas_api NUMERIC,
-    importacion_api INTEGER,
-    comuna_api INTEGER,
-    puerto_api INTEGER,
-    puerto_ext_api INTEGER,
-    pais_api INTEGER,
-    cargapeligrosa_api INTEGER,
-    hash_request VARCHAR(64) UNIQUE NOT NULL, -- Hash SHA256 de los parámetros de entrada ordenados
-    respuesta_json JSONB NOT NULL,          -- Respuesta completa de la API externa
-    fuente_respuesta VARCHAR(20)             -- 'api_externa' o 'cache_local'
-);
-CREATE INDEX idx_consulta_historica_hash ON tbl_consulta_historica (hash_request);
-CREATE INDEX idx_consulta_historica_user_id ON tbl_consulta_historica (user_id);
-
-------
-
 -- cambiar estado con otra tabla
 CREATE TABLE tbluser (
     id SERIAL PRIMARY KEY,
@@ -49,6 +10,15 @@ CREATE TABLE tbluser (
 	estado BOOLEAN DEFAULT FALSE,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tbl_user_estado_historial (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES tbluser(id) ON DELETE CASCADE,
+    cambiado_por INTEGER NOT NULL REFERENCES tbluser(id) ON DELETE SET NULL,
+    nuevo_estado BOOLEAN NOT NULL,
+    fecha_cambio TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    comentario TEXT
 );
 
 CREATE TABLE tbl_consulta_unica (

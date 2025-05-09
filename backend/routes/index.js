@@ -4,6 +4,7 @@ import authRoutes from './authRoutes.js';
 // import transactionRoutes from './transactionRoutes.js';
 import userRoutes from './userRoutes.js';
 // import consultas_historicas from './consultas_historicas.js';
+import consultasHistoricas from './consultas_historicas.js';
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use('/auth', authRoutes);
 // router.use('/transaction', transactionRoutes);
 router.use('/user', userRoutes);
 // router.use('/consultas_historicas', consultas_historicas);
+router.use('/consultas-historicas', consultasHistoricas);
 
 export default router;
