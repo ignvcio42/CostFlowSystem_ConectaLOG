@@ -58,3 +58,10 @@ CREATE TABLE tbl_consulta_historica (
 --  Índices Recomendados
 CREATE INDEX idx_consulta_user ON tbl_consulta_historica(user_id);
 CREATE INDEX idx_consulta_unica_hash ON tbl_consulta_unica(hash_request);
+
+
+------------------------------------------------------------------------
+-- Esto eliminará todos los datos de las tablas y reiniciará los contadores de ID.
+TRUNCATE TABLE tbl_consulta_historica, tbl_consulta_unica, tbluser 
+RESTART IDENTITY CASCADE;
+------------------------------------------------------------------------

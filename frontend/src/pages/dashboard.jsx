@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../libs/api_calls";
+import useStore from "@/store";
 
 const emptyQuery = {
   producto: "",
@@ -19,6 +20,8 @@ const Dashboard = () => {
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+
+    const { user } = useStore((state) => state);
 
   const handleChange = (index, e) => {
     const { name, value, type } = e.target;
@@ -45,7 +48,23 @@ const Dashboard = () => {
 
     try {
       const responses = await Promise.all(
-        queries.map((q) => api.post("/consultas-historicas/consultar", q))
+        queries.map((q) => {
+          const normalizada = {
+            producto: q.producto || "",
+            carga: Number.isInteger(q.carga) ? q.carga : 0,
+            modo: q.modo || "",
+            toneladas: Number.isInteger(q.toneladas) ? q.toneladas : 0,
+            importacion: Number.isInteger(q.importacion) ? q.importacion : 0,
+            comuna: q.comuna || "",
+            puerto: q.puerto || "",
+            puerto_ext: q.puerto_ext || "",
+            pais: q.pais || "",
+            cargapeligrosa: Number.isInteger(q.cargapeligrosa)
+              ? q.cargapeligrosa
+              : 0,
+          };
+          return api.post("/consultas-historicas/consultar", normalizada);
+        })
       );
       setResultados(responses.map((r) => r.data));
     } catch (err) {
@@ -62,7 +81,10 @@ const Dashboard = () => {
 
       <form onSubmit={handleSubmit}>
         {queries.map((query, index) => (
-          <div key={index} className="mb-6 border p-4 rounded bg-gray-50 relative">
+          <div
+            key={index}
+            className="mb-6 border p-4 rounded bg-gray-50 relative"
+          >
             <h3 className="font-semibold mb-2">Consulta #{index + 1}</h3>
             <button
               type="button"
