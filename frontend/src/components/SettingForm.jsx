@@ -106,29 +106,6 @@ export const SettingForm = () => {
         </div>
       </div>
 
-      <div className="w-full flex items-center justify-between pt-10">
-        <div className="">
-          <p className="text-lg text-black dark:text-gray-400 font-semibold">
-            Appearence
-          </p>
-          <span className="block text-gray-700 dark:text-gray-400 text-sm md:text-base mb-2">
-            Customize the look and feel of your account. Choose between light
-            and dark mode.
-          </span>
-
-          <div className="w-28 md:w-40">
-            <select
-              className="w-full text-sm border dark:border-gray-800 dark:bg-transparent dark:placeholder:text-gray-700 dark:text-gray-400 dark:outline-none"
-              value={theme}
-              onChange={(e) => toggleTheme(e.target.value)}
-            >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div className="flex items-center gap-6 justify-end pb-10 border-b-2 border-gray-200 dark:border-gray-800">
         {/* <Button
           variant="outline"
@@ -140,7 +117,7 @@ export const SettingForm = () => {
         <Button
           type="submit"
           disabled={isLoading}
-          className="px-6 bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600"
+          className="px-6 bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 rounded"
         >
           {isLoading ? (
             <BiLoader className="animate-spin text-white" />

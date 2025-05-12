@@ -98,14 +98,14 @@ const ChangePassword = () => {
           <Button
             variant="outline"
             type="reset"
-            className="px-6 bg-transparent text-black dark:text-white border border-gray-200 dark:border-gray-700"
+            className="px-6 bg-transparent text-black dark:text-white border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             Reset
           </Button>
           <Button
             type="submit"
             disabled={loading}
-            className="px-6 bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600"
+            className="px-6 bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-700 dark:hover:bg-violet-600 rounded"
           >
             {loading ? (
               <BiLoader className="animate-spin text-white" />

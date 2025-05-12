@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../libs/api_calls";
 import useStore from "@/store";
+import { normalizeQuery } from "@/libs/normalizeQuery";
 
 const emptyQuery = {
   producto: "",
@@ -21,7 +22,7 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
-    const { user } = useStore((state) => state);
+  const { user } = useStore((state) => state);
 
   const handleChange = (index, e) => {
     const { name, value, type } = e.target;
@@ -49,20 +50,7 @@ const Dashboard = () => {
     try {
       const responses = await Promise.all(
         queries.map((q) => {
-          const normalizada = {
-            producto: q.producto || "",
-            carga: Number.isInteger(q.carga) ? q.carga : 0,
-            modo: q.modo || "",
-            toneladas: Number.isInteger(q.toneladas) ? q.toneladas : 0,
-            importacion: Number.isInteger(q.importacion) ? q.importacion : 0,
-            comuna: q.comuna || "",
-            puerto: q.puerto || "",
-            puerto_ext: q.puerto_ext || "",
-            pais: q.pais || "",
-            cargapeligrosa: Number.isInteger(q.cargapeligrosa)
-              ? q.cargapeligrosa
-              : 0,
-          };
+          const normalizada = normalizeQuery(q); // aquí se normaliza
           return api.post("/consultas-historicas/consultar", normalizada);
         })
       );
@@ -76,8 +64,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Múltiples Consultas</h2>
+    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-xl shadow-md">
+      <h2 className="text-2xl font-bold mb-6">Multi - Formulario</h2>
 
       <form onSubmit={handleSubmit}>
         {queries.map((query, index) => (
