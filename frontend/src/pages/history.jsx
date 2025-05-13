@@ -29,92 +29,126 @@ const History = () => {
     const internacional = consulta.respuesta_json?.Internacional;
     return (
       <Card
-      key={consulta.id}
-      className="dark:bg-muted bg-white p-4 rounded-xl shadow transition-all duration-300"
+        key={consulta.id}
+        className="dark:bg-muted bg-white p-4 rounded-xl shadow transition-all duration-300"
       >
-      <CardContent>
-        <p className="text-sm text-muted-foreground mb-2 dark:text-white dark:bg-muted transition-all duration-300">
-        <strong>Consulta #{index + 1}</strong> -{" "}
-        {new Date(consulta.fecha_consulta).toLocaleString()}
-        </p>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-2 dark:text-white dark:bg-muted transition-all duration-300">
+            <strong>
+              <u>Consulta #{index + 1}</u>
+            </strong>{" "}
+            - {new Date(consulta.fecha_consulta).toLocaleString()}
+          </p>
 
-        {nacional && (
-        <div className="mb-3">
-          <h3 className="text-lg font-semibold mb-1 dark:text-white">🏙️ Nacional</h3>
-          <p className="dark:text-white"> 
-          <strong>Origen:</strong> {nacional["origen local"]}
-          </p>
-          <p className="dark:text-white">
-          <strong>Destino:</strong> {nacional["destino local"]}
-          </p>
-          <p className="dark:text-white">
-          <strong>Producto:</strong> {nacional.producto?.Partida}
-          </p>
-          <p className="dark:text-white">
-          <strong>Capítulo:</strong> {nacional.producto?.Capitulo}
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2 dark:text-white">
-          <Badge variant="outline">
-            Peajes: $
-            {Number(
-            nacional["Costos ($USD)"]["Costo Peajes local($USD/tkm)"] ??
-              0
-            ).toFixed(2)}
-          </Badge>
-          <Badge variant="outline">
-            Utilidad: $
-            {Number(
-            nacional["Costos ($USD)"]["Utilidad empresa local($USD)"] ??
-              0
-            ).toFixed(2)}
-          </Badge>
-          <Badge variant="outline">
-            Costo Total: $
-            {Number(
-            nacional["Costos ($USD)"][
-              "Costo Total local Camión($USD/tkm)"
-            ] ?? 0
-            ).toFixed(2)}
-          </Badge>
-          </div>
-        </div>
-        )}
+          {(nacional || internacional) && (
+            <div className="mb-3">
+              {/* Datos nacionales */}
+              {nacional && (
+                <>
+                  {/* <h3 className="text-lg font-semibold mb-1 dark:text-white">🏙️ Nacional</h3> */}
+                  <p className="dark:text-white">
+                    <strong>Origen:</strong> {nacional["origen local"]}
+                  </p>
+                  <p className="dark:text-white">
+                    <strong>Destino:</strong> {nacional["destino local"]}
+                  </p>
+                  <p className="dark:text-white">
+                    <strong>Capítulo:</strong> {nacional.producto?.Capitulo}
+                  </p>
+                  <p className="dark:text-white">
+                    <strong>Producto:</strong> {nacional.producto?.Partida}
+                  </p>
+                  {nacional.producto?.Glosa && (
+                    <p className="dark:text-white">
+                      <strong>Glosa:</strong> {nacional.producto.Glosa}
+                    </p>
+                  )}
+                </>
+              )}
 
-        {internacional && (
-        <div>
-          <h3 className="text-lg font-semibold mb-1 dark:text-white">🌐 Internacional</h3>
-          <p className="dark:text-white">
-          <strong>Sector Productivo:</strong>{" "}
-          {internacional["Sector Productivo"]}
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2 dark:text-white">
-          <Badge variant="outline">
-            Flete: $
-            {Number(internacional["Costo Flete ($USD/ton)"] ?? 0).toFixed(
-            2
-            )}
-          </Badge>
-          <Badge variant="outline">
-            Seguro: $
-            {Number(
-            internacional["Costo Seguro ($USD/ton)"] ?? 0
-            ).toFixed(2)}
-          </Badge>
-          <Badge variant="outline">
-            Documental: $
-            {Number(
-            internacional["Costo Documental ($USD/ton)"] ?? 0
-            ).toFixed(2)}
-          </Badge>
-          </div>
-          {internacional.Warning && (
-          <p className="text-xs text-muted-foreground mt-2 dark:text-white">
-            ⚠️ {internacional.Warning}
-          </p>
+              {/* Datos internacionales */}
+              {internacional && (
+                <>
+                  <p className="dark:text-white">
+                    <strong>Sector Productivo:</strong>{" "}
+                    {internacional["Sector Productivo"]}
+                  </p>
+                  {internacional.Warning && (
+                    <p className="text-xs text-muted-foreground mt-2 dark:text-white">
+                      ⚠️ {internacional.Warning}
+                    </p>
+                  )}
+                </>
+              )}
+
+              {/* Sección de costos al final */}
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold mb-2 dark:text-white">
+                  💰 Costos Totales
+                </h3>
+                <div className="flex flex-wrap gap-2 dark:text-white">
+                  {/* Costos Nacionales */}
+                  {nacional && (
+                    <>
+                      <Badge variant="outline">
+                        Tramo ferrocarril: $
+                        {Number(
+                          nacional["Costos"]["Costo tramo ferrocarril ($)"] ?? 0
+                        ).toFixed(2)}
+                      </Badge>
+                      <Badge variant="outline">
+                        Tramo camión: $
+                        {Number(
+                          nacional["Costos"]["Costo tramo camión ($)"] ?? 0
+                        ).toFixed(2)}
+                      </Badge>
+                    </>
+                  )}
+
+                  {/* Costos Internacionales */}
+                  {internacional && (
+                    <>
+                      <Badge variant="outline">
+                        Costo Documental Total($USD): $
+                        {Number(
+                          internacional["Costo Documental Total($USD)"] ?? 0
+                        ).toFixed(2)}
+                      </Badge>
+                      <Badge variant="outline">
+                        Costo Transporte Internacional($USD): $
+                        {Number(
+                          internacional[
+                            "Costo Transporte Internacional($USD)"
+                          ] ?? 0
+                        ).toFixed(2)}
+                      </Badge>
+                    </>
+                  )}
+
+                  {/* Cálculo de total combinado */}
+                  <Badge
+                    variant="outline"
+                    className="bg-green-100 text-green-800 dark:bg-green-800 dark:text-white"
+                  >
+                    Total combinado: $
+                    {(
+                      Number(
+                        nacional?.["Costos"]["Costo tramo ferrocarril ($)"] ?? 0
+                      ) +
+                      Number(
+                        nacional?.["Costos"]["Costo tramo camión ($)"] ?? 0
+                      ) +
+                      Number(
+                        internacional?.["Costo tramo ferrocarril ($)"] ?? 0
+                      ) +
+                      Number(internacional?.["Costo tramo camión ($)"] ?? 0)
+                    ).toFixed(2)}
+                  </Badge>
+                </div>
+              </div>
+            </div>
           )}
-        </div>
-        )}
-      </CardContent>
+        </CardContent>
       </Card>
     );
   };
