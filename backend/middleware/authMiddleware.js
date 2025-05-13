@@ -29,10 +29,11 @@ const authMiddleware = async (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next) => {
-  if (req.body.user.role !== "admin") {
+  if (req.user.role !== "admin") {
     return res.status(403).json({ status: "error", message: "Access denied: Admins only" });
   }
   next();
 };
+
 
 export default authMiddleware;
