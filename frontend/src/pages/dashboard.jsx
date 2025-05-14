@@ -127,7 +127,7 @@ const Dashboard = () => {
 
       {error && <p className="text-red-600 mt-4">{error}</p>}
 
-      {resultados.length > 0 && (
+      {/* {resultados.length > 0 && (
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-2">Resultados:</h3>
           {resultados.map((res, idx) => (
@@ -137,7 +137,7 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

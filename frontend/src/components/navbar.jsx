@@ -19,8 +19,8 @@ import ThemeSwitch from "./switch";
 import TransitionWrapper from "./wrappers/transition-wrapper";
 
 const links = [
-  { label: "Dashboard", link: "/overview" },
-  // { label: "Transactions", link: "/transactions" },
+  { label: "Formulario", link: "/overview" },
+  { label: "Formulario CSV", link: "/csv" },
   // { label: "Accounts", link: "/accounts" },
   { label: "History", link: "/history" },
   { label: "Settings", link: "/settings" },
