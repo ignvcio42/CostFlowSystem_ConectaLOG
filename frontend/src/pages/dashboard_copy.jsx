@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import api from "../libs/api_calls";
-import { useNavigate } from "react-router-dom";
 
 const emptyQuery = {
   producto: "",
@@ -20,8 +19,6 @@ const Dashboard = () => {
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleChange = (index, e) => {
     const { name, value, type } = e.target;
@@ -51,14 +48,14 @@ const Dashboard = () => {
         queries.map((q) => api.post("/consultas-historicas/consultar", q))
       );
       setResultados(responses.map((r) => r.data));
-      navigate("/history");
+      // Aquí podrías guardar en el store o enviar a history con estado
+      toast.success("Consultas realizadas con éxito");
+      setTimeout(() => {
+        navigate("/history");
+      }, 3000);
     } catch (err) {
       console.error(err);
       setError("Error en alguna de las consultas.");
-      //recargar la página
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     } finally {
       setCargando(false);
     }

@@ -6,6 +6,7 @@ export const realizarConsulta = async (req, res) => {
   const userId = req.user.userId;
   const parametros = req.body;
 
+  console.log(parametros);
   const hash = generarHashConsulta(parametros);
 
   try {
