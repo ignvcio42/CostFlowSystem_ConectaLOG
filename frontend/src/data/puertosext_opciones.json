@@ -1,0 +1,1334 @@
+[
+  {
+    "value": "111",
+    "label": "MONTREAL"
+  },
+  {
+    "value": "112",
+    "label": "COSTA DEL PACIFICO"
+  },
+  {
+    "value": "113",
+    "label": "HALIFAX"
+  },
+  {
+    "value": "114",
+    "label": "VANCOUVER"
+  },
+  {
+    "value": "115",
+    "label": "SAINT JOHN"
+  },
+  {
+    "value": "116",
+    "label": "TORONTO"
+  },
+  {
+    "value": "117",
+    "label": "OTROS PUERTOS CANADA"
+  },
+  {
+    "value": "118",
+    "label": "BAYSIDE"
+  },
+  {
+    "value": "120",
+    "label": "PORT CARTIES"
+  },
+  {
+    "value": "121",
+    "label": "COSTA DEL ATLANTICO"
+  },
+  {
+    "value": "122",
+    "label": "PUERTOS DEL GOLFO ME"
+  },
+  {
+    "value": "123",
+    "label": "COSTA DEL PACIFICO"
+  },
+  {
+    "value": "124",
+    "label": "QUEBEC"
+  },
+  {
+    "value": "125",
+    "label": "PRINCE RUPERT"
+  },
+  {
+    "value": "126",
+    "label": "HAMILTON"
+  },
+  {
+    "value": "131",
+    "label": "BOSTON"
+  },
+  {
+    "value": "132",
+    "label": "NEW HAVEN"
+  },
+  {
+    "value": "133",
+    "label": "BRIDGEPORT"
+  },
+  {
+    "value": "134",
+    "label": "NEW YORK"
+  },
+  {
+    "value": "135",
+    "label": "FILADELFIA"
+  },
+  {
+    "value": "136",
+    "label": "BALTIMORE"
+  },
+  {
+    "value": "137",
+    "label": "NORFOLK"
+  },
+  {
+    "value": "139",
+    "label": "CHARLESTON"
+  },
+  {
+    "value": "140",
+    "label": "SAVANAH"
+  },
+  {
+    "value": "141",
+    "label": "MIAMI"
+  },
+  {
+    "value": "142",
+    "label": "EVERGLADES"
+  },
+  {
+    "value": "143",
+    "label": "JACKSONVILLE"
+  },
+  {
+    "value": "145",
+    "label": "PALM BEACH"
+  },
+  {
+    "value": "146",
+    "label": "BATON ROUGE"
+  },
+  {
+    "value": "147",
+    "label": "COLUMBRES"
+  },
+  {
+    "value": "148",
+    "label": "PITTSBURGH"
+  },
+  {
+    "value": "149",
+    "label": "DULUTH"
+  },
+  {
+    "value": "150",
+    "label": "MILWAUKEE"
+  },
+  {
+    "value": "151",
+    "label": "TAMPA"
+  },
+  {
+    "value": "152",
+    "label": "PENSACOLA"
+  },
+  {
+    "value": "153",
+    "label": "MOBILE"
+  },
+  {
+    "value": "154",
+    "label": "NEW ORLEANS"
+  },
+  {
+    "value": "155",
+    "label": "PORT ARTHUR"
+  },
+  {
+    "value": "156",
+    "label": "GALVESTON"
+  },
+  {
+    "value": "157",
+    "label": "CORPUS CRISTI"
+  },
+  {
+    "value": "158",
+    "label": "BROWNSVILLE"
+  },
+  {
+    "value": "159",
+    "label": "HOUSTON"
+  },
+  {
+    "value": "160",
+    "label": "OAKLAND"
+  },
+  {
+    "value": "161",
+    "label": "STOCKTON"
+  },
+  {
+    "value": "171",
+    "label": "SEATTLE"
+  },
+  {
+    "value": "172",
+    "label": "PORTLAND"
+  },
+  {
+    "value": "173",
+    "label": "SAN FRANCISCO"
+  },
+  {
+    "value": "174",
+    "label": "LOS ANGELES"
+  },
+  {
+    "value": "175",
+    "label": "LONG BEACH"
+  },
+  {
+    "value": "176",
+    "label": "SAN DIEGO"
+  },
+  {
+    "value": "180",
+    "label": "OTROS PUERTOS EE.UU."
+  },
+  {
+    "value": "199",
+    "label": "LOS VILOS"
+  },
+  {
+    "value": "204",
+    "label": "PATACHE"
+  },
+  {
+    "value": "205",
+    "label": "CALBUCO"
+  },
+  {
+    "value": "206",
+    "label": "MICHILLA"
+  },
+  {
+    "value": "207",
+    "label": "PUERTO ANGAMOS"
+  },
+  {
+    "value": "208",
+    "label": "POSEIDON"
+  },
+  {
+    "value": "209",
+    "label": "TRES PUENTES"
+  },
+  {
+    "value": "210",
+    "label": "OTROS PUERTOS MEXICO"
+  },
+  {
+    "value": "211",
+    "label": "TAMPICO"
+  },
+  {
+    "value": "212",
+    "label": "COSTA DEL PACIFICO"
+  },
+  {
+    "value": "213",
+    "label": "VERACRUZ"
+  },
+  {
+    "value": "214",
+    "label": "COATZACOALCOS"
+  },
+  {
+    "value": "215",
+    "label": "GUAYMAS"
+  },
+  {
+    "value": "216",
+    "label": "MAZATLAN"
+  },
+  {
+    "value": "217",
+    "label": "MANZANILLO"
+  },
+  {
+    "value": "218",
+    "label": "ACAPULCO"
+  },
+  {
+    "value": "219",
+    "label": "GOLFO DE MEXICO,OTRO"
+  },
+  {
+    "value": "220",
+    "label": "ALTAMIRA"
+  },
+  {
+    "value": "221",
+    "label": "CRISTOBAL"
+  },
+  {
+    "value": "222",
+    "label": "BALBOA"
+  },
+  {
+    "value": "223",
+    "label": "COLON"
+  },
+  {
+    "value": "224",
+    "label": "OTROS PTOS. PANAMA"
+  },
+  {
+    "value": "231",
+    "label": "OTROS PTOS. COLOMBIA"
+  },
+  {
+    "value": "232",
+    "label": "BUENAVENTURA"
+  },
+  {
+    "value": "233",
+    "label": "BARRANQUILLA"
+  },
+  {
+    "value": "241",
+    "label": "OTROS PTOS. ECUADOR"
+  },
+  {
+    "value": "242",
+    "label": "GUAYAQUIL"
+  },
+  {
+    "value": "251",
+    "label": "OTROS PTOS. DE PERU"
+  },
+  {
+    "value": "252",
+    "label": "CALLAO"
+  },
+  {
+    "value": "253",
+    "label": "ILO"
+  },
+  {
+    "value": "254",
+    "label": "IQUITOS"
+  },
+  {
+    "value": "261",
+    "label": "OTROS PTOS.ARGENTINA"
+  },
+  {
+    "value": "262",
+    "label": "BUENOS AIRES"
+  },
+  {
+    "value": "263",
+    "label": "NECOCHEA"
+  },
+  {
+    "value": "264",
+    "label": "MENDOZA"
+  },
+  {
+    "value": "265",
+    "label": "CORDOBA"
+  },
+  {
+    "value": "266",
+    "label": "BAHIA BLANCA"
+  },
+  {
+    "value": "267",
+    "label": "COMODORO RIVADAVIA"
+  },
+  {
+    "value": "268",
+    "label": "PUERTO MADRYN"
+  },
+  {
+    "value": "269",
+    "label": "MAR DEL PLATA"
+  },
+  {
+    "value": "270",
+    "label": "ROSARIO"
+  },
+  {
+    "value": "271",
+    "label": "OTROS PTOS.URUGUAY"
+  },
+  {
+    "value": "272",
+    "label": "MONTEVIDEO"
+  },
+  {
+    "value": "281",
+    "label": "OTROS PTOS.VENEZUELA"
+  },
+  {
+    "value": "282",
+    "label": "LA GUAIRA"
+  },
+  {
+    "value": "285",
+    "label": "MARACAIBO"
+  },
+  {
+    "value": "291",
+    "label": "OTROS PTOS.BRASIL"
+  },
+  {
+    "value": "292",
+    "label": "SANTOS"
+  },
+  {
+    "value": "293",
+    "label": "RIO DE JANEIRO"
+  },
+  {
+    "value": "294",
+    "label": "RIO GRANDE DEL SUR"
+  },
+  {
+    "value": "295",
+    "label": "PARANAGUA"
+  },
+  {
+    "value": "296",
+    "label": "SAO PAULO"
+  },
+  {
+    "value": "297",
+    "label": "SALVADOR"
+  },
+  {
+    "value": "301",
+    "label": "OTROS ANT.HOLANDESA"
+  },
+  {
+    "value": "302",
+    "label": "CURAZAO"
+  },
+  {
+    "value": "399",
+    "label": "OTROS PTOS.AMERICA"
+  },
+  {
+    "value": "411",
+    "label": "SHANGAI"
+  },
+  {
+    "value": "412",
+    "label": "DAIREN"
+  },
+  {
+    "value": "413",
+    "label": "OTROS PTOS.DE CHINA"
+  },
+  {
+    "value": "420",
+    "label": "OTROS PUERT COREA N"
+  },
+  {
+    "value": "421",
+    "label": "NAMPO"
+  },
+  {
+    "value": "422",
+    "label": "BUSAN"
+  },
+  {
+    "value": "423",
+    "label": "OTROS PTOS. COREA S"
+  },
+  {
+    "value": "431",
+    "label": "MANILA"
+  },
+  {
+    "value": "432",
+    "label": "OTROS PTOS.FILIPINAS"
+  },
+  {
+    "value": "441",
+    "label": "OTROS PTOS.JAPONESES"
+  },
+  {
+    "value": "442",
+    "label": "OSAKA"
+  },
+  {
+    "value": "443",
+    "label": "KOBE"
+  },
+  {
+    "value": "444",
+    "label": "YOKOHAMA"
+  },
+  {
+    "value": "445",
+    "label": "NAGOYA"
+  },
+  {
+    "value": "446",
+    "label": "SHIMIZUI"
+  },
+  {
+    "value": "447",
+    "label": "MOJI"
+  },
+  {
+    "value": "448",
+    "label": "YAWATA"
+  },
+  {
+    "value": "449",
+    "label": "FUKUYAMA"
+  },
+  {
+    "value": "451",
+    "label": "KAOHSIUNG"
+  },
+  {
+    "value": "452",
+    "label": "KEELUNG"
+  },
+  {
+    "value": "453",
+    "label": "OTROS PTOS.TAIWAN"
+  },
+  {
+    "value": "461",
+    "label": "KARHG ISLAND"
+  },
+  {
+    "value": "462",
+    "label": "OTROS PTO.IRAN NO ES"
+  },
+  {
+    "value": "471",
+    "label": "CALCUTA"
+  },
+  {
+    "value": "472",
+    "label": "OTROS PTOS. DE INDIA"
+  },
+  {
+    "value": "481",
+    "label": "CHALNA"
+  },
+  {
+    "value": "482",
+    "label": "OTROS PTO.BANGLADESH"
+  },
+  {
+    "value": "491",
+    "label": "OTROS PTO.SINGAPURE"
+  },
+  {
+    "value": "492",
+    "label": "HONG KONG"
+  },
+  {
+    "value": "499",
+    "label": "OTROS PTO.ASIATICOS"
+  },
+  {
+    "value": "511",
+    "label": "CONSTANZA"
+  },
+  {
+    "value": "512",
+    "label": "OTROS PTO.DE RUMANIA"
+  },
+  {
+    "value": "521",
+    "label": "VARNA"
+  },
+  {
+    "value": "522",
+    "label": "OTROS PTOS BULGARIA"
+  },
+  {
+    "value": "533",
+    "label": "BELGRADO"
+  },
+  {
+    "value": "534",
+    "label": "OTROS PUERTOS DE SER"
+  },
+  {
+    "value": "535",
+    "label": "PODGORITSA"
+  },
+  {
+    "value": "536",
+    "label": "OTROS PUERTOS DE MON"
+  },
+  {
+    "value": "537",
+    "label": "OTROS PUERTOS DE CRO"
+  },
+  {
+    "value": "538",
+    "label": "RIJEKA"
+  },
+  {
+    "value": "541",
+    "label": "OTROS PTOS.DE ITALIA"
+  },
+  {
+    "value": "542",
+    "label": "GENOVA"
+  },
+  {
+    "value": "543",
+    "label": "LIORNA,LIVORNO"
+  },
+  {
+    "value": "544",
+    "label": "NAPOLES"
+  },
+  {
+    "value": "545",
+    "label": "SALERNO"
+  },
+  {
+    "value": "546",
+    "label": "AUGUSTA"
+  },
+  {
+    "value": "547",
+    "label": "SAVONA"
+  },
+  {
+    "value": "551",
+    "label": "OTROS PTOS.FRANCIA"
+  },
+  {
+    "value": "552",
+    "label": "LA PALLICE"
+  },
+  {
+    "value": "553",
+    "label": "LE HAVRE"
+  },
+  {
+    "value": "554",
+    "label": "MARSELLA"
+  },
+  {
+    "value": "555",
+    "label": "BURDEOS"
+  },
+  {
+    "value": "556",
+    "label": "CALAIS"
+  },
+  {
+    "value": "557",
+    "label": "BREST"
+  },
+  {
+    "value": "558",
+    "label": "RUAN"
+  },
+  {
+    "value": "561",
+    "label": "OTROS PTOS.ESPANA"
+  },
+  {
+    "value": "562",
+    "label": "CADIZ"
+  },
+  {
+    "value": "563",
+    "label": "BARCELONA"
+  },
+  {
+    "value": "564",
+    "label": "BILBAO"
+  },
+  {
+    "value": "565",
+    "label": "HUELVA"
+  },
+  {
+    "value": "566",
+    "label": "SEVILLA"
+  },
+  {
+    "value": "567",
+    "label": "TARRAGONA"
+  },
+  {
+    "value": "568",
+    "label": "ALGECIRAS"
+  },
+  {
+    "value": "569",
+    "label": "VALENCIA"
+  },
+  {
+    "value": "571",
+    "label": "LIVERPOOL"
+  },
+  {
+    "value": "572",
+    "label": "LONDRES"
+  },
+  {
+    "value": "573",
+    "label": "ROCHESTER"
+  },
+  {
+    "value": "574",
+    "label": "ETEN SALVERRY"
+  },
+  {
+    "value": "576",
+    "label": "OTROS PTOS.INGLATERR"
+  },
+  {
+    "value": "577",
+    "label": "DOVER"
+  },
+  {
+    "value": "578",
+    "label": "PLYMOUTH"
+  },
+  {
+    "value": "581",
+    "label": "HELSINKI"
+  },
+  {
+    "value": "582",
+    "label": "OTROS PTOS.FINLANDIA"
+  },
+  {
+    "value": "583",
+    "label": "HANKO"
+  },
+  {
+    "value": "584",
+    "label": "KEMI"
+  },
+  {
+    "value": "585",
+    "label": "KOKKOLA"
+  },
+  {
+    "value": "586",
+    "label": "KOTKA"
+  },
+  {
+    "value": "587",
+    "label": "OULO"
+  },
+  {
+    "value": "588",
+    "label": "PIETARSAARI"
+  },
+  {
+    "value": "589",
+    "label": "PORI"
+  },
+  {
+    "value": "591",
+    "label": "BREMEN"
+  },
+  {
+    "value": "592",
+    "label": "HAMBURGO"
+  },
+  {
+    "value": "593",
+    "label": "NUREMBERG"
+  },
+  {
+    "value": "594",
+    "label": "FRANKFURT"
+  },
+  {
+    "value": "595",
+    "label": "DUSSELDORF"
+  },
+  {
+    "value": "596",
+    "label": "OTROS PTOS.ALEMANIA"
+  },
+  {
+    "value": "597",
+    "label": "CUXHAVEN"
+  },
+  {
+    "value": "598",
+    "label": "ROSTOCK"
+  },
+  {
+    "value": "599",
+    "label": "OLDENBURG"
+  },
+  {
+    "value": "601",
+    "label": "AMBERES"
+  },
+  {
+    "value": "602",
+    "label": "OTROS PTO.BELGICA"
+  },
+  {
+    "value": "603",
+    "label": "ZEEBRUGGE"
+  },
+  {
+    "value": "604",
+    "label": "GHENT"
+  },
+  {
+    "value": "605",
+    "label": "OOSTENDE"
+  },
+  {
+    "value": "611",
+    "label": "LISBOA"
+  },
+  {
+    "value": "612",
+    "label": "OTROSS PTOS.PORTUGAL"
+  },
+  {
+    "value": "613",
+    "label": "SETUBAL"
+  },
+  {
+    "value": "621",
+    "label": "AMSTERDAM"
+  },
+  {
+    "value": "622",
+    "label": "ROTTERDAM"
+  },
+  {
+    "value": "623",
+    "label": "OTROS PTOS.HOLANDA"
+  },
+  {
+    "value": "631",
+    "label": "GOTEMBURGO"
+  },
+  {
+    "value": "632",
+    "label": "OTROS PTOS.SUECIA"
+  },
+  {
+    "value": "633",
+    "label": "MALMO"
+  },
+  {
+    "value": "634",
+    "label": "HELSIMBORG"
+  },
+  {
+    "value": "635",
+    "label": "KALMAR"
+  },
+  {
+    "value": "641",
+    "label": "AARHUS"
+  },
+  {
+    "value": "642",
+    "label": "COPENHAGEN"
+  },
+  {
+    "value": "643",
+    "label": "OTROS PTOS.DINAMARCA"
+  },
+  {
+    "value": "644",
+    "label": "AALBORG"
+  },
+  {
+    "value": "645",
+    "label": "ODENSE"
+  },
+  {
+    "value": "651",
+    "label": "OSLO"
+  },
+  {
+    "value": "652",
+    "label": "OTROS PTO. NORUEGA"
+  },
+  {
+    "value": "653",
+    "label": "STAVANGER"
+  },
+  {
+    "value": "699",
+    "label": "OTROS PTOS.EUROPA"
+  },
+  {
+    "value": "711",
+    "label": "DURBAM"
+  },
+  {
+    "value": "712",
+    "label": "CIUDAD DEL CABO"
+  },
+  {
+    "value": "713",
+    "label": "OTROS PTO.SUDAFFRICA"
+  },
+  {
+    "value": "714",
+    "label": "SALDANHA"
+  },
+  {
+    "value": "715",
+    "label": "PORT-ELIZABETH"
+  },
+  {
+    "value": "716",
+    "label": "MOSSEL-BAY"
+  },
+  {
+    "value": "717",
+    "label": "EAST-LONDON"
+  },
+  {
+    "value": "799",
+    "label": "OTROS PTO.DE AFRICA"
+  },
+  {
+    "value": "811",
+    "label": "SIDNEY"
+  },
+  {
+    "value": "812",
+    "label": "FREMANTLE"
+  },
+  {
+    "value": "813",
+    "label": "OTROS PTOS.AUSTRALIA"
+  },
+  {
+    "value": "814",
+    "label": "ADELAIDA"
+  },
+  {
+    "value": "815",
+    "label": "DARWIN"
+  },
+  {
+    "value": "816",
+    "label": "GERALDTON"
+  },
+  {
+    "value": "899",
+    "label": "OTROS PTOS. OCEANIA"
+  },
+  {
+    "value": "900",
+    "label": "RANCHO,COMB.,LUBRIC."
+  },
+  {
+    "value": "901",
+    "label": "ARICA"
+  },
+  {
+    "value": "902",
+    "label": "IQUIQUE"
+  },
+  {
+    "value": "903",
+    "label": "ANTOFAGASTA"
+  },
+  {
+    "value": "904",
+    "label": "COQUIMBO"
+  },
+  {
+    "value": "905",
+    "label": "VALPARAISO"
+  },
+  {
+    "value": "906",
+    "label": "SAN ANTONIO"
+  },
+  {
+    "value": "907",
+    "label": "TALCAHUANO"
+  },
+  {
+    "value": "908",
+    "label": "SAN VICENTE"
+  },
+  {
+    "value": "909",
+    "label": "LIRQUEN"
+  },
+  {
+    "value": "910",
+    "label": "PUERTO MONTT"
+  },
+  {
+    "value": "911",
+    "label": "CHACABUCO/PTO.AYSEN"
+  },
+  {
+    "value": "912",
+    "label": "PUNTA ARENAS"
+  },
+  {
+    "value": "913",
+    "label": "PATILLOS"
+  },
+  {
+    "value": "914",
+    "label": "TOCOPILLA"
+  },
+  {
+    "value": "915",
+    "label": "MEJILLONES"
+  },
+  {
+    "value": "916",
+    "label": "TALTAL"
+  },
+  {
+    "value": "917",
+    "label": "CHANARAL/BARQUITO"
+  },
+  {
+    "value": "918",
+    "label": "CALDERA"
+  },
+  {
+    "value": "919",
+    "label": "CALDERILLA"
+  },
+  {
+    "value": "920",
+    "label": "HUASCO/GUACOLDA"
+  },
+  {
+    "value": "921",
+    "label": "QUINTERO"
+  },
+  {
+    "value": "922",
+    "label": "JUAN FERNANDEZ"
+  },
+  {
+    "value": "923",
+    "label": "CONSTUTUCION"
+  },
+  {
+    "value": "924",
+    "label": "TOME"
+  },
+  {
+    "value": "925",
+    "label": "PENCO"
+  },
+  {
+    "value": "926",
+    "label": "CORONEL"
+  },
+  {
+    "value": "927",
+    "label": "LOTA"
+  },
+  {
+    "value": "928",
+    "label": "LEBU"
+  },
+  {
+    "value": "929",
+    "label": "ISLA DE PASCUA"
+  },
+  {
+    "value": "930",
+    "label": "CORRAL"
+  },
+  {
+    "value": "931",
+    "label": "ANCUD"
+  },
+  {
+    "value": "932",
+    "label": "CASTRO"
+  },
+  {
+    "value": "933",
+    "label": "QUELLON"
+  },
+  {
+    "value": "934",
+    "label": "CHAITEN"
+  },
+  {
+    "value": "935",
+    "label": "TORTEL"
+  },
+  {
+    "value": "936",
+    "label": "NATALES"
+  },
+  {
+    "value": "937",
+    "label": "GUARELLO"
+  },
+  {
+    "value": "938",
+    "label": "PUERTO ANDINO"
+  },
+  {
+    "value": "939",
+    "label": "PERCY"
+  },
+  {
+    "value": "940",
+    "label": "CLARENCIA"
+  },
+  {
+    "value": "941",
+    "label": "GREGORIO"
+  },
+  {
+    "value": "942",
+    "label": "CABO NEGRO"
+  },
+  {
+    "value": "943",
+    "label": "PUERTO WILLIAMS"
+  },
+  {
+    "value": "944",
+    "label": "TER.ANTARTICO CHILEN"
+  },
+  {
+    "value": "945",
+    "label": "AEROP. CARRIEL SUR"
+  },
+  {
+    "value": "946",
+    "label": "GUAYACAN"
+  },
+  {
+    "value": "947",
+    "label": "PASO PEHUENCHE"
+  },
+  {
+    "value": "948",
+    "label": "VENTANAS"
+  },
+  {
+    "value": "949",
+    "label": "PINO HACHADO(LIUCURA"
+  },
+  {
+    "value": "950",
+    "label": "CALETA COLOSO"
+  },
+  {
+    "value": "951",
+    "label": "AGUAS NEGRAS"
+  },
+  {
+    "value": "952",
+    "label": "ZONA FRANCA IQUIQUE"
+  },
+  {
+    "value": "953",
+    "label": "ZONA FRANCA PTA AREN"
+  },
+  {
+    "value": "954",
+    "label": "RIO MAYER"
+  },
+  {
+    "value": "955",
+    "label": "RIO MOSCO"
+  },
+  {
+    "value": "956",
+    "label": "VISVIRI"
+  },
+  {
+    "value": "957",
+    "label": "CHACALLUTA"
+  },
+  {
+    "value": "958",
+    "label": "CHUNGARA"
+  },
+  {
+    "value": "959",
+    "label": "COLCHANE"
+  },
+  {
+    "value": "960",
+    "label": "ABRA DE NAPA"
+  },
+  {
+    "value": "961",
+    "label": "OLLAGUE"
+  },
+  {
+    "value": "962",
+    "label": "SAN PEDRO DE ATACAMA"
+  },
+  {
+    "value": "963",
+    "label": "SOCOMPA"
+  },
+  {
+    "value": "964",
+    "label": "SAN FRANCISCO"
+  },
+  {
+    "value": "965",
+    "label": "LOS LIBERTADORES"
+  },
+  {
+    "value": "966",
+    "label": "MAHUIL MALAL"
+  },
+  {
+    "value": "967",
+    "label": "CARDENAL SAMORE"
+  },
+  {
+    "value": "968",
+    "label": "PEREZ ROSALES"
+  },
+  {
+    "value": "969",
+    "label": "FUTALEUFU"
+  },
+  {
+    "value": "970",
+    "label": "PALENA-CARRENLEUFU"
+  },
+  {
+    "value": "971",
+    "label": "PANGUIPULLI"
+  },
+  {
+    "value": "972",
+    "label": "HUAHUM"
+  },
+  {
+    "value": "973",
+    "label": "LAGO VERDE"
+  },
+  {
+    "value": "974",
+    "label": "APPELEG"
+  },
+  {
+    "value": "975",
+    "label": "PAMPA ALTA"
+  },
+  {
+    "value": "976",
+    "label": "HUEMULES"
+  },
+  {
+    "value": "977",
+    "label": "CHILE CHICO"
+  },
+  {
+    "value": "978",
+    "label": "BAKER"
+  },
+  {
+    "value": "979",
+    "label": "DOROTEA"
+  },
+  {
+    "value": "980",
+    "label": "CASAS VIEJAS"
+  },
+  {
+    "value": "981",
+    "label": "MONTE AYMOND"
+  },
+  {
+    "value": "982",
+    "label": "SAN SEBASTIAN"
+  },
+  {
+    "value": "983",
+    "label": "COYHAIQUE ALTO"
+  },
+  {
+    "value": "984",
+    "label": "TRIANA"
+  },
+  {
+    "value": "985",
+    "label": "IBANEZ PALAVICINI"
+  },
+  {
+    "value": "986",
+    "label": "VILLA OHIGGINS"
+  },
+  {
+    "value": "987",
+    "label": "AEROP.CHACALLUTA"
+  },
+  {
+    "value": "988",
+    "label": "AEROP.DIEGO ARACENA"
+  },
+  {
+    "value": "989",
+    "label": "AEROP.CERRO MORENO"
+  },
+  {
+    "value": "990",
+    "label": "AEROP.EL TEPUAL"
+  },
+  {
+    "value": "991",
+    "label": "AEROP.C.I.DEL CAMPO"
+  },
+  {
+    "value": "992",
+    "label": "AEROP.A.M.BENITEZ"
+  },
+  {
+    "value": "994",
+    "label": "ARICA-TACNA"
+  },
+  {
+    "value": "995",
+    "label": "ARICA-LA PAZ"
+  },
+  {
+    "value": "997",
+    "label": "OTROS PTOS. CHILENOS"
+  },
+  {
+    "value": "998",
+    "label": "PASO JAMA"
+  }
+]

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import api from "../libs/api_calls";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+import { useOpciones } from "../hooks/useOpciones";
 
 const emptyQuery = {
   producto: "",
@@ -20,6 +22,8 @@ const Dashboard = () => {
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+  const opciones = useOpciones();
+
 
   const navigate = useNavigate();
 
@@ -86,15 +90,54 @@ const Dashboard = () => {
 
             {Object.entries(query).map(([key, val]) => (
               <div key={key} className="mb-2">
-                <label className="block text-sm font-medium">{key}</label>
-                <input
-                  name={key}
-                  type={typeof val === "number" ? "number" : "text"}
-                  value={val}
-                  onChange={(e) => handleChange(index, e)}
-                  className="w-full border px-3 py-1 rounded"
-                  required
-                />
+                <label className="block text-sm font-medium capitalize mb-1">
+                  {key}
+                </label>
+
+                {key === "comuna" ||
+                key === "pais" ||
+                key === "puerto" ||
+                key === "modo" ? (
+                  <Select
+                    options={
+                      opciones[
+                        key === "comuna"
+                          ? "comunas"
+                          : key === "pais"
+                          ? "paises"
+                          : key === "puerto"
+                          ? "puertos"
+                          : "modos"
+                      ]
+                    }
+                    value={opciones[
+                      key === "comuna"
+                        ? "comunas"
+                        : key === "pais"
+                        ? "paises"
+                        : key === "puerto"
+                        ? "puertos"
+                        : "modos"
+                    ].find((opt) => opt.value == val)}
+                    onChange={(selected) => {
+                      const newQueries = [...queries];
+                      newQueries[index][key] = selected.value;
+                      setQueries(newQueries);
+                    }}
+                    isClearable
+                    placeholder="Selecciona una opción..."
+                    className="text-sm"
+                  />
+                ) : (
+                  <input
+                    name={key}
+                    type={typeof val === "number" ? "number" : "text"}
+                    value={val}
+                    onChange={(e) => handleChange(index, e)}
+                    className="w-full border px-3 py-1 rounded text-sm"
+                    required
+                  />
+                )}
               </div>
             ))}
           </div>
