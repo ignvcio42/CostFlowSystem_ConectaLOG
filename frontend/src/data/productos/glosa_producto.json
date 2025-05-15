@@ -1,0 +1,382 @@
+[
+  {
+    "label": "Abonos",
+    "value": "31"
+  },
+  {
+    "label": "Aceites esenciales y resinoides; preparaciones de perfumería, de tocador o de cosmética",
+    "value": "33"
+  },
+  {
+    "label": "Aeronaves, vehículos espaciales y sus partes",
+    "value": "88"
+  },
+  {
+    "label": "Alfombras y demás revestimientos para el suelo, de materia textil",
+    "value": "57"
+  },
+  {
+    "label": "Algodón",
+    "value": "52"
+  },
+  {
+    "label": "Aluminio y sus manufacturas",
+    "value": "76"
+  },
+  {
+    "label": "Animales vivos",
+    "value": "01"
+  },
+  {
+    "label": "Aparatos de relojería y sus partes",
+    "value": "91"
+  },
+  {
+    "label": "Armas, municiones, y sus partes y accesorios",
+    "value": "93"
+  },
+  {
+    "label": "Azucares y artículos de confitería",
+    "value": "17"
+  },
+  {
+    "label": "Barcos y demás artefactos flotantes",
+    "value": "89"
+  },
+  {
+    "label": "Bebidas, líquidos alcohólicos y vinagre",
+    "value": "22"
+  },
+  {
+    "label": "Cacao y sus preparaciones",
+    "value": "18"
+  },
+  {
+    "label": "Café, té, yerba mate y especias",
+    "value": "09"
+  },
+  {
+    "label": "Calzado, polainas y artículos análogos; partes de estos artículos",
+    "value": "64"
+  },
+  {
+    "label": "Carne y despojos comestibles",
+    "value": "02"
+  },
+  {
+    "label": "Caucho y sus manufacturas",
+    "value": "40"
+  },
+  {
+    "label": "Cereales",
+    "value": "10"
+  },
+  {
+    "label": "Cinc y sus manufacturas",
+    "value": "79"
+  },
+  {
+    "label": "Cobre y sus manufacturas",
+    "value": "74"
+  },
+  {
+    "label": "Combustibles minerales, aceites minerales y productos de su destilación; materias bituminosas; ceras minerales",
+    "value": "27"
+  },
+  {
+    "label": "Corcho sus manufacturas",
+    "value": "45"
+  },
+  {
+    "label": "Estaño y sus manufacturas",
+    "value": "80"
+  },
+  {
+    "label": "Extractos curtientes o tintóreos; taninos y sus derivados; pigmentos y demás materias colorantes; pinturas y barnices; mastiques; tintas",
+    "value": "32"
+  },
+  {
+    "label": "Fibras sintéticas o artificiales discontinuas",
+    "value": "55"
+  },
+  {
+    "label": "Filamentos sintéticos o artificiales; tiras y formas similares de materia textil sintética o artifical",
+    "value": "54"
+  },
+  {
+    "label": "Frutas y frutos comestibles; cortezas de agrios (cítricos), melones o sandias",
+    "value": "08"
+  },
+  {
+    "label": "Fundición, hiero y acero",
+    "value": "72"
+  },
+  {
+    "label": "Gomas, resinas y demás jugos y extractos vegetales",
+    "value": "13"
+  },
+  {
+    "label": "Grasas y aceites animales o vegetales; productos de su desdoblamiento; grasas alimenticias elaboradas; ceras de origen animal o vegetal",
+    "value": "15"
+  },
+  {
+    "label": "Guata, fieltro y tela sin tejer; hilados especiales; cordeles, cuerdas y cordajes; artículos de cordelería",
+    "value": "56"
+  },
+  {
+    "label": "Herramientas y útiles, artículos de cuchillería y cubiertos de mesa, de metal común; partes de estos artículos, de metal común",
+    "value": "82"
+  },
+  {
+    "label": "Hortalizas, plantas, raíces y tubérculos alimenticios",
+    "value": "07"
+  },
+  {
+    "label": "Instrumentos musicales; sus partes y accesorios",
+    "value": "92"
+  },
+  {
+    "label": "Instrumentos y aparatos de óptica, fotografía y cinematografía, de medida, control o precisión; instrumentos y aparatos medicoquirúrgicos; partes y accesorios de estos instrumentos o aparatos",
+    "value": "90"
+  },
+  {
+    "label": "Jabón, agentes de superficie orgánicos, preparaciones para lavar, preparaciones lubricantes, ceras artificiales, ceras preparadas, productos de limpieza, velas y artículos similares, pastas para modelar, ceras para odontología y preparaciones para odontología a base de yeso fraguable",
+    "value": "34"
+  },
+  {
+    "label": "Juguetes, juegos y artículos para recreo o deporte; sus partes y accesorios",
+    "value": "95"
+  },
+  {
+    "label": "Lana y pelo fino u ordinario; hilados y tejidos de crin",
+    "value": "51"
+  },
+  {
+    "label": "Las demás fibras textiles vegetales; hilados de papel y tejidos de hilados de papel",
+    "value": "53"
+  },
+  {
+    "label": "Leche y productos lácteos; huevos de ave; miel natural; productos comestibles de origen animal, no expresados ni comprendidos en otra parte",
+    "value": "04"
+  },
+  {
+    "label": "Los demás artículos los textiles confeccionados; juegos; prendería y trapos",
+    "value": "63"
+  },
+  {
+    "label": "Los demás metales comunes; cermets; manufacturas de estas materias",
+    "value": "81"
+  },
+  {
+    "label": "Los demás productos de origen animal, no expresados ni comprendidos en otra parte",
+    "value": "05"
+  },
+  {
+    "label": "Madera, carbón vegetal y manufacturas de madera",
+    "value": "44"
+  },
+  {
+    "label": "Manufacturas de cuero; artículos de talabartería o guarnicionaría; artículos de viaje, bolsos de mano (carteras) y continentes similares; manufacturas de tripa",
+    "value": "42"
+  },
+  {
+    "label": "Manufacturas de espartería o cestería",
+    "value": "46"
+  },
+  {
+    "label": "Manufacturas de fundición, hierro o acero",
+    "value": "73"
+  },
+  {
+    "label": "Manufacturas de piedra, yeso fraguable, cemento, amianto (asbesto), mica o materias análogas",
+    "value": "68"
+  },
+  {
+    "label": "Manufacturas diversas",
+    "value": "96"
+  },
+  {
+    "label": "Manufacturas diversas de metal común",
+    "value": "83"
+  },
+  {
+    "label": "Maquinas, aparatos y material eléctrico, y sus partes; aparatos de grabación o reproducción de sonido, aparatos de grabación o reproducción de imagen y sonido en televisión, y las partes y accesorios de estos aparatos",
+    "value": "85"
+  },
+  {
+    "label": "Materias albuminoideas; productos a base de almidón o de fécula modificados; colas; enzimas",
+    "value": "35"
+  },
+  {
+    "label": "Materias trenzables y demás productos de origen vegetal, no expresados ni comprendidos en otra parte",
+    "value": "14"
+  },
+  {
+    "label": "Minerales metalíferos, escorias y cenizas",
+    "value": "26"
+  },
+  {
+    "label": "Muebles; mobiliario medicoquirúrgico; artículos de cama y similares; aparatos de alumbrado no expresados ni comprendidos en otra parte; anuncios, letreros y placas indicadoras luminosos y artículos similares construcciones prefabricadas",
+    "value": "94"
+  },
+  {
+    "label": "Níquel y sus manufacturas",
+    "value": "75"
+  },
+  {
+    "label": "Objetos de arte o colección y antigüedades",
+    "value": "97"
+  },
+  {
+    "label": "Papel y cartón; manufacturas de pasta de celulosa, de papel o cartón",
+    "value": "48"
+  },
+  {
+    "label": "Paraguas, sombrillas, quitasoles, bastones, bastones asiento, látigos, fustas, y sus partes",
+    "value": "66"
+  },
+  {
+    "label": "Pasta de madera o de las demás materias fibrosas celulósicas; papel o cartón para reciclar (desperdicios y desechos)",
+    "value": "47"
+  },
+  {
+    "label": "Peletería y confecciones de peletería; peletería facticia o artificial",
+    "value": "43"
+  },
+  {
+    "label": "Perlas finas (naturales) o cultivadas, piedras preciosas o semipreciosas, metales preciosos, chapados de metal precioso (plaqué) y manufacturas de estas materias; bisutería; monedas",
+    "value": "71"
+  },
+  {
+    "label": "Pescados y crustáceos, moluscos y demás invertebrados acuáticos",
+    "value": "03"
+  },
+  {
+    "label": "Pieles (excepto la peletería) y cueros",
+    "value": "41"
+  },
+  {
+    "label": "Plantas vivas y productos de la floricultura",
+    "value": "06"
+  },
+  {
+    "label": "Plástico y sus manufacturas",
+    "value": "39"
+  },
+  {
+    "label": "Plomo y sus manufacturas",
+    "value": "78"
+  },
+  {
+    "label": "Plumas y plumón preparados y artículos de plumas o plumón; flores artificiales; manufacturas de cabello",
+    "value": "67"
+  },
+  {
+    "label": "Pólvoras y explosivos; artículos de pirotecnia; fósforo (cerillas); aleaciones pirofóricas; materias inflamables",
+    "value": "36"
+  },
+  {
+    "label": "Prendas y complementos (accesorios), de vestir, de punto",
+    "value": "61"
+  },
+  {
+    "label": "Prendas y complementos (accesorios), de vestir, excepto los de punto",
+    "value": "62"
+  },
+  {
+    "label": "Preparaciones a base de cereales, harina, almidón, fécula o leche; productos de pastelería",
+    "value": "19"
+  },
+  {
+    "label": "Preparaciones alimenticias diversas",
+    "value": "21"
+  },
+  {
+    "label": "Preparaciones de carne, pescado o de crustáceos, moluscos o demás invertebrados acuáticos",
+    "value": "16"
+  },
+  {
+    "label": "Preparaciones de hortalizas, frutos u otros frutos o demás partes de plantas",
+    "value": "20"
+  },
+  {
+    "label": "Productos cerámicos",
+    "value": "69"
+  },
+  {
+    "label": "Productos de la molinería; malta; almidón y fécula; inulina; gluten de trigo",
+    "value": "11"
+  },
+  {
+    "label": "Productos diversos de las industrias químicas",
+    "value": "38"
+  },
+  {
+    "label": "Productos editoriales de la prensa y de las demás industrias graficas; textos manuscritos o mecanografiados y planos",
+    "value": "49"
+  },
+  {
+    "label": "Productos farmacéuticos",
+    "value": "30"
+  },
+  {
+    "label": "Productos fotográficos o cinematográficos",
+    "value": "37"
+  },
+  {
+    "label": "Productos químicos inorgánicos; compuestos inorgánicos u orgánicos de los metales preciosos, de los elementos radiactivos, de metales de las tierras raras o de isótopos",
+    "value": "28"
+  },
+  {
+    "label": "Productos químicos orgánicos",
+    "value": "29"
+  },
+  {
+    "label": "Reactores nucleares, calderas, maquinas, aparatos y artefactos mecánicos; partes de estas maquinas o aparatos",
+    "value": "84"
+  },
+  {
+    "label": "Residuos y desperdicios de las industrias alimentarias; alimentos preparados para animales",
+    "value": "23"
+  },
+  {
+    "label": "Sal; azufre; tierras y piedras; yesos, cales y cementos",
+    "value": "25"
+  },
+  {
+    "label": "Seda",
+    "value": "50"
+  },
+  {
+    "label": "Semillas y frutos oleaginosos; semillas y frutos diversos; plantas industriales o medicinales; paja y forrajes",
+    "value": "12"
+  },
+  {
+    "label": "Sombreros, demás tocados y sus partes",
+    "value": "65"
+  },
+  {
+    "label": "Tabaco y sucedáneos del tabaco, elaborados",
+    "value": "24"
+  },
+  {
+    "label": "Tejidos de punto",
+    "value": "60"
+  },
+  {
+    "label": "Tejidos especiales; superficies textiles con mechón insertado; encajes; tapicería; pasamanería; bordados",
+    "value": "58"
+  },
+  {
+    "label": "Telas impregnadas, recubiertas, revestidas o estratificadas; artículos técnicos de materia textil",
+    "value": "59"
+  },
+  {
+    "label": "Vehículos automóviles, tractores, velocípedos y demás vehículos terrestres; sus partes y accesorios",
+    "value": "87"
+  },
+  {
+    "label": "Vehículos y material para vías férreas o similares, y sus partes; aparatos mecánicos (incluso electromecánicos) de señalización para vías de comunicación",
+    "value": "86"
+  }
+]
