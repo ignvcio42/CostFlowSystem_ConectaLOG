@@ -102,7 +102,7 @@ const Dashboard = () => {
           >
             <h3 className="font-semibold mb-2">Consulta #{index + 1}</h3>
             <span className="text-yellow-600 text-sm ">
-              Confirmar cada seleccion porfavor
+              Confirmar cada selección, por favor.
             </span>
             <button
               type="button"

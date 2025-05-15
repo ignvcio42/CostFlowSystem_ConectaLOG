@@ -1,0 +1,10 @@
+[
+    {
+      "value": "0",
+      "label": "Exportacion"
+    },
+    {
+      "value": "1",	
+      "label": "Importacion"
+    }
+]

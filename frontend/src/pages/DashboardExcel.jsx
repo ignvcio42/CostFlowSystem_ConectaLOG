@@ -6,6 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import api from "../libs/api_calls";
 import useStore from "@/store";
 import { normalizeQuery } from "@/libs/normalizeQuery";
+import comunas from "@/data/comunas_opciones.json";
+import paises from "@/data/paises_opciones.json";
+import puertos from "@/data/puertos_opciones.json";
+import puertosExt from "@/data/puertosext_opciones.json";
+import tipocarga from "@/data/diccionario_carga.json";
+import modo from "@/data/diccionario_modos.json";
+import importaciones from "@/data/diccionario_importaciones.json";
+import cargapeligrosa from "@/data/diccionario_cargaspeligrosas.json";
 
 const DashboardExcel = () => {
   const [cargando, setCargando] = useState(false);
@@ -19,28 +27,86 @@ const DashboardExcel = () => {
       "carga",
       "modo", // Ingresar 'Camion' o 'Ferrocarril' (sin tilde)
       "toneladas",
-      "importacion", // 1 para sí, 0 para no
-      "comuna", // código comuna
-      "puerto", // código puerto
-      "puerto_ext", // código puerto exterior
-      "pais", // código país
-      "cargapeligrosa", // 1 o 0
+      "importacion",
+      "comuna",
+      "puerto",
+      "puerto_ext",
+      "pais",
+      "cargapeligrosa",
     ];
 
     const exampleRow = ["38221900", 2, "camion", 1, 0, 7401, 992, 0, 563, 0];
 
     const worksheet = XLSX.utils.aoa_to_sheet([headers, exampleRow]);
-
-    // Agregar comentario al encabezado
     worksheet["C1"].c = [
       {
         t: "Ingresar 'Camion' o 'Ferrocarril' (sin tilde). Se normaliza automáticamente.",
         a: "Sistema",
       },
     ];
-
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Plantilla");
+
+    // Crear hojas separadas para cada diccionario
+
+    const hojaTiposCarga = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(tipocarga.map((p) => [p.label, p.value]))
+    );
+    XLSX.utils.book_append_sheet(
+      workbook,
+      hojaTiposCarga,
+      "Diccionario_TiposCarga"
+    );
+
+    const hojaModos = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(modo.map((p) => [p.label, p.value]))
+    );
+    XLSX.utils.book_append_sheet(workbook, hojaModos, "Diccionario_Modos");
+
+    const hojaImportaciones = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(
+        importaciones.map((p) => [p.label, p.value])
+      )
+    );
+    XLSX.utils.book_append_sheet(
+      workbook,
+      hojaImportaciones,
+      "Diccionario_Importaciones"
+    );
+
+    const hojaComunas = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(comunas.map((c) => [c.label, c.value]))
+    );
+    XLSX.utils.book_append_sheet(workbook, hojaComunas, "Diccionario_Comunas");
+
+    const hojaPuertos = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(puertos.map((p) => [p.label, p.value]))
+    );
+    XLSX.utils.book_append_sheet(workbook, hojaPuertos, "Diccionario_Puertos");
+
+    const hojaPuertosExt = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(puertosExt.map((p) => [p.label, p.value]))
+    );
+    XLSX.utils.book_append_sheet(
+      workbook,
+      hojaPuertosExt,
+      "Diccionario_PuertosExt"
+    );
+    const hojaPaises = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(paises.map((p) => [p.label, p.value]))
+    );
+    XLSX.utils.book_append_sheet(workbook, hojaPaises, "Diccionario_Paises");
+
+    const hojaCargaPeligrosa = XLSX.utils.aoa_to_sheet(
+      [["Nombre", "Código"]].concat(
+        cargapeligrosa.map((p) => [p.label, p.value])
+      )
+    );
+    XLSX.utils.book_append_sheet(
+      workbook,
+      hojaCargaPeligrosa,
+      "Diccionario_CargaPeligrosa"
+    );
 
     XLSX.writeFile(workbook, "template_consulta.xlsx");
 
@@ -198,6 +264,10 @@ const DashboardExcel = () => {
           </li>
           <li>
             Para valores numéricos, use solo números (ej: 1, 2, 3.5, 20.15)
+          </li>
+          <li>
+            Consulte la hoja "Diccionario" en el Excel para encontrar los
+            códigos correctos de comunas, países, puertos, etc.
           </li>
         </ol>
       </div>

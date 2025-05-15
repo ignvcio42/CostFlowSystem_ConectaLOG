@@ -1,0 +1,19 @@
+[
+    {
+      "value": "1",
+      "label": "Granel líquido"
+    },
+    {
+      "value": "2",
+      "label": "Carga General"
+    },
+    {
+      "value": "3",
+      "label": "Granel Solido"
+    },
+    {
+      "value": "4",
+      "label": "Carga Container Dry"
+    }
+
+]
