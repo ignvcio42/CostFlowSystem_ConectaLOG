@@ -6,15 +6,15 @@ import { useOpciones } from "../hooks/useOpciones";
 
 const emptyQuery = {
   producto: "",
-  carga: 2,
-  modo: "Ferrocarril",
-  toneladas: 1,
-  importacion: 0,
-  comuna: "",
-  puerto: "",
-  puerto_ext: "",
-  pais: "",
-  cargapeligrosa: 0,
+  carga: 0, // Cambiado a número
+  modo: "",
+  toneladas: 0.0, // Cambiado a número
+  importacion: 0, // Cambiado a número
+  comuna: 0, // Cambiado a número
+  puerto: 0, // Cambiado a número
+  puerto_ext: 0, // Cambiado a número
+  pais: 0, // Cambiado a número
+  cargapeligrosa: 0, // Cambiado a número
 };
 
 const fieldLabels = {
@@ -30,8 +30,6 @@ const fieldLabels = {
   cargapeligrosa: "Carga Peligrosa",
 };
 
-
-
 const Dashboard = () => {
   const [queries, setQueries] = useState([structuredClone(emptyQuery)]);
   const [resultados, setResultados] = useState([]);
@@ -39,13 +37,20 @@ const Dashboard = () => {
   const [cargando, setCargando] = useState(false);
   const opciones = useOpciones();
 
-
   const navigate = useNavigate();
 
   const handleChange = (index, e) => {
     const { name, value, type } = e.target;
     const newQueries = [...queries];
-    newQueries[index][name] = type === "number" ? parseInt(value) || "" : value;
+
+    if (name === "toneladas") {
+      // Permitir decimales para toneladas
+      newQueries[index][name] = value === "" ? "" : parseFloat(value) || 0;
+    } else {
+      newQueries[index][name] =
+        type === "number" ? parseInt(value) || "" : value;
+    }
+
     setQueries(newQueries);
   };
 
@@ -85,7 +90,9 @@ const Dashboard = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-md ">
-      <h2 className="text-2xl font-bold mb-6 dark:text-white">Múltiples Consultas</h2>
+      <h2 className="text-2xl font-bold mb-6 dark:text-white">
+        Múltiples Consultas
+      </h2>
 
       <form onSubmit={handleSubmit}>
         {queries.map((query, index) => (
@@ -94,7 +101,9 @@ const Dashboard = () => {
             className="mb-6 border p-4 rounded bg-gray-50 relative"
           >
             <h3 className="font-semibold mb-2">Consulta #{index + 1}</h3>
-            <span className="text-yellow-600 text-sm ">Confirmar cada seleccion porfavor</span>
+            <span className="text-yellow-600 text-sm ">
+              Confirmar cada seleccion porfavor
+            </span>
             <button
               type="button"
               onClick={() => removeQuery(index)}
@@ -117,7 +126,7 @@ const Dashboard = () => {
                 key === "carga" ||
                 key === "cargapeligrosa" ||
                 key === "importacion" ||
-                key === "modo"  ? (
+                key === "modo" ? (
                   <Select
                     options={
                       opciones[
@@ -167,11 +176,18 @@ const Dashboard = () => {
                 ) : (
                   <input
                     name={key}
-                    type={typeof val === "number" ? "number" : "text"}
+                    type={
+                      key === "toneladas"
+                        ? "number"
+                        : typeof val === "number"
+                        ? "number"
+                        : "text"
+                    }
                     value={val}
                     onChange={(e) => handleChange(index, e)}
                     className="w-full border px-3 py-1 rounded text-sm"
                     required
+                    step={key === "toneladas" ? "0.01" : "1"} // Esto permite 2 decimales
                   />
                 )}
               </div>
@@ -205,18 +221,6 @@ const Dashboard = () => {
       </form>
 
       {error && <p className="text-red-600 mt-4">{error}</p>}
-
-      {/* {resultados.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2">Resultados:</h3>
-          {resultados.map((res, idx) => (
-            <div key={idx} className="mb-4 p-3 bg-green-100 rounded">
-              <strong>Consulta #{idx + 1}:</strong>
-              <pre className="text-sm">{JSON.stringify(res, null, 2)}</pre>
-            </div>
-          ))}
-        </div>
-      )} */}
     </div>
   );
 };
