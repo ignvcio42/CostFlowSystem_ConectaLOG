@@ -1,17 +1,34 @@
 import React, { useState } from "react";
 import api from "../libs/api_calls";
+import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+import { useOpciones } from "../hooks/useOpciones";
+import ProductoSelector from "@/components/ProductoSelector";
 
 const emptyQuery = {
   producto: "",
-  carga: 2,
-  modo: "Ferrocarril",
-  toneladas: 1,
-  importacion: 0,
-  comuna: "",
-  puerto: "",
-  puerto_ext: "",
-  pais: "",
-  cargapeligrosa: 0,
+  carga: 0, // Cambiado a número
+  modo: "",
+  toneladas: 0.0, // Cambiado a número
+  importacion: 0, // Cambiado a número
+  comuna: 0, // Cambiado a número
+  puerto: 0, // Cambiado a número
+  puerto_ext: 0, // Cambiado a número
+  pais: 0, // Cambiado a número
+  cargapeligrosa: 0, // Cambiado a número
+};
+
+const fieldLabels = {
+  producto: "Producto",
+  carga: "Tipo de Carga",
+  modo: "Modo de Transporte",
+  toneladas: "Toneladas",
+  importacion: "Tipo de operación",
+  comuna: "Comuna",
+  puerto: "Puerto",
+  puerto_ext: "Puerto Exterior",
+  pais: "País",
+  cargapeligrosa: "Carga Peligrosa",
 };
 
 const Dashboard = () => {
@@ -19,11 +36,22 @@ const Dashboard = () => {
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+  const opciones = useOpciones();
+
+  const navigate = useNavigate();
 
   const handleChange = (index, e) => {
     const { name, value, type } = e.target;
     const newQueries = [...queries];
-    newQueries[index][name] = type === "number" ? parseInt(value) || "" : value;
+
+    if (name === "toneladas") {
+      // Permitir decimales para toneladas
+      newQueries[index][name] = value === "" ? "" : parseFloat(value) || 0;
+    } else {
+      newQueries[index][name] =
+        type === "number" ? parseInt(value) || "" : value;
+    }
+
     setQueries(newQueries);
   };
 
@@ -48,22 +76,24 @@ const Dashboard = () => {
         queries.map((q) => api.post("/consultas-historicas/consultar", q))
       );
       setResultados(responses.map((r) => r.data));
-      // Aquí podrías guardar en el store o enviar a history con estado
-      toast.success("Consultas realizadas con éxito");
-      setTimeout(() => {
-        navigate("/history");
-      }, 3000);
+      navigate("/history");
     } catch (err) {
       console.error(err);
       setError("Error en alguna de las consultas.");
+      //recargar la página
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } finally {
       setCargando(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Múltiples Consultas</h2>
+    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-md ">
+      <h2 className="text-2xl font-bold mb-6 dark:text-white">
+        Múltiples Consultas
+      </h2>
 
       <form onSubmit={handleSubmit}>
         {queries.map((query, index) => (
@@ -72,6 +102,9 @@ const Dashboard = () => {
             className="mb-6 border p-4 rounded bg-gray-50 relative"
           >
             <h3 className="font-semibold mb-2">Consulta #{index + 1}</h3>
+            <span className="text-yellow-600 text-sm ">
+              Confirmar cada selección, por favor.
+            </span>
             <button
               type="button"
               onClick={() => removeQuery(index)}
@@ -83,15 +116,90 @@ const Dashboard = () => {
 
             {Object.entries(query).map(([key, val]) => (
               <div key={key} className="mb-2">
-                <label className="block text-sm font-medium">{key}</label>
-                <input
-                  name={key}
-                  type={typeof val === "number" ? "number" : "text"}
-                  value={val}
-                  onChange={(e) => handleChange(index, e)}
-                  className="w-full border px-3 py-1 rounded"
-                  required
-                />
+                <label className="block text-sm font-medium capitalize mb-1">
+                  {fieldLabels[key] || key}
+                </label>
+
+                {key === "comuna" ||
+                key === "pais" ||
+                key === "puerto" ||
+                key === "puerto_ext" ||
+                key === "carga" ||
+                key === "cargapeligrosa" ||
+                key === "importacion" ||
+                key === "modo" ? (
+                  <Select
+                    options={
+                      opciones[
+                        key === "comuna"
+                          ? "comunas"
+                          : key === "pais"
+                          ? "paises"
+                          : key === "puerto"
+                          ? "puertos"
+                          : key === "puerto_ext"
+                          ? "puertosext"
+                          : key === "modo"
+                          ? "modos"
+                          : key === "cargapeligrosa"
+                          ? "cargaspeligrosas"
+                          : key === "importacion"
+                          ? "importaciones"
+                          : "cargas"
+                      ]
+                    }
+                    value={opciones[
+                      key === "comuna"
+                        ? "comunas"
+                        : key === "pais"
+                        ? "paises"
+                        : key === "puerto"
+                        ? "puertos"
+                        : key === "puerto_ext"
+                        ? "puertosext"
+                        : key === "modo"
+                        ? "modos"
+                        : key === "cargapeligrosa"
+                        ? "cargaspeligrosas"
+                        : key === "importacion"
+                        ? "importaciones"
+                        : "cargas"
+                    ].find((opt) => opt.value == val)}
+                    onChange={(selected) => {
+                      const newQueries = [...queries];
+                      newQueries[index][key] = selected ? selected.value : "";
+                      setQueries(newQueries);
+                    }}
+                    isClearable
+                    placeholder="Selecciona una opción..."
+                    className="text-sm"
+                  />
+                ) : key === "producto" ? (
+                  <ProductoSelector
+                    value={val}
+                    onChange={(value) => {
+                      const newQueries = [...queries];
+                      newQueries[index][key] = value;
+                      setQueries(newQueries);
+                    }}
+                  />
+                ) : (
+                  <input
+                    name={key}
+                    type={
+                      key === "toneladas"
+                        ? "number"
+                        : typeof val === "number"
+                        ? "number"
+                        : "text"
+                    }
+                    value={val}
+                    onChange={(e) => handleChange(index, e)}
+                    className="w-full border px-3 py-1 rounded text-sm"
+                    required
+                    step={key === "toneladas" ? "0.01" : "1"}
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -123,18 +231,6 @@ const Dashboard = () => {
       </form>
 
       {error && <p className="text-red-600 mt-4">{error}</p>}
-
-      {resultados.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2">Resultados:</h3>
-          {resultados.map((res, idx) => (
-            <div key={idx} className="mb-4 p-3 bg-green-100 rounded">
-              <strong>Consulta #{idx + 1}:</strong>
-              <pre className="text-sm">{JSON.stringify(res, null, 2)}</pre>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

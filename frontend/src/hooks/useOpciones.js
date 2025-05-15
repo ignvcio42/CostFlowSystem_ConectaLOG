@@ -17,7 +17,8 @@ export const useOpciones = () => {
       { value: 1, label: "Granel líquido" },
       { value: 2, label: "Carga General" },
       { value: 3, label: "Granel Solido" },
-      { value: 4, label: "Carga Container Dry" },
+      { value: 4, label: "Carga Container reefer" },
+      { value: 5, label: "Carga Container Dry" },
     ],
     cargaspeligrosas: [
       { value: 0, label: "No" },

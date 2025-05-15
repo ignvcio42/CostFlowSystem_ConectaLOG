@@ -1,0 +1,120 @@
+import React, { useState } from "react";
+import Select from "react-select";
+import glosass from "../data/productos/glosa_producto.json";
+import subpartidas from "../data/productos/subpartida.json";
+import partidas from "../data/productos/partida.json";
+import capitulos from "../data/productos/capitulo.json";
+
+const searchTypes = {
+  manual: "Manual",
+  capitulo: "Capítulo",
+  partida: "Partida",
+  subpartida: "Subpartida",
+  glosa: "Glosa Producto"
+};
+
+const customFilter = (option, inputValue) => {
+  const input = inputValue.toLowerCase();
+  return (
+    option.label.toLowerCase().includes(input) ||
+    option.value.toLowerCase().includes(input)
+  );
+};
+
+const formatOptionLabel = ({ value, label }, { context }) => {
+  return context === "menu" ? (
+    <div>
+      <div className="font-semibold">{value}</div>
+      <div className="text-xs text-gray-500">{label}</div>
+    </div>
+  ) : (
+    <span>{value}</span>
+  );
+};
+
+const ProductoSelector = ({ value, onChange }) => {
+  const [searchType, setSearchType] = useState("manual");
+  const [inputValue, setInputValue] = useState(value || "");
+
+  const handleSearchTypeChange = (type) => {
+    setSearchType(type);
+    if (type === "manual") {
+      onChange(inputValue);
+    } else {
+      onChange("");
+    }
+  };
+
+  const getOptions = () => {
+    switch (searchType) {
+      case "glosa":
+        return glosass;
+      case "subpartida":
+        return subpartidas;
+      case "partida":
+        return partidas;
+      case "capitulo":
+        return capitulos;
+      default:
+        return [];
+    }
+  };
+
+  const handleSelectChange = (selected) => {
+    const newValue = selected ? selected.value : "";
+    setInputValue(newValue);
+    onChange(newValue);
+  };
+
+  const handleManualChange = (e) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    onChange(newValue);
+  };
+
+  return (
+    <div>
+      <div className="flex flex-wrap gap-2 mb-2">
+        {Object.entries(searchTypes).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            onClick={() => handleSearchTypeChange(key)}
+            className={`px-2 py-1 text-xs rounded ${
+              searchType === key
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {searchType === "manual" ? (
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleManualChange}
+          className="w-full border px-3 py-1 rounded text-sm"
+          required
+        />
+      ) : (
+        <Select
+          options={getOptions()}
+          value={getOptions().find((opt) => opt.value === inputValue)}
+          onChange={handleSelectChange}
+          isClearable
+          placeholder={`Buscar por ${searchTypes[searchType]}...`}
+          className="text-sm"
+          noOptionsMessage={() => "No hay opciones"}
+          filterOption={customFilter}
+          formatOptionLabel={formatOptionLabel}
+          getOptionValue={(option) => option.value}
+        />
+      )}
+    </div>
+  );
+};
+
+export default ProductoSelector;
