@@ -17,6 +17,21 @@ const emptyQuery = {
   cargapeligrosa: 0,
 };
 
+const fieldLabels = {
+  producto: "Producto",
+  carga: "Tipo de Carga",
+  modo: "Modo de Transporte",
+  toneladas: "Toneladas",
+  importacion: "Tipo de operación",
+  comuna: "Comuna",
+  puerto: "Puerto",
+  puerto_ext: "Puerto Exterior",
+  pais: "País",
+  cargapeligrosa: "Carga Peligrosa",
+};
+
+
+
 const Dashboard = () => {
   const [queries, setQueries] = useState([structuredClone(emptyQuery)]);
   const [resultados, setResultados] = useState([]);
@@ -69,8 +84,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Múltiples Consultas</h2>
+    <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-lg shadow-md ">
+      <h2 className="text-2xl font-bold mb-6 dark:text-white">Múltiples Consultas</h2>
 
       <form onSubmit={handleSubmit}>
         {queries.map((query, index) => (
@@ -79,6 +94,7 @@ const Dashboard = () => {
             className="mb-6 border p-4 rounded bg-gray-50 relative"
           >
             <h3 className="font-semibold mb-2">Consulta #{index + 1}</h3>
+            <span className="text-yellow-600 text-sm ">Confirmar cada seleccion porfavor</span>
             <button
               type="button"
               onClick={() => removeQuery(index)}
@@ -91,13 +107,17 @@ const Dashboard = () => {
             {Object.entries(query).map(([key, val]) => (
               <div key={key} className="mb-2">
                 <label className="block text-sm font-medium capitalize mb-1">
-                  {key}
+                  {fieldLabels[key] || key}
                 </label>
 
                 {key === "comuna" ||
                 key === "pais" ||
                 key === "puerto" ||
-                key === "modo" ? (
+                key === "puerto_ext" ||
+                key === "carga" ||
+                key === "cargapeligrosa" ||
+                key === "importacion" ||
+                key === "modo"  ? (
                   <Select
                     options={
                       opciones[
@@ -107,7 +127,15 @@ const Dashboard = () => {
                           ? "paises"
                           : key === "puerto"
                           ? "puertos"
-                          : "modos"
+                          : key === "puerto_ext"
+                          ? "puertosext"
+                          : key === "modo"
+                          ? "modos"
+                          : key === "cargapeligrosa"
+                          ? "cargaspeligrosas"
+                          : key === "importacion"
+                          ? "importaciones"
+                          : "cargas"
                       ]
                     }
                     value={opciones[
@@ -117,7 +145,15 @@ const Dashboard = () => {
                         ? "paises"
                         : key === "puerto"
                         ? "puertos"
-                        : "modos"
+                        : key === "puerto_ext"
+                        ? "puertosext"
+                        : key === "modo"
+                        ? "modos"
+                        : key === "cargapeligrosa"
+                        ? "cargaspeligrosas"
+                        : key === "importacion"
+                        ? "importaciones"
+                        : "cargas"
                     ].find((opt) => opt.value == val)}
                     onChange={(selected) => {
                       const newQueries = [...queries];
