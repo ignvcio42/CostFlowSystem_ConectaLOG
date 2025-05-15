@@ -15,6 +15,7 @@ import Transactions from "./pages/transactions";
 import AdminUsersPage from "./pages/admin/users";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardCsv from "./pages/DashboardCsv";
+import DashboardExcel from "./pages/DashboardExcel";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
@@ -58,6 +59,7 @@ function App() {
           <Route path="/history" element={<History />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/csv" element={<DashboardCsv />} />
+          <Route path="/excel" element={<DashboardExcel />} />
 
           {/* Ruta protegida solo para rol ADMIN */}
           <Route
