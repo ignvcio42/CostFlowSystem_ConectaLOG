@@ -38,15 +38,25 @@ const DashboardExcel = () => {
     const exampleRow = ["38221900", 2, "camion", 1, 0, 7401, 992, 0, 563, 0];
 
     const worksheet = XLSX.utils.aoa_to_sheet([headers, exampleRow]);
+
+    // Nota 1 (Celda A1): Formato de códigos
+    worksheet["A1"].c = [
+      {
+        t: "Si escribe manualmente, anteponga apóstrofe (') para conservar ceros. Ej: '08",
+        a: "Sistema",
+      },
+    ];
+
+    // Nota 2 (Celda C1): Modo de transporte (existente)
     worksheet["C1"].c = [
       {
         t: "Ingresar 'Camion' o 'Ferrocarril' (sin tilde). Se normaliza automáticamente.",
         a: "Sistema",
       },
     ];
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Plantilla");
-
     // Crear hojas separadas para cada diccionario
 
     const hojaTiposCarga = XLSX.utils.aoa_to_sheet(
@@ -184,13 +194,11 @@ const DashboardExcel = () => {
         });
 
         // Validar códigos numéricos
-        ["producto", "comuna", "puerto", "puerto_ext", "pais"].forEach(
-          (campo) => {
-            if (isNaN(Number(row[campo]))) {
-              errores.push(`Fila ${fila}: '${campo}' debe ser numérico.`);
-            }
+        ["comuna", "puerto", "puerto_ext", "pais"].forEach((campo) => {
+          if (isNaN(Number(row[campo]))) {
+            errores.push(`Fila ${fila}: '${campo}' debe ser numérico.`);
           }
-        );
+        });
 
         // Si no hay errores para esta fila, normalizar y guardar
         if (!errores.some((e) => e.includes(`Fila ${fila}:`))) {
@@ -258,18 +266,41 @@ const DashboardExcel = () => {
           </li>
           <li>Guarde el archivo en formato Excel (.xlsx)</li>
           <li>Suba el archivo usando el botón "Subir Archivo Excel"</li>
+          <li className="font-bold text-red-600">
+            <strong>Para código "producto":</strong>
+            <ul className="list-disc pl-5 mt-1">
+              <li>
+                <strong>
+                  Seleccione la columna y establezca formato "Texto"
+                </strong>{" "}
+                <strong>Y</strong>
+              </li>
+              <li>
+                <strong>
+                  Anteponga un apóstrofe (<code>'</code>) para conservar ceros.
+                  Ej:
+                </strong>{" "}
+                <code>'08</code>, <code>'00070000</code>
+              </li>
+            </ul>
+          </li>
           <li>
             Los valores deben escribirse sin tildes (ej: "camion" en lugar de
             "camión")
           </li>
           <li>
-            Para valores numéricos, use solo números (ej: 1, 2, 3.5, 20.15)
+            Para valores numéricos reales (toneladas, carga), use solo números.
+            Ej: 1, 20.5
           </li>
           <li>
-            Consulte la hoja "Diccionario" en el Excel para encontrar los
-            códigos correctos de comunas, países, puertos, etc.
+            Consulte las hojas "Diccionario" en el Excel para códigos de
+            comunas, países, etc.
           </li>
         </ol>
+      </div>
+      <div className="mt-2 p-2 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
+        <strong>Tip:</strong> En Excel, los campos con apóstrofe (
+        <code>'123</code>) se ven igual pero se guardan como texto.
       </div>
 
       <ToastContainer position="bottom-right" autoClose={3000} />
