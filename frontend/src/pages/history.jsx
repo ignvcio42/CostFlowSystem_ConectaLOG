@@ -5,12 +5,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import HistorialFilter from "@/components/historial/HistorialFilter";
 
 const History = () => {
   const [historial, setHistorial] = useState([]);
   const [error, setError] = useState("");
   const { user } = useStore((state) => state);
   const [selected, setSelected] = useState([]);
+
+  // Filtros
+  const [filters, setFilters] = useState({
+    fecha: "",
+    origen: "",
+    destino: "",
+    capitulo: "",
+    producto: "",
+  });
 
   useEffect(() => {
     const fetchHistorial = async () => {
@@ -25,6 +35,70 @@ const History = () => {
 
     fetchHistorial();
   }, []);
+
+  function getLocalDateStringFromUTC(dateStringUTC) {
+    if (!dateStringUTC) return "";
+    const d = new Date(dateStringUTC);
+    // Ajusta a tu zona horaria local
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  // Filtrar historial según filtros
+  const filteredHistorial = historial.filter((consulta) => {
+    const nacional = consulta.respuesta_json?.Nacional;
+
+    // FECHA (YYYY-MM-DD)
+    const consultaFecha = getLocalDateStringFromUTC(consulta.fecha_consulta);
+    const fechaMatch = !filters.fecha || consultaFecha === filters.fecha;
+
+    // ORIGEN
+    const origenMatch =
+      !filters.origen ||
+      (nacional &&
+        nacional["origen local"]
+          ?.toLowerCase()
+          .includes(filters.origen.toLowerCase()));
+
+    // DESTINO
+    const destinoMatch =
+      !filters.destino ||
+      (nacional &&
+        nacional["destino local"]
+          ?.toLowerCase()
+          .includes(filters.destino.toLowerCase()));
+
+    // CAPITULO
+    const capituloMatch =
+      !filters.capitulo ||
+      (nacional &&
+        nacional.producto?.Capitulo?.toString()
+          .toLowerCase()
+          .includes(filters.capitulo.toLowerCase()));
+
+    // PRODUCTO: busca en columna producto O en nacional.producto.Partida
+    const productoMatch =
+      !filters.producto ||
+      (consulta.producto &&
+        consulta.producto
+          .toString()
+          .toLowerCase()
+          .includes(filters.producto.toLowerCase())) ||
+      (nacional &&
+        nacional.producto?.Partida?.toString()
+          .toLowerCase()
+          .includes(filters.producto.toLowerCase()));
+
+    return (
+      fechaMatch &&
+      origenMatch &&
+      destinoMatch &&
+      capituloMatch &&
+      productoMatch
+    );
+  });
 
   const renderConsulta = (consulta, index) => {
     const nacional = consulta.respuesta_json?.Nacional;
@@ -244,6 +318,8 @@ const History = () => {
       <h2 className="text-3xl font-bold mb-6 text-center dark:text-white">
         Historial de Consultas
       </h2>
+      {/* Filtro */}
+      <HistorialFilter filters={filters} setFilters={setFilters} />
       {selected.length > 0 && (
         <button
           className="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
@@ -266,7 +342,9 @@ const History = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 ">
-          {historial.map((consulta, index) => renderConsulta(consulta, index))}
+          {filteredHistorial.map((consulta, index) =>
+            renderConsulta(consulta, index)
+          )}
         </div>
       )}
     </div>
