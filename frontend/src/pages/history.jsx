@@ -276,7 +276,7 @@ const History = () => {
       setTimeout(() => window.location.reload(), 1000);
     } catch (err) {
       toast.error(
-        "No se pudo ejecutar la consulta (verifica si la API externa está disponible)"
+        "No se pudo ejecutar la consulta. Por favor, inténtalo de nuevo."
       );
       setTimeout(() => window.location.reload(), 1000);
     }
