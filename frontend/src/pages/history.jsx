@@ -4,11 +4,13 @@ import useStore from "@/store";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 const History = () => {
   const [historial, setHistorial] = useState([]);
   const [error, setError] = useState("");
   const { user } = useStore((state) => state);
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     const fetchHistorial = async () => {
@@ -29,9 +31,27 @@ const History = () => {
     const internacional = consulta.respuesta_json?.Internacional;
     return (
       <Card
-        key={consulta.id}
+        key={consulta.historial_id}
         className="dark:bg-muted bg-white p-4 rounded-xl shadow transition-all duration-300"
       >
+        <div className="flex items-center mb-2">
+          <input
+            type="checkbox"
+            checked={selected.includes(consulta.historial_id)}
+            onChange={() => {
+              setSelected((prev) =>
+                prev.includes(consulta.historial_id)
+                  ? prev.filter((id) => id !== consulta.historial_id)
+                  : [...prev, consulta.historial_id]
+              );
+            }}
+            className="mr-2 accent-blue-600 w-5 h-5"
+          />
+          <span className="text-sm text-muted-foreground dark:text-white">
+            Seleccionar para ejecutar consultas múltiples
+          </span>
+        </div>
+
         <CardContent>
           <p className="text-sm text-muted-foreground mb-2 dark:text-white dark:bg-muted transition-all duration-300">
             <strong>
@@ -149,8 +169,74 @@ const History = () => {
             </div>
           )}
         </CardContent>
+        <button
+          className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          onClick={() => reejecutarConsulta(consulta)}
+        >
+          Re-ejecutar esta consulta
+        </button>
       </Card>
     );
+  };
+
+  // Recibe como parámetro una consulta del historial (como las que ya tienes en el render)
+  const reejecutarConsulta = async (consulta) => {
+    // Construye el objeto de parámetros con los datos de la consulta
+    const params = {
+      producto: consulta.producto,
+      carga: consulta.carga,
+      modo: consulta.modo,
+      toneladas: consulta.toneladas,
+      importacion: consulta.importacion,
+      comuna: consulta.comuna,
+      puerto: consulta.puerto,
+      puerto_ext: consulta.puerto_ext,
+      pais: consulta.pais,
+      cargapeligrosa: consulta.cargapeligrosa,
+    };
+
+    try {
+      await api.post("/consultas-historicas/reejecutar-consulta", params);
+      toast.success("Consulta ejecutada nuevamente");
+      console.log("params enviados:", params);
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      toast.error(
+        "No se pudo ejecutar la consulta (verifica si la API externa está disponible)"
+      );
+      setTimeout(() => window.location.reload(), 1000);
+    }
+  };
+
+  const reejecutarMultiplesConsultas = async () => {
+    try {
+      const consultasSeleccionadas = historial.filter((c) =>
+        selected.includes(c.historial_id)
+      );
+      await Promise.all(
+        consultasSeleccionadas.map((consulta) => {
+          const params = {
+            producto: String(consulta.producto ?? ""),
+            carga: Number(consulta.carga ?? 0),
+            modo: String(consulta.modo ?? ""),
+            toneladas: Number(consulta.toneladas ?? 0),
+            importacion: Number(consulta.importacion ?? 0),
+            comuna: Number(consulta.comuna ?? 0),
+            puerto: Number(consulta.puerto ?? 0),
+            puerto_ext: Number(consulta.puerto_ext ?? 0),
+            pais: Number(consulta.pais ?? 0),
+            cargapeligrosa: Number(consulta.cargapeligrosa ?? 0),
+          };
+          console.log("Params enviados:", params);
+          return api.post("/consultas-historicas/reejecutar-consulta", params);
+        })
+      );
+      toast.success("Consultas ejecutadas nuevamente");
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      toast.error("Error al ejecutar las consultas seleccionadas");
+      setTimeout(() => window.location.reload(), 1000);
+    }
   };
 
   return (
@@ -158,6 +244,19 @@ const History = () => {
       <h2 className="text-3xl font-bold mb-6 text-center dark:text-white">
         Historial de Consultas
       </h2>
+      {selected.length > 0 && (
+        <button
+          className="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+          onClick={async () => {
+            await reejecutarMultiplesConsultas();
+            setSelected([]); // Limpia la selección después de ejecutar
+          }}
+        >
+          Ejecutar {selected.length} consulta{selected.length > 1 ? "s" : ""}{" "}
+          seleccionada{selected.length > 1 ? "s" : ""}
+        </button>
+      )}
+
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
       {historial.length === 0 ? (
         <div className="space-y-4">
