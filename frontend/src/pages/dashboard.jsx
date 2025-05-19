@@ -5,6 +5,7 @@ import Select from "react-select";
 import { useOpciones } from "../hooks/useOpciones";
 import ProductoSelector from "@/components/ProductoSelector";
 import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
 
 const emptyQuery = {
   producto: "",
@@ -33,11 +34,19 @@ const fieldLabels = {
 };
 
 const Dashboard = () => {
-  const [queries, setQueries] = useState([structuredClone(emptyQuery)]);
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const location = useLocation();
+  const queriesFromHistory = location.state?.queries;
+
+  const [queries, setQueries] = useState(
+    queriesFromHistory && queriesFromHistory.length > 0
+      ? queriesFromHistory
+      : [structuredClone(emptyQuery)]
+  );
   const opciones = useOpciones();
 
   const navigate = useNavigate();

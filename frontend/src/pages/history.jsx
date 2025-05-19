@@ -6,12 +6,53 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import HistorialFilter from "@/components/historial/HistorialFilter";
+import { useNavigate } from "react-router-dom";
 
 const History = () => {
   const [historial, setHistorial] = useState([]);
   const [error, setError] = useState("");
   const { user } = useStore((state) => state);
   const [selected, setSelected] = useState([]);
+
+  const navigate = useNavigate();
+
+  const enviarSeleccionadasADashboard = () => {
+    const consultasSeleccionadas = historial.filter((c) =>
+      selected.includes(c.historial_id)
+    );
+
+    const queries = consultasSeleccionadas.map((consulta) => ({
+      producto: consulta.producto ?? "",
+      carga: consulta.carga ?? 0,
+      modo: consulta.modo ?? "",
+      toneladas: consulta.toneladas ?? 0,
+      importacion: consulta.importacion ?? 0,
+      comuna: consulta.comuna ?? 0,
+      puerto: consulta.puerto ?? 0,
+      puerto_ext: consulta.puerto_ext ?? 0,
+      pais: consulta.pais ?? 0,
+      cargapeligrosa: consulta.cargapeligrosa ?? 0,
+    }));
+    toast.success("Consultas enviadas correctamente");
+    navigate("/overview", { state: { queries } });
+  };
+
+  const enviarUnicaConsultaADashboard = (consulta) => {
+    const query = {
+      producto: consulta.producto ?? "",
+      carga: consulta.carga ?? 0,
+      modo: consulta.modo ?? "",
+      toneladas: consulta.toneladas ?? 0,
+      importacion: consulta.importacion ?? 0,
+      comuna: consulta.comuna ?? 0,
+      puerto: consulta.puerto ?? 0,
+      puerto_ext: consulta.puerto_ext ?? 0,
+      pais: consulta.pais ?? 0,
+      cargapeligrosa: consulta.cargapeligrosa ?? 0,
+    };
+    toast.success("Consulta enviada correctamente");
+    navigate("/overview", { state: { queries: [query] } });
+  };
 
   // Filtros
   const [filters, setFilters] = useState({
@@ -100,9 +141,40 @@ const History = () => {
     );
   });
 
+  const todosIds = filteredHistorial.map((c) => c.historial_id);
+  const todosSeleccionados =
+    selected.length === todosIds.length && todosIds.length > 0;
+
+  const textoToggle = todosSeleccionados
+    ? "Deseleccionar todos"
+    : "Seleccionar todos";
+  const handleToggleTodos = () => {
+    if (todosSeleccionados) {
+      setSelected([]);
+    } else {
+      setSelected(todosIds);
+    }
+  };
+
   const renderConsulta = (consulta, index) => {
     const nacional = consulta.respuesta_json?.Nacional;
     const internacional = consulta.respuesta_json?.Internacional;
+
+    const todosIds = filteredHistorial.map((c) => c.historial_id);
+    const todosSeleccionados =
+      selected.length === todosIds.length && todosIds.length > 0;
+    const hayCualquieraSeleccionado = selected.length > 0;
+
+    const textoToggle = todosSeleccionados
+      ? "Deseleccionar todos"
+      : "Seleccionar todos";
+    const handleToggleTodos = () => {
+      if (todosSeleccionados) {
+        setSelected([]);
+      } else {
+        setSelected(todosIds);
+      }
+    };
     return (
       <Card
         key={consulta.historial_id}
@@ -121,8 +193,8 @@ const History = () => {
             }}
             className="mr-2 accent-blue-600 w-5 h-5"
           />
-          <span className="text-sm text-muted-foreground dark:text-white">
-            Seleccionar para ejecutar consultas múltiples
+          <span className="text-sm text-muted-foreground dark:text-white hover:cursor-pointer hover:underline">
+            Seleccionar para ejecutar/editar consultas múltiples
           </span>
         </div>
 
@@ -243,12 +315,20 @@ const History = () => {
             </div>
           )}
         </CardContent>
-        <button
-          className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-          onClick={() => reejecutarConsulta(consulta)}
-        >
-          Re-ejecutar esta consulta
-        </button>
+        <div className="flex gap-2 mb-6 ">
+          <button
+            className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={() => reejecutarConsulta(consulta)}
+          >
+            Re-ejecutar esta consulta
+          </button>
+          <button
+            className="mt-4 px-3 py-1 bg-green-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={() => enviarUnicaConsultaADashboard(consulta)}
+          >
+            Editar esta consulta
+          </button>
+        </div>
       </Card>
     );
   };
@@ -320,17 +400,40 @@ const History = () => {
       </h2>
       {/* Filtro */}
       <HistorialFilter filters={filters} setFilters={setFilters} />
+
+      {/* BOTÓN DE (DE)SELECCIONAR TODOS, SI HAY MÁS DE UNA CARD */}
+      {filteredHistorial.length > 1 && (
+        <div className="mb-4 flex justify-start">
+          <button
+            className="px-3 py-1 text-xs bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
+            onClick={handleToggleTodos}
+            type="button"
+          >
+            {textoToggle}
+          </button>
+        </div>
+      )}
       {selected.length > 0 && (
-        <button
-          className="mb-6 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-          onClick={async () => {
-            await reejecutarMultiplesConsultas();
-            setSelected([]); // Limpia la selección después de ejecutar
-          }}
-        >
-          Ejecutar {selected.length} consulta{selected.length > 1 ? "s" : ""}{" "}
-          seleccionada{selected.length > 1 ? "s" : ""}
-        </button>
+        <div className="flex gap-2 mb-6">
+          <button
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            onClick={async () => {
+              await reejecutarMultiplesConsultas();
+              setSelected([]); // Limpia la selección después de ejecutar
+            }}
+          >
+            Ejecutar {selected.length} consulta
+            {selected.length > 1 ? "s" : ""} seleccionada
+            {selected.length > 1 ? "s" : ""}
+          </button>
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            onClick={enviarSeleccionadasADashboard}
+          >
+            Editar {selected.length} consulta{selected.length > 1 ? "s" : ""}{" "}
+            seleccionada{selected.length > 1 ? "s" : ""} en Formulario
+          </button>
+        </div>
       )}
 
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
