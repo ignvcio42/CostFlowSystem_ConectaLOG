@@ -416,7 +416,7 @@ const History = () => {
       {selected.length > 0 && (
         <div className="flex gap-2 mb-6">
           <button
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             onClick={async () => {
               await reejecutarMultiplesConsultas();
               setSelected([]); // Limpia la selección después de ejecutar
@@ -427,7 +427,7 @@ const History = () => {
             {selected.length > 1 ? "s" : ""}
           </button>
           <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
             onClick={enviarSeleccionadasADashboard}
           >
             Editar {selected.length} consulta{selected.length > 1 ? "s" : ""}{" "}
