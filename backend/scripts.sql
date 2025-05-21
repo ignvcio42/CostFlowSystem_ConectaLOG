@@ -20,7 +20,13 @@ CREATE TABLE tbl_user_estado_historial (
     fecha_cambio TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     comentario TEXT
 );
-
+CREATE TABLE tbl_email_verification (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES tbluser(id) ON DELETE CASCADE,
+    verification_token VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    verified BOOLEAN DEFAULT FALSE
+);
 CREATE TABLE tbl_consulta_unica (
     id SERIAL PRIMARY KEY,
     hash_request VARCHAR(64) UNIQUE NOT NULL,

@@ -52,10 +52,12 @@ const SignUp = () => {
       const { data: res } = await api.post("/auth/sign-up", data);
 
       if (res?.user) {
-        toast.success("Account created successfully! Please sign in.");
+        toast.success(
+          "Cuenta creada! Por favor revisa tu correo para verificar tu cuenta."
+        );
         setTimeout(() => {
-          navigate("/sign-in");
-        }, 1500);
+          navigate("/verify-email");
+        }, 1800);
       }
     } catch (error) {
       console.log(error);
@@ -132,7 +134,7 @@ const SignUp = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition dark:bg-white dark:text-black dark:hover:bg-gray-200"  
+                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition dark:bg-white dark:text-black dark:hover:bg-gray-200"
               >
                 {loading ? "Creating..." : "Create account"}
               </button>

@@ -16,6 +16,8 @@ import AdminUsersPage from "./pages/admin/users";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardCsv from "./pages/DashboardCsv";
 import DashboardExcel from "./pages/DashboardExcel";
+import VerifyEmail from "./pages/auth/verify-email";
+import ProcessVerifyEmail from "./pages/auth/process-verify";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
@@ -74,6 +76,8 @@ function App() {
 
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verificar-correo" element={<ProcessVerifyEmail />} />
       </Routes>
 
       <Toaster richColors position="top-center" />
