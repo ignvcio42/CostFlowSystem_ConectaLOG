@@ -132,6 +132,15 @@ const SignIn= () => {
               Sign up
             </Link>
           </CardFooter>
+          <CardFooter className="justify-center gap-2">
+            <p className="text-sm text-gray-600">Forgot your password?</p>
+            <Link
+              to="/forgot-password"
+              className="text-sm text-blue-500 hover:underline"
+            >
+              Reset password
+            </Link>
+          </CardFooter>
         </div>
       </Card>
     </div>

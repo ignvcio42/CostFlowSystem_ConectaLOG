@@ -18,6 +18,8 @@ import DashboardCsv from "./pages/DashboardCsv";
 import DashboardExcel from "./pages/DashboardExcel";
 import VerifyEmail from "./pages/auth/verify-email";
 import ProcessVerifyEmail from "./pages/auth/process-verify";
+import ForgotPassword from "./pages/auth/reset-password/forgot-password";
+import ResetPassword from "./pages/auth/reset-password/reset-password";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
@@ -78,6 +80,8 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verificar-correo" element={<ProcessVerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
 
       <Toaster richColors position="top-center" />

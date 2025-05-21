@@ -27,6 +27,14 @@ CREATE TABLE tbl_email_verification (
     expires_at TIMESTAMP NOT NULL,
     verified BOOLEAN DEFAULT FALSE
 );
+CREATE TABLE tbl_password_reset (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES tbluser(id) ON DELETE CASCADE,
+    reset_token VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    used BOOLEAN DEFAULT FALSE
+);
+
 CREATE TABLE tbl_consulta_unica (
     id SERIAL PRIMARY KEY,
     hash_request VARCHAR(64) UNIQUE NOT NULL,

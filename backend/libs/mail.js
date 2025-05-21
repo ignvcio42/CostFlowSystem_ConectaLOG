@@ -27,3 +27,18 @@ export async function sendVerificationEmail(to, token) {
   };
   await transporter.sendMail(mailOptions);
 }
+
+export async function sendResetPasswordEmail(to, token) {
+  const resetUrl = `http://localhost:5173/reset-password?token=${token}`;
+  const mailOptions = {
+    from: '"Tu App" <onboarding@resend.dev>',
+    to,
+    subject: "Recuperar contraseña",
+    html: `
+      <p>Haz click en el siguiente enlace para restablecer tu contraseña:</p>
+      <a href="${resetUrl}">${resetUrl}</a>
+      <p>Este enlace expira en 1 hora.</p>
+    `
+  };
+  await transporter.sendMail(mailOptions);
+}

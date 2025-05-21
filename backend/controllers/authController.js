@@ -1,7 +1,7 @@
 import { pool } from "../libs/database.js";
 import { comparePassword, createJWT, hashPassword } from "../libs/index.js";
 import crypto from "crypto";
-import { sendVerificationEmail } from "../libs/mail.js";
+import { sendVerificationEmail, sendResetPasswordEmail } from "../libs/mail.js";
 
 export const signupUser = async (req, res) => {
   try {
@@ -135,6 +135,49 @@ export const resendVerificationEmail = async (req, res) => {
   res
     .status(200)
     .json({ message: "Se ha enviado un nuevo correo de verificación." });
+};
+
+export const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ message: "Email requerido." });
+
+  const userResult = await pool.query("SELECT * FROM tbluser WHERE email = $1", [email]);
+  const user = userResult.rows[0];
+  if (!user) return res.status(404).json({ message: "No existe cuenta con ese email." });
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
+
+  // Guardar token
+  await pool.query(
+    "INSERT INTO tbl_password_reset (user_id, reset_token, expires_at) VALUES ($1, $2, $3)",
+    [user.id, resetToken, expiresAt]
+  );
+
+  // Enviar correo con el enlace
+  await sendResetPasswordEmail(email, resetToken);
+
+  res.status(200).json({ message: "Se ha enviado un enlace de recuperación a tu correo." });
+};
+
+export const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) return res.status(400).json({ message: "Token y contraseña son requeridos." });
+
+  // Buscar el token
+  const resetResult = await pool.query(
+    "SELECT * FROM tbl_password_reset WHERE reset_token = $1 AND expires_at > NOW() AND used = FALSE",
+    [token]
+  );
+  const resetRecord = resetResult.rows[0];
+  if (!resetRecord) return res.status(400).json({ message: "Token inválido o expirado." });
+
+  // Cambiar contraseña
+  const hashedPassword = await hashPassword(newPassword);
+  await pool.query("UPDATE tbluser SET password = $1 WHERE id = $2", [hashedPassword, resetRecord.user_id]);
+  await pool.query("UPDATE tbl_password_reset SET used = TRUE WHERE id = $1", [resetRecord.id]);
+
+  res.status(200).json({ message: "Contraseña restablecida correctamente." });
 };
 
 export const signinUser = async (req, res) => {
