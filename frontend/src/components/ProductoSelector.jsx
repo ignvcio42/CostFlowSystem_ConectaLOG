@@ -4,13 +4,14 @@ import glosass from "../data/productos/glosa_producto.json";
 import subpartidas from "../data/productos/subpartida.json";
 import partidas from "../data/productos/partida.json";
 import capitulos from "../data/productos/capitulo.json";
+import { FixedSizeList as List } from "react-window";
 
 const searchTypes = {
   capitulo: "Capítulo",
   partida: "Partida",
   subpartida: "Subpartida",
   glosa: "Glosa Producto",
-  manual: "Manual"
+  manual: "Manual",
 };
 
 const customFilter = (option, inputValue) => {
@@ -32,6 +33,36 @@ const formatOptionLabel = ({ value, label }, { context }) => {
   );
 };
 
+// Virtualized MenuList
+const heightPerOption = 54;
+const VirtualizedMenuList = (props) => {
+  const { options, children, maxHeight, getValue } = props;
+  const [value] = getValue();
+  const initialOffset = value ? options.indexOf(value) * heightPerOption : 0;
+
+  return (
+    <List
+      height={Math.min(maxHeight, options.length * heightPerOption)}
+      itemCount={children.length}
+      itemSize={heightPerOption}
+      initialScrollOffset={initialOffset}
+      width="100%"
+    >
+      {({ index, style }) => (
+        <div
+          style={{
+            ...style,
+            padding: "8px 12px",
+            boxSizing: "border-box",
+            background: children[index]?.props?.isFocused ? "#E0F2FE" : "white",
+          }}
+        >
+          {children[index]}
+        </div>
+      )}
+    </List>
+  );
+};
 const ProductoSelector = ({ value, onChange }) => {
   const [searchType, setSearchType] = useState("capitulo");
   const [inputValue, setInputValue] = useState(value || "");
@@ -123,6 +154,7 @@ const ProductoSelector = ({ value, onChange }) => {
           filterOption={customFilter}
           formatOptionLabel={formatOptionLabel}
           getOptionValue={(option) => option.value}
+          components={{ MenuList: VirtualizedMenuList }} // <- aquí!
         />
       )}
     </div>

@@ -246,6 +246,21 @@ const History = () => {
                   )}
                 </>
               )}
+              <p className="dark:text-white">
+                <strong>Modo de Transporte:</strong> {consulta.modo || "-"}
+              </p>
+              {internacional.ERROR && (
+                <p className="text-red-500 mt-2">
+                  <strong>Error Internacional:</strong> {internacional.ERROR}
+                </p>
+              )}
+              {nacional.ERROR && (
+                <p className="text-red-500 mt-2">
+                  <strong>Error Nacional:</strong> {nacional.ERROR}
+                </p>
+              )}
+
+
 
               {/* Sección de costos al final */}
               <div className="mt-4">
