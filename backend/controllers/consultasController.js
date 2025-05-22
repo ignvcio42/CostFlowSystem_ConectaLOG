@@ -1,90 +1,119 @@
 import { pool } from "../libs/database.js";
 import axios from "axios";
 import { generarHashConsulta } from "../libs/hash.js";
+import { sendUserQuerySummary } from "../libs/mail.js";
 
 export const realizarConsulta = async (req, res) => {
   const userId = req.user.userId;
   const parametros = req.body;
 
-  console.log(parametros);
-  const hash = generarHashConsulta(parametros);
+  const isArray = Array.isArray(parametros);
+  const queries = isArray ? parametros : [parametros];
+
+  let resultados = [];
 
   try {
-    // Verificar si ya existe la consulta
-    const consultaExistente = await pool.query(
-      "SELECT * FROM tbl_consulta_unica WHERE hash_request = $1",
-      [hash]
-    );
+    for (const query of queries) {
+      const hash = generarHashConsulta(query);
 
-    if (consultaExistente.rows.length > 0) {
-      const consultaId = consultaExistente.rows[0].id;
+      // Verificar si ya existe la consulta
+      const consultaExistente = await pool.query(
+        "SELECT * FROM tbl_consulta_unica WHERE hash_request = $1",
+        [hash]
+      );
 
-      // Insertar en tabla histórica
+      if (consultaExistente.rows.length > 0) {
+        const consultaId = consultaExistente.rows[0].id;
+        await pool.query(
+          "INSERT INTO tbl_consulta_historica (user_id, consulta_id) VALUES ($1, $2)",
+          [userId, consultaId]
+        );
+        resultados.push(consultaExistente.rows[0].respuesta_json);
+        continue;
+      }
+
+      // Si no existe → intentar llamar API externa
+      let data;
+      try {
+        const response = await axios.get("http://localhost:8000/query", {
+          params: query,
+        });
+        data = response.data;
+      } catch (apiError) {
+        resultados.push({
+          error: "La API externa no está disponible para una de las consultas.",
+        });
+        continue;
+      }
+
+      // Insertar en consulta única
+      const insert = await pool.query(
+        `INSERT INTO tbl_consulta_unica (
+          hash_request, producto, carga, modo, toneladas, importacion,
+          comuna, puerto, puerto_ext, pais, cargapeligrosa,
+          respuesta_json, fuente_respuesta
+        ) VALUES (
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'api_externa'
+        ) RETURNING id`,
+        [
+          hash,
+          query.producto,
+          query.carga,
+          query.modo,
+          query.toneladas,
+          query.importacion,
+          query.comuna,
+          query.puerto,
+          query.puerto_ext,
+          query.pais,
+          query.cargapeligrosa,
+          data,
+        ]
+      );
+
+      const consultaId = insert.rows[0].id;
       await pool.query(
         "INSERT INTO tbl_consulta_historica (user_id, consulta_id) VALUES ($1, $2)",
         [userId, consultaId]
       );
-
-      // Devolver resultado directamente
-      return res.json(consultaExistente.rows[0].respuesta_json);
+      resultados.push(data);
     }
 
-    // Si no existe → intentar llamar API externa
-    let data;
-    try {
-      const response = await axios.get("http://localhost:8000/query", {
-        params: parametros,
-      });
-      data = response.data;
-    } catch (apiError) {
-      // API caída → abortar
-      return res.status(503).json({
-        message:
-          "La API externa no está disponible y no hay datos almacenados para esta consulta.",
-      });
-    }
+    // Devolver los resultados (uno o varios)
+    res.json(isArray ? resultados : resultados[0]);
 
-    // Insertar en consulta única
-    const insert = await pool.query(
-      `INSERT INTO tbl_consulta_unica (
-        hash_request, producto, carga, modo, toneladas, importacion,
-        comuna, puerto, puerto_ext, pais, cargapeligrosa,
-        respuesta_json, fuente_respuesta
-      ) VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'api_externa'
-      ) RETURNING id`,
-      [
-        hash,
-        parametros.producto,
-        parametros.carga,
-        parametros.modo,
-        parametros.toneladas,
-        parametros.importacion,
-        parametros.comuna,
-        parametros.puerto,
-        parametros.puerto_ext,
-        parametros.pais,
-        parametros.cargapeligrosa,
-        data,
-      ]
-    );
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // ENVÍA EL CORREO SOLO UNA VEZ CON TODAS LAS CONSULTAS
+    setTimeout(async () => {
+      try {
+        let userEmail = req.user?.email;
+        if (!userEmail) {
+          const { rows } = await pool.query(
+            "SELECT email FROM tbluser WHERE id = $1",
+            [userId]
+          );
+          userEmail = rows[0]?.email;
+        }
+        if (!userEmail) {
+          console.error(
+            "No se pudo encontrar el email del usuario, no se envía correo."
+          );
+          return;
+        }
 
-    const consultaId = insert.rows[0].id;
+        // AHORA MANDAS LOS RESULTADOS (RESPUESTA) Y NO LOS QUERIES (PARÁMETROS)
+        await sendUserQuerySummary(userEmail, resultados);
+      } catch (err) {
+        console.error("Error al enviar correo resumen consulta:", err);
+      }
+    }, 0);
 
-    // Insertar en tabla histórica
-    await pool.query(
-      "INSERT INTO tbl_consulta_historica (user_id, consulta_id) VALUES ($1, $2)",
-      [userId, consultaId]
-    );
-
-    // Devolver el resultado obtenido de la API
-    return res.json(data);
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al procesar la consulta." });
   }
 };
-
 
 export const obtenerHistorial = async (req, res) => {
   const userId = req.user.userId;
@@ -195,11 +224,8 @@ export const reejecutarConsulta = async (req, res) => {
 
     // 5. Devuelve la respuesta de la API
     res.json(data);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al re-ejecutar la consulta." });
   }
 };
-
-

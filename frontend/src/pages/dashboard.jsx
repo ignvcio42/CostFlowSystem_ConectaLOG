@@ -82,10 +82,16 @@ const Dashboard = () => {
     setResultados([]);
 
     try {
-      const responses = await Promise.all(
-        queries.map((q) => api.post("/consultas-historicas/consultar", q))
+      // ENVÍA TODAS LAS CONSULTAS EN UN SOLO REQUEST COMO ARRAY
+      const response = await api.post(
+        "/consultas-historicas/consultar",
+        queries
       );
-      setResultados(responses.map((r) => r.data));
+
+      // response.data puede ser array u objeto según backend
+      setResultados(
+        Array.isArray(response.data) ? response.data : [response.data]
+      );
       toast.success("Consultas realizadas con éxito");
       setTimeout(() => navigate("/history"), 1000);
     } catch (err) {

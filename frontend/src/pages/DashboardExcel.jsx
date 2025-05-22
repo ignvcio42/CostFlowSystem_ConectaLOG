@@ -178,6 +178,14 @@ const DashboardExcel = () => {
           );
         }
 
+        // Validación de carga
+        const carga = Number(row.carga);
+        if (isNaN(carga) || carga < 1 || carga > 5) {
+          errores.push(
+            `Fila ${fila}: 'carga' debe ser un número entre 1 y 5.`
+          );
+        }
+
         // Validación de toneladas
         if (isNaN(Number(row.toneladas)) || Number(row.toneladas) <= 0) {
           errores.push(
@@ -213,8 +221,9 @@ const DashboardExcel = () => {
 
       setCargando(true);
       try {
-        const responses = await Promise.all(
-          queries.map((q) => api.post("/consultas-historicas/consultar", q))
+        const response = await api.post(
+          "/consultas-historicas/consultar",
+          queries
         );
         toast.success("Consultas realizadas con éxito");
         setTimeout(() => navigate("/history"), 1000);
