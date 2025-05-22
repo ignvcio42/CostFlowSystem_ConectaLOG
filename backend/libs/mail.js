@@ -76,7 +76,7 @@ export async function sendUserRejectedEmail(userEmail, nombre, comentario = "") 
   });
 }
 export async function sendUserDisabledEmail(userEmail, nombre, comentario) {
-  await transporter.sendMail({
+  await resend.emails.send({
     from: `"Plataforma" <${FROM_EMAIL}>`,
     to: userEmail,
     subject: "Tu cuenta fue deshabilitada",
@@ -91,7 +91,7 @@ export async function sendUserDisabledEmail(userEmail, nombre, comentario) {
 }
 
 export async function sendUserEnabledEmail(userEmail, nombre) {
-  await transporter.sendMail({
+  await resend.emails.send({
     from: `"Plataforma" <${FROM_EMAIL}>`,
     to: userEmail,
     subject: "¡Tu cuenta ha sido habilitada de nuevo!",
@@ -215,7 +215,7 @@ export async function sendUserQuerySummary(to, resultados) {
   }
 
   // ==== ENVÍA EL CORREO ====
-  await transporter.sendMail({
+  await resend.emails.send({
     from: `"Tu App" <${FROM_EMAIL}>`,
     to,
     subject: "Respaldo resumido de tus consultas (no responder)",
