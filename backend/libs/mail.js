@@ -42,3 +42,46 @@ export async function sendResetPasswordEmail(to, token) {
   };
   await transporter.sendMail(mailOptions);
 }
+
+export async function sendEmailToAdmins(adminEmails, user) {
+  const subject = "Nuevo usuario esperando confirmación";
+  const html = `
+    <p>El usuario <b>${user?.firstname}</b> con correo <b>${user?.email}</b> ha verificado su correo y está esperando ser confirmado.</p>
+    <p>Por favor ingresa al panel de administración para aceptar o rechazar la cuenta.</p>
+  `;
+  await transporter.sendMail({
+    from: '"Sistema" <noreply@tusistema.com>',
+    to: adminEmails.join(","),  
+    subject,
+    html,
+  });
+}
+
+export async function sendUserAcceptedEmail(userEmail, nuevo_estado, comentario) {
+  const subject = nuevo_estado
+    ? "¡Tu cuenta ha sido aceptada!"
+    : "Tu cuenta fue rechazada";
+  const html = nuevo_estado
+    ? `<p>¡Felicitaciones! Tu cuenta ha sido activada y ya puedes iniciar sesión.</p>`
+    : `<p>Lamentablemente, tu cuenta fue rechazada. Comentario del admin: <br>${comentario || "(Sin comentario)"}.</p>`;
+
+  await transporter.sendMail({
+    from: '"Sistema" <noreply@tusistema.com>',
+    to: userEmail,
+    subject,
+    html,
+  });
+}
+
+export async function sendUserRejectedEmail(userEmail, nombre, comentario = "") {
+  await transporter.sendMail({
+    from: '"Sistema" <noreply@tusistema.com>',
+    to: userEmail,
+    subject: "Tu cuenta fue rechazada",
+    html: `
+      <p>Hola ${nombre},</p>
+      <p>Lamentablemente tu cuenta fue rechazada.</p>
+      <p>${comentario ? `Motivo: <i>${comentario}</i>` : ""}</p>
+    `
+  });
+}

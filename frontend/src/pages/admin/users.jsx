@@ -100,7 +100,7 @@ const UsuariosAdmin = () => {
                   >
                     Aceptar
                   </Button>
-                  {/* <Button
+                  <Button
                     variant="destructive"
                     disabled={actualizando === usuario.id}
                     onClick={() =>
@@ -112,7 +112,7 @@ const UsuariosAdmin = () => {
                     }
                   >
                     Rechazar
-                  </Button> */}
+                  </Button>
                 </div>
               </CardContent>
             </Card>

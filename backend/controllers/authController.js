@@ -1,7 +1,7 @@
 import { pool } from "../libs/database.js";
 import { comparePassword, createJWT, hashPassword } from "../libs/index.js";
 import crypto from "crypto";
-import { sendVerificationEmail, sendResetPasswordEmail } from "../libs/mail.js";
+import { sendVerificationEmail, sendResetPasswordEmail, sendEmailToAdmins } from "../libs/mail.js";
 
 export const signupUser = async (req, res) => {
   try {
@@ -87,6 +87,23 @@ export const verifyEmail = async (req, res) => {
         status: "error",
         message: "No se pudo actualizar el estado de verificación.",
       });
+    }
+
+    // 3. Obtener información del usuario que se verificó (para mostrar en el correo a los admins)
+    const emailVerification = result.rows[0];
+    const userResult = await pool.query(
+      `SELECT id, email, firstName, lastName FROM tbluser WHERE id = $1`,
+      [emailVerification.user_id]
+    );
+    const user = userResult.rows[0];
+
+    // 4. Buscar todos los admin activos
+    const admins = await pool.query("SELECT email FROM tbluser WHERE role = 'admin' AND estado = TRUE");
+    const adminEmails = admins.rows.map(row => row.email);
+
+    // 5. Enviar correo a todos los admin si hay alguno
+    if (adminEmails.length > 0 && user) {
+      await sendEmailToAdmins(adminEmails, user);
     }
 
     res.status(200).json({
