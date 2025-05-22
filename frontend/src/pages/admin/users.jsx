@@ -86,9 +86,9 @@ const UsuariosAdmin = () => {
                     Pendiente
                   </Badge>
                 </div>
-                <div className="flex flex-col md:flex-row gap-2 dark:text-white dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 rounded">
+                <div className="flex flex-col md:flex-row gap-2 dark:text-white">
                   <Button
-                    className="dark:text-white dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
+                    className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
                     disabled={actualizando === usuario.id}
                     onClick={() =>
                       cambiarEstadoUsuario(
@@ -101,6 +101,7 @@ const UsuariosAdmin = () => {
                     Aceptar
                   </Button>
                   <Button
+                    className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
                     variant="destructive"
                     disabled={actualizando === usuario.id}
                     onClick={() =>
