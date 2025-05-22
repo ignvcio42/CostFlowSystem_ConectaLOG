@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import glosass from "../data/productos/glosa_producto.json";
 import subpartidas from "../data/productos/subpartida.json";
@@ -6,11 +6,11 @@ import partidas from "../data/productos/partida.json";
 import capitulos from "../data/productos/capitulo.json";
 
 const searchTypes = {
-  manual: "Manual",
   capitulo: "Capítulo",
   partida: "Partida",
   subpartida: "Subpartida",
-  glosa: "Glosa Producto"
+  glosa: "Glosa Producto",
+  manual: "Manual"
 };
 
 const customFilter = (option, inputValue) => {
@@ -33,15 +33,27 @@ const formatOptionLabel = ({ value, label }, { context }) => {
 };
 
 const ProductoSelector = ({ value, onChange }) => {
-  const [searchType, setSearchType] = useState("manual");
+  const [searchType, setSearchType] = useState("capitulo");
   const [inputValue, setInputValue] = useState(value || "");
+
+  // ⚡ useEffect para poner searchType en manual si hay valor externo (edición)
+  useEffect(() => {
+    if (value) {
+      setSearchType("manual");
+      setInputValue(value);
+    }
+  }, [value]);
 
   const handleSearchTypeChange = (type) => {
     setSearchType(type);
-    if (type === "manual") {
+    if (type === "capitulo") {
+      onChange(inputValue);
+    } else if (type === "manual") {
+      // Si el tipo es manual, poner el valor actual (por si estaba en otro)
       onChange(inputValue);
     } else {
       onChange("");
+      setInputValue(""); // Limpiar campo si no es manual
     }
   };
 
