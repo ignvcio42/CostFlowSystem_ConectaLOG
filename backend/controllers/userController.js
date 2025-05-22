@@ -1,6 +1,6 @@
 import { comparePassword, hashPassword } from "../libs/index.js";
 import { pool } from "../libs/database.js";
-import { sendUserAcceptedEmail, sendUserRejectedEmail } from "../libs/mail.js";
+import { sendUserAcceptedEmail, sendUserDisabledEmail, sendUserRejectedEmail } from "../libs/mail.js";
 
 export const getUser = async (req, res) => {
   try {
@@ -104,13 +104,11 @@ export const updateUser = async (req, res) => {
 
     updatedUser.rows[0].password = undefined; // Remove password from the response
 
-    res
-      .status(201)
-      .json({
-        status: "success",
-        message: "User updated successfully",
-        user: updatedUser.rows[0],
-      });
+    res.status(201).json({
+      status: "success",
+      message: "User updated successfully",
+      user: updatedUser.rows[0],
+    });
   } catch (error) {
     console.log(error);
     res
@@ -136,7 +134,7 @@ export const getAllRoleUsers = async (req, res) => {
 export const changeUserEstado = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nuevo_estado, comentario } = req.body;
+    const { nuevo_estado, motivo_estado, comentario } = req.body;
     const cambiado_por = req.user.userId;
 
     const userResult = await pool.query("SELECT * FROM tbluser WHERE id = $1", [
@@ -149,10 +147,10 @@ export const changeUserEstado = async (req, res) => {
     }
     const user = userResult.rows[0];
 
-    // Actualizar estado
+    // Actualizar estado y motivo
     await pool.query(
-      "UPDATE tbluser SET estado = $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2",
-      [nuevo_estado, id]
+      "UPDATE tbluser SET estado = $1, motivo_estado = $2, updatedat = CURRENT_TIMESTAMP WHERE id = $3",
+      [nuevo_estado, motivo_estado, id]
     );
 
     // Registrar en historial
@@ -161,23 +159,58 @@ export const changeUserEstado = async (req, res) => {
       [id, cambiado_por, nuevo_estado, comentario]
     );
 
-    // Notificar al usuario
+    // Envía correo según el motivo_estado (ejemplo, tú puedes agregar más casos)
+    // Envía correo según el motivo_estado (ejemplo, tú puedes agregar más casos)
     if (user) {
-      if (nuevo_estado === true) {
-        await sendUserAcceptedEmail(user.email, user.firstname);
-      } else {
-        await sendUserRejectedEmail(user.email, user.firstname, comentario);
+      try {
+        if (motivo_estado === "aceptado") {
+          await sendUserAcceptedEmail(user.email, user.firstname);
+        } else if (motivo_estado === "rechazado") {
+          await sendUserRejectedEmail(user.email, user.firstname, comentario);
+        } else if (motivo_estado === "deshabilitado") {
+          await sendUserDisabledEmail(user.email, user.firstname, comentario);
+        }
+      } catch (correoError) {
+        console.error(
+          "No se pudo enviar el correo de notificación:",
+          correoError
+        );
+        // No lances error, sigue normalmente
       }
     }
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "Estado del usuario actualizado correctamente",
-      });
+    res.status(200).json({
+      status: "success",
+      message: "Estado del usuario actualizado correctamente",
+    });
   } catch (error) {
     console.error("Error actualizando estado:", error);
+    res.status(500).json({ status: "error", message: "Error en el servidor" });
+  }
+};
+
+// En tu userController.js
+
+export const disableOwnUser = async (req, res) => {
+  try {
+    const userId = req.user.userId; // <-- del JWT
+    const { comentario } = req.body;
+
+    // Cambia el estado y motivo_estado
+    await pool.query(
+      "UPDATE tbluser SET estado = FALSE, motivo_estado = $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2",
+      ["deshabilitado", userId]
+    );
+
+    // Guarda en historial
+    await pool.query(
+      "INSERT INTO tbl_user_estado_historial (user_id, cambiado_por, nuevo_estado, comentario) VALUES ($1, $2, $3, $4)",
+      [userId, userId, false, comentario || "Deshabilitado por el propio usuario"]
+    );
+
+    res.status(200).json({ status: "success", message: "Tu cuenta ha sido deshabilitada. Puedes volver a solicitar activación más adelante." });
+  } catch (error) {
+    console.error("Error deshabilitando usuario:", error);
     res.status(500).json({ status: "error", message: "Error en el servidor" });
   }
 };
