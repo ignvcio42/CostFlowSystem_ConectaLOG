@@ -10,7 +10,7 @@ CREATE TABLE tbluser (
 	estado BOOLEAN DEFAULT FALSE,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    motivo_estado VARCHAR(50)
+    motivo_estado VARCHAR(50) NOT NULL DEFAULT 'pendiente'
 );
 
 CREATE TABLE tbl_user_estado_historial (
