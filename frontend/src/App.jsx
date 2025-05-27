@@ -87,7 +87,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
 
-      <Toaster richColors position="top-center" />
+      <Toaster richColors position="top-right" />
     </div>
   );
 }
