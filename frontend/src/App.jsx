@@ -5,7 +5,7 @@ import SignUp from "./pages/auth/sign-up";
 import Dashboard from "./pages/dashboard";
 import Settings from "./pages/settings";
 import History from "./pages/history";
-import AccountPage from "./pages/account-page";
+// import AccountPage from "./pages/account-page";
 import useStore from "./store";
 import { setAuthToken } from "./libs/api_calls";
 import { Toaster } from "sonner";
@@ -20,6 +20,7 @@ import VerifyEmail from "./pages/auth/verify-email";
 import ProcessVerifyEmail from "./pages/auth/process-verify";
 import ForgotPassword from "./pages/auth/reset-password/forgot-password";
 import ResetPassword from "./pages/auth/reset-password/reset-password";
+import Glosary from "./pages/glosary";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
@@ -61,8 +62,8 @@ function App() {
           <Route path="/overview" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/history" element={<History />} />
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/csv" element={<DashboardCsv />} />
+          <Route path="/glosary" element={<Glosary />} />
+          {/* <Route path="/csv" element={<DashboardCsv />} /> */}
           <Route path="/excel" element={<DashboardExcel />} />
 
           {/* Ruta protegida solo para rol ADMIN */}

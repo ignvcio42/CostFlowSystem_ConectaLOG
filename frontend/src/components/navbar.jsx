@@ -20,11 +20,12 @@ import TransitionWrapper from "./wrappers/transition-wrapper";
 
 const links = [
   { label: "Formulario", link: "/overview" },
-  { label: "Formulario CSV", link: "/csv" },
+  // { label: "Formulario CSV", link: "/csv" },
   { label: "Formulario Excel", link: "/excel" },
   // { label: "Accounts", link: "/accounts" },
   { label: "History", link: "/history" },
   { label: "Settings", link: "/settings" },
+  { label: "Glosary", link: "/glosary" },
 ];
 
 const UserMenu = () => {
