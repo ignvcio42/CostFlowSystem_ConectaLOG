@@ -3,13 +3,18 @@ import * as z from "zod";
 import useStore from "@/store";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import api from "@/libs/api_calls";
 import { toast } from "sonner";
-
 
 const LoginSchema = z.object({
   email: z
@@ -20,7 +25,7 @@ const LoginSchema = z.object({
     .min(1, "password is required"),
 });
 
-const SignIn= () => {
+const SignIn = () => {
   const { user, setCredentails } = useStore((state) => state);
   const {
     register,
@@ -32,6 +37,16 @@ const SignIn= () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Mostrar toast si la sesión expiró y limpiar el flag
+    if (localStorage.getItem("sessionExpired") === "1") {
+      toast.error(
+        "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+      );
+      localStorage.removeItem("sessionExpired");
+    }
+  }, []);
 
   useEffect(() => {
     user && navigate("/");
@@ -46,7 +61,7 @@ const SignIn= () => {
       if (res?.user) {
         toast.success(res?.message);
 
-        const userInfo = {...res?.user, token: res.token };
+        const userInfo = { ...res?.user, token: res.token };
         localStorage.setItem("user", JSON.stringify(userInfo));
 
         setCredentails(userInfo);
@@ -82,7 +97,6 @@ const SignIn= () => {
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-6 px-6 pb-6"
             >
-
               <div className="space-y-2 dark:text-white">
                 <Label htmlFor="email">Email</Label>
                 <Input
