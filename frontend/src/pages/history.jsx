@@ -14,6 +14,16 @@ const History = () => {
   const { user } = useStore((state) => state);
   const [selected, setSelected] = useState([]);
 
+  const [isStickyVisible, setIsStickyVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsStickyVisible(window.scrollY > 150);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const navigate = useNavigate();
 
   const enviarSeleccionadasADashboard = () => {
@@ -260,8 +270,6 @@ const History = () => {
                 </p>
               )}
 
-
-
               {/* Sección de costos al final */}
               <div className="mt-4">
                 <h3 className="text-lg font-semibold mb-2 dark:text-white">
@@ -330,20 +338,22 @@ const History = () => {
             </div>
           )}
         </CardContent>
-        <div className="flex gap-2 mb-6 ">
-          <button
-            className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-            onClick={() => reejecutarConsulta(consulta)}
-          >
-            Re-ejecutar esta consulta
-          </button>
-          <button
-            className="mt-4 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            onClick={() => enviarUnicaConsultaADashboard(consulta)}
-          >
-            Editar esta consulta
-          </button>
-        </div>
+        {selected.length === 0 && (
+          <div className="flex gap-2 mb-6">
+            <button
+              className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              onClick={() => reejecutarConsulta(consulta)}
+            >
+              Re-ejecutar esta consulta
+            </button>
+            <button
+              className="mt-4 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              onClick={() => enviarUnicaConsultaADashboard(consulta)}
+            >
+              Editar esta consulta
+            </button>
+          </div>
+        )}
       </Card>
     );
   };
@@ -429,7 +439,13 @@ const History = () => {
         </div>
       )}
       {selected.length > 0 && (
-        <div className="flex gap-2 mb-6">
+        <div
+          className={`${
+            isStickyVisible
+              ? "fixed bottom-6 right-6 z-50 bg-white dark:bg-gray-800 shadow-md p-3 rounded"
+              : "mb-6"
+          } flex gap-2 transition-all duration-300`}
+        >
           <button
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             onClick={async () => {

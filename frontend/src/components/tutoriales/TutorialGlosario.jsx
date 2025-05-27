@@ -8,7 +8,7 @@ export default function TutorialGlosario() {
   const steps = [
     {
       target: "#glosario-header",
-      content: "Este es el título del glosario.",
+      content: "Aqui puedes buscar datos específicos del glosario.",
       placement: "bottom", // ⬅️ controla dónde aparece
       disableScrolling: true,
     },

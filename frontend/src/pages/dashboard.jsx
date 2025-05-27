@@ -308,7 +308,7 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={addQuery}
-            className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors duration-200 flex items-center gap-1"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors duration-200 flex items-center gap-1"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -327,7 +327,7 @@ const Dashboard = () => {
           <button
             type="submit"
             disabled={cargando}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 dark:disabled:bg-blue-800 transition-colors duration-200 flex items-center gap-1"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-400 dark:disabled:bg-blue-800 transition-colors duration-200 flex items-center gap-1"
           >
             {cargando ? (
               <>
@@ -374,7 +374,7 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={() => setQueries([structuredClone(emptyQuery)])}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center gap-1"
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors duration-200 flex items-center gap-1"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -401,7 +401,7 @@ const Dashboard = () => {
 
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-xl max-w-md w-full mx-4">
             <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">
               Confirmar envío
             </h3>
@@ -412,7 +412,7 @@ const Dashboard = () => {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowConfirmation(false)}
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition"
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition"
               >
                 Cancelar
               </button>
@@ -421,7 +421,7 @@ const Dashboard = () => {
                   setShowConfirmation(false);
                   await submitQueries();
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
               >
                 Confirmar
               </button>
