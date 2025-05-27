@@ -14,6 +14,7 @@ import capitulos from "@/data/productos/capitulo.json";
 import glosas from "@/data/productos/glosa_producto.json";
 import partidas from "@/data/productos/partida.json";
 import subpartidas from "@/data/productos/subpartida.json";
+import TutorialGlosario from "@/components/tutoriales/TutorialGlosario";
 
 const secciones = [
   { key: "capitulos", label: "Capítulos", data: capitulos },
@@ -36,23 +37,32 @@ export default function GlosarioPage() {
   const current = secciones.find((s) => s.key === selected);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 dark:text-white">Glosario</h1>
-      <div className="flex flex-wrap gap-2 mb-4">
+    <div className="relative min-h-screen p-4 ">
+      <div id="glosario-header" className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold dark:text-white transition-all duration-300">
+          Glosario
+        </h1>
+        <TutorialGlosario />
+      </div>
+
+      <div id="glosario-selector" className="flex flex-wrap gap-2 mb-4">
         {secciones.map((s) => (
           <Button
             key={s.key}
             variant={s.key === selected ? "default" : "secondary"}
             onClick={() => setSelected(s.key)}
-            className="hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 rounded"
+            className="hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 rounded transition-all duration-300"
           >
             {s.label}
           </Button>
         ))}
       </div>
-      {current && (
-        <GlosarioSection title={current.label} items={current.data} />
-      )}
+
+      <div id="glosario-resultados">
+        {current && (
+          <GlosarioSection title={current.label} items={current.data} />
+        )}
+      </div>
     </div>
   );
 }

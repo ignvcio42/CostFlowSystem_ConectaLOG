@@ -12,7 +12,7 @@ export default function GlosarioItem({ item }) {
         {isLong && (
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="sm" variant="ghost" className="dark:text-white dark:hover:text-gray-400 hover:text-gray-600">Ver</Button>
+              <Button id="contenedor-ver-mas" size="sm" variant="ghost" className="dark:text-white dark:hover:text-gray-400 hover:text-gray-600">Ver</Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl bg-white rounded-xl">
               <p className="text-base">{item.label}</p>

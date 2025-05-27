@@ -20,6 +20,7 @@ export default function GlosarioSection({ title, items }) {
         value={search}
         onChange={e => setSearch(e.target.value)}
         className="mb-4 rounded dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        id="buscador-glosario"
       />
       <List
         height={400}

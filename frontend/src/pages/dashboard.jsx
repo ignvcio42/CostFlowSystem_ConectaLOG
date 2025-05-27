@@ -7,6 +7,7 @@ import ProductoSelector from "@/components/ProductoSelector";
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
 import PreguntasFrecuentes from "@/components/qa";
+import TutorialFormulario from "@/components/tutoriales/TutorialFormulario";
 
 const emptyQuery = {
   producto: "",
@@ -114,9 +115,12 @@ const Dashboard = () => {
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+      <h2 id="formulario-header" className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
         Múltiples Consultas
       </h2>
+      <div className="flex items-center justify-between mb-4">
+      <TutorialFormulario />
+      </div>
 
       <form onSubmit={handleSubmit}>
         {queries.map((query, index) => (
@@ -164,7 +168,7 @@ const Dashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(query).map(([key, val]) => (
-                <div key={key} className="mb-3">
+                <div key={key} className="mb-3" id={`campo-${key}`}>
                   <label className="block text-sm font-medium capitalize mb-1 text-gray-700 dark:text-gray-300">
                     {fieldLabels[key] || key}
                   </label>
@@ -267,6 +271,7 @@ const Dashboard = () => {
                       }}
                     />
                   ) : key === "producto" ? (
+                    <div id="campo-producto">
                     <ProductoSelector
                       value={val}
                       onChange={(value) => {
@@ -275,6 +280,7 @@ const Dashboard = () => {
                         setQueries(newQueries);
                       }}
                     />
+                    </div>
                   ) : (
                     <input
                       name={key}
@@ -298,7 +304,7 @@ const Dashboard = () => {
           </div>
         ))}
 
-        <div className="flex flex-wrap gap-3 mb-4">
+        <div id="botones-formulario" className="flex flex-wrap gap-3 mb-4">
           <button
             type="button"
             onClick={addQuery}

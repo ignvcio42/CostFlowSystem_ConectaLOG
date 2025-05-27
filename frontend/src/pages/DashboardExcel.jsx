@@ -14,6 +14,7 @@ import tipocarga from "@/data/diccionario_carga.json";
 import modo from "@/data/diccionario_modos.json";
 import importaciones from "@/data/diccionario_importaciones.json";
 import cargapeligrosa from "@/data/diccionario_cargaspeligrosas.json";
+import TutorialExcel from "@/components/tutoriales/TutorialExcel";
 
 const DashboardExcel = () => {
   const [cargando, setCargando] = useState(false);
@@ -181,9 +182,7 @@ const DashboardExcel = () => {
         // Validación de carga
         const carga = Number(row.carga);
         if (isNaN(carga) || carga < 1 || carga > 5) {
-          errores.push(
-            `Fila ${fila}: 'carga' debe ser un número entre 1 y 5.`
-          );
+          errores.push(`Fila ${fila}: 'carga' debe ser un número entre 1 y 5.`);
         }
 
         // Validación de toneladas
@@ -241,19 +240,26 @@ const DashboardExcel = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-6 p-6 border rounded-xl shadow-lg bg-white dark:bg-muted dark:text-white transition-all duration-300">
-      <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+      <h2
+        id="formulario-header"
+        className="text-3xl font-bold mb-6 text-center bg-gradient-to-r"
+      >
         Consulta por Archivo Excel
       </h2>
+      <div className="mb-6 p-4">
+        <TutorialExcel />
+      </div>
 
       <div className="flex flex-col gap-4">
         <button
+          id="descarga-plantilla"
           onClick={downloadTemplate}
           className="px-4 py-2 bg-yellow-300 text-yellow-900 rounded-lg hover:bg-yellow-400 transition-colors"
         >
           Descargar Plantilla Excel
         </button>
 
-        <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer text-center">
+        <label id="carga-excel" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer text-center">
           Subir Archivo Excel
           <input
             type="file"
@@ -265,7 +271,7 @@ const DashboardExcel = () => {
 
         {cargando && <p className="text-blue-600">Procesando archivo...</p>}
       </div>
-      <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <div id="instrucciones" className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
         <h3 className="font-bold mb-2">Instrucciones:</h3>
         <ol className="list-decimal pl-5 space-y-2 text-sm">
           <li>Descargue la plantilla haciendo clic en el botón superior</li>
