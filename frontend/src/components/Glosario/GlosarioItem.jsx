@@ -5,7 +5,7 @@ export default function GlosarioItem({ item }) {
   const isLong = item.label.length > 1;
 
   return (
-    <div className="p-2 border rounded mb-2 flex justify-between items-center">
+    <div className="p-2 border rounded mb-2 flex justify-between items-center hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200">
       <span className="truncate max-w-[75%] dark:text-white">{item.label}</span>
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground text-sm dark:text-gray-400">{item.value}</span>
@@ -14,7 +14,7 @@ export default function GlosarioItem({ item }) {
             <DialogTrigger asChild>
               <Button id="contenedor-ver-mas" size="sm" variant="ghost" className="dark:text-white dark:hover:text-gray-400 hover:text-gray-600">Ver</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-white rounded-xl">
+            <DialogContent className="max-w-2xl bg-white rounded">
               <p className="text-base">{item.label}</p>
               <p className="text-sm text-muted-foreground ">Codigo: {item.value}</p>
             </DialogContent>

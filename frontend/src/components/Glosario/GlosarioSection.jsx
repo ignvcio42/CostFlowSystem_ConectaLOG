@@ -13,7 +13,7 @@ export default function GlosarioSection({ title, items }) {
   );
 
   return (
-    <Card className="p-4 my-4">
+    <Card className="p-4 my-4 hover:shadow-lg">
       <h2 className="text-xl font-bold mb-2 dark:text-white">{title}</h2>
       <Input
         placeholder="Buscar..."

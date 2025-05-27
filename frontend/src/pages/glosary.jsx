@@ -51,7 +51,7 @@ export default function GlosarioPage() {
             key={s.key}
             variant={s.key === selected ? "default" : "secondary"}
             onClick={() => setSelected(s.key)}
-            className="hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 rounded transition-all duration-300"
+            className="hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 rounded transition-all duration-300 hover:shadow-md hover:scale-105"
           >
             {s.label}
           </Button>
