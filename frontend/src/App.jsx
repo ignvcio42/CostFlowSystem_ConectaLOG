@@ -11,7 +11,6 @@ import { setAuthToken } from "./libs/api_calls";
 import { Toaster } from "sonner";
 import Navbar from "./components/navbar";
 import Transactions from "./pages/transactions";
-// import Footer from "./components/footer";
 import AdminUsersPage from "./pages/admin/users";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardCsv from "./pages/DashboardCsv";
@@ -21,6 +20,7 @@ import ProcessVerifyEmail from "./pages/auth/process-verify";
 import ForgotPassword from "./pages/auth/reset-password/forgot-password";
 import ResetPassword from "./pages/auth/reset-password/reset-password";
 import Glosary from "./pages/glosary";
+import Footer from "./components/footer";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
@@ -38,7 +38,9 @@ const RootLayout = () => {
           <Outlet />
         </div>
       </main>
-      <div>{/* <Footer /> */}</div>
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 };
@@ -53,7 +55,7 @@ function App() {
       document.body.classList.remove("dark");
     }
   }, [theme]);
-  
+
   return (
     <div className="w-full min-h-screen bg-gray-100 dark:bg-slate-900">
       <Routes>

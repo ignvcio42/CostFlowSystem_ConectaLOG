@@ -1,0 +1,46 @@
+[
+  {
+    "categoria": "Formulario",
+    "preguntas": [
+      {
+        "pregunta": "¿Qué información debo ingresar en el formulario?",
+        "respuesta": "Debes seleccionar un producto (por Capítulo, Partida, Subpartida o Glosa), el tipo de carga, modo de transporte, comuna de origen, puerto, país, tonelaje y si la carga es peligrosa. (Revisar la sección Glosario para más detalles)."
+      },
+      {
+        "pregunta": "¿Puedo ingresar múltiples consultas a la vez?",
+        "respuesta": "Sí. Puedes agregar tantas consultas como desees con el botón 'Agregar Consulta'."
+      }
+    ]
+  },
+  {
+    "categoria": "Resultados",
+    "preguntas": [
+      {
+        "pregunta": "¿Cuánto tiempo toma obtener los resultados?",
+        "respuesta": "Idealmente, el sistema responde de 20-30 segundos por consulta. Si ya fue hecha antes, el sistema entrega el resultado aún más rápido."
+      },
+      {
+        "pregunta": "¿En qué formato se presentan los resultados?",
+        "respuesta": "Estructurados en seccion Historial y enviados por correo electrónico."
+      }
+    ]
+},
+{
+  "categoria": "Errores",
+  "preguntas": [
+    {
+      "pregunta": "¿Qué hago si el sistema no reconoce mi consulta?",
+      "respuesta": "Revisa que todos los campos estén correctamente llenos y que la información sea válida. Si el problema persiste, contacta al soporte técnico."
+    }
+  ]
+},
+{
+  "categoria": "Contacto",
+  "preguntas": [
+    {
+      "pregunta": "¿Cómo puedo contactar al soporte técnico?",
+      "respuesta": "Puedes enviar un correo a 1H0lH@example.com o llamar al número +56 9 1234 5678. Nuestro equipo está disponible de lunes a viernes, de 9:00 a 18:00 horas."
+    }
+  ]
+}
+]

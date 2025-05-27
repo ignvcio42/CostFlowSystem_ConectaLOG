@@ -6,6 +6,7 @@ import { useOpciones } from "../hooks/useOpciones";
 import ProductoSelector from "@/components/ProductoSelector";
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
+import PreguntasFrecuentes from "@/components/qa";
 
 const emptyQuery = {
   producto: "",
@@ -111,6 +112,7 @@ const Dashboard = () => {
   };
 
   return (
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
         Múltiples Consultas
@@ -421,6 +423,10 @@ const Dashboard = () => {
           </div>
         </div>
       )}
+    </div>
+    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
+      <PreguntasFrecuentes />
+    </div>
     </div>
   );
 };
