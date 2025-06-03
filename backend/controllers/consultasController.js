@@ -229,3 +229,37 @@ export const reejecutarConsulta = async (req, res) => {
     res.status(500).json({ message: "Error al re-ejecutar la consulta." });
   }
 };
+
+export const obtenerHistorialDeUsuario = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const { rows } = await pool.query(
+      `SELECT 
+        ch.id AS historial_id,
+        cu.id AS consulta_id,
+        cu.hash_request,
+        ch.fecha_consulta,
+        cu.producto,
+        cu.carga,
+        cu.modo,
+        cu.toneladas,
+        cu.importacion,
+        cu.comuna,
+        cu.puerto,
+        cu.puerto_ext,
+        cu.pais,
+        cu.cargapeligrosa,
+        cu.respuesta_json,
+        cu.fuente_respuesta
+      FROM tbl_consulta_historica ch
+      JOIN tbl_consulta_unica cu ON ch.consulta_id = cu.id
+      WHERE ch.user_id = $1
+      ORDER BY ch.fecha_consulta DESC`,
+      [userId]
+    );
+    res.json(rows); // <-- Array plano
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener historial de consultas" });
+  }
+};
+

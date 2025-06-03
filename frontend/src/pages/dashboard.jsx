@@ -114,7 +114,7 @@ const Dashboard = () => {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
+    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
       <h2 id="formulario-header" className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
         Múltiples Consultas
       </h2>
@@ -126,7 +126,7 @@ const Dashboard = () => {
         {queries.map((query, index) => (
           <div
             key={index}
-            className="mb-6 border border-gray-200 dark:border-gray-700 p-4 rounded-lg bg-gray-50 dark:bg-gray-700 relative transition-colors duration-300"
+            className="mb-6 border border-gray-200 dark:border-gray-700 p-4 rounded-lg bg-gray-50 dark:bg-black/20 relative transition-colors duration-300"
           >
             <div className="flex justify-between items-start mb-3">
               <h3 className="font-semibold text-gray-700 dark:text-gray-200">
@@ -225,7 +225,7 @@ const Dashboard = () => {
                       }}
                       isClearable
                       placeholder="Selecciona una opción..."
-                      className="text-sm react-select-container"
+                      className="text-sm react-select-container "
                       classNamePrefix="react-select"
                       styles={{
                         control: (provided, state) => ({
@@ -430,7 +430,7 @@ const Dashboard = () => {
         </div>
       )}
     </div>
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
+    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white dark:bg-black/20 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md dark:shadow-gray-900/50 transition-colors duration-300">
       <PreguntasFrecuentes />
     </div>
     </div>

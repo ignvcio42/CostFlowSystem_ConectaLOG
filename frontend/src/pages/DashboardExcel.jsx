@@ -15,6 +15,7 @@ import modo from "@/data/diccionario_modos.json";
 import importaciones from "@/data/diccionario_importaciones.json";
 import cargapeligrosa from "@/data/diccionario_cargaspeligrosas.json";
 import TutorialExcel from "@/components/tutoriales/TutorialExcel";
+import { UploadCloud, Loader2 } from "lucide-react";
 
 const DashboardExcel = () => {
   const [cargando, setCargando] = useState(false);
@@ -239,7 +240,7 @@ const DashboardExcel = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-6 p-6 border rounded-xl shadow-lg bg-white dark:bg-muted dark:text-white transition-all duration-300">
+    <div className="max-w-4xl mx-auto mt-6 p-6 rounded-xl shadow-lg bg-white dark:text-white transition-all duration-300 dark:bg-black/20">
       <h2
         id="formulario-header"
         className="text-3xl font-bold mb-6 text-center bg-gradient-to-r"
@@ -254,12 +255,16 @@ const DashboardExcel = () => {
         <button
           id="descarga-plantilla"
           onClick={downloadTemplate}
-          className="px-4 py-2 bg-yellow-300 text-yellow-900 rounded-lg hover:bg-yellow-400 transition-colors"
+          className="px-4 py-2 bg-yellow-400 text-yellow-900 rounded-lg hover:bg-yellow-500 font-semibold transition-colors"
         >
           Descargar Plantilla Excel
         </button>
 
-        <label id="carga-excel" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer text-center">
+        <label
+          id="carga-excel"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-colors cursor-pointer text-center flex items-center justify-center gap-2"
+        >
+          <UploadCloud className="w-5 h-5" />
           Subir Archivo Excel
           <input
             type="file"
@@ -269,9 +274,17 @@ const DashboardExcel = () => {
           />
         </label>
 
-        {cargando && <p className="text-blue-600">Procesando archivo...</p>}
+        {cargando && (
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium">
+            <Loader2 className="animate-spin w-5 h-5" />
+            Procesando archivo...
+          </div>
+        )}
       </div>
-      <div id="instrucciones" className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <div
+        id="instrucciones"
+        className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"
+      >
         <h3 className="font-bold mb-2">Instrucciones:</h3>
         <ol className="list-decimal pl-5 space-y-2 text-sm">
           <li>Descargue la plantilla haciendo clic en el botón superior</li>

@@ -7,12 +7,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import HistorialFilter from "@/components/historial/HistorialFilter";
 import { useNavigate } from "react-router-dom";
+import { RefreshCcw, Edit2 } from "lucide-react";
 
 const History = () => {
   const [historial, setHistorial] = useState([]);
   const [error, setError] = useState("");
   const { user } = useStore((state) => state);
   const [selected, setSelected] = useState([]);
+  const [loadingReejecutarId, setLoadingReejecutarId] = useState(null);
+  const [loadingMultiples, setLoadingMultiples] = useState(false);
 
   const [isStickyVisible, setIsStickyVisible] = useState(false);
 
@@ -188,7 +191,7 @@ const History = () => {
     return (
       <Card
         key={consulta.historial_id}
-        className="dark:bg-muted bg-white p-4 rounded-xl shadow transition-all duration-300"
+        className="dark:bg-black/20 border-none bg-white p-4 rounded-xl shadow transition-all duration-300"
       >
         <div className="flex items-center mb-2">
           <input
@@ -341,15 +344,27 @@ const History = () => {
         {selected.length === 0 && (
           <div className="flex gap-2 mb-6">
             <button
-              className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center gap-2 font-medium"
               onClick={() => reejecutarConsulta(consulta)}
+              disabled={loadingReejecutarId === consulta.historial_id}
             >
-              Re-ejecutar esta consulta
+              <RefreshCcw
+                className={`w-4 h-4 ${
+                  loadingReejecutarId === consulta.historial_id
+                    ? "animate-spin"
+                    : ""
+                }`}
+              />
+              {loadingReejecutarId === consulta.historial_id
+                ? "Re-ejecutando..."
+                : "Re-ejecutar esta consulta"}
             </button>
+
             <button
-              className="mt-4 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              className="mt-4 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex items-center gap-2 font-medium"
               onClick={() => enviarUnicaConsultaADashboard(consulta)}
             >
+              <Edit2 className="w-4 h-4" />
               Editar esta consulta
             </button>
           </div>
@@ -360,7 +375,6 @@ const History = () => {
 
   // Recibe como parámetro una consulta del historial (como las que ya tienes en el render)
   const reejecutarConsulta = async (consulta) => {
-    // Construye el objeto de parámetros con los datos de la consulta
     const params = {
       producto: consulta.producto,
       carga: consulta.carga,
@@ -374,20 +388,25 @@ const History = () => {
       cargapeligrosa: consulta.cargapeligrosa,
     };
 
+    setLoadingReejecutarId(consulta.historial_id);
     try {
       await api.post("/consultas-historicas/reejecutar-consulta", params);
       toast.success("Consulta ejecutada nuevamente");
-      console.log("params enviados:", params);
-      setTimeout(() => window.location.reload(), 1000);
+      // Puedes recargar solo el historial, sin reload de toda la página:
+      // fetchHistorial(); // Descomenta si tienes la función accesible aquí
+      setTimeout(() => window.location.reload(), 1000); // o tu lógica previa
     } catch (err) {
       toast.error(
         "No se pudo ejecutar la consulta. Por favor, inténtalo de nuevo."
       );
       setTimeout(() => window.location.reload(), 1000);
+    } finally {
+      setLoadingReejecutarId(null);
     }
   };
 
   const reejecutarMultiplesConsultas = async () => {
+    setLoadingMultiples(true);
     try {
       const consultasSeleccionadas = historial.filter((c) =>
         selected.includes(c.historial_id)
@@ -406,7 +425,6 @@ const History = () => {
             pais: Number(consulta.pais ?? 0),
             cargapeligrosa: Number(consulta.cargapeligrosa ?? 0),
           };
-          console.log("Params enviados:", params);
           return api.post("/consultas-historicas/reejecutar-consulta", params);
         })
       );
@@ -415,6 +433,8 @@ const History = () => {
     } catch (err) {
       toast.error("Error al ejecutar las consultas seleccionadas");
       setTimeout(() => window.location.reload(), 1000);
+    } finally {
+      setLoadingMultiples(false);
     }
   };
 
@@ -447,16 +467,25 @@ const History = () => {
           } flex gap-2 transition-all duration-300`}
         >
           <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition flex items-center gap-2 font-medium"
             onClick={async () => {
               await reejecutarMultiplesConsultas();
               setSelected([]); // Limpia la selección después de ejecutar
             }}
+            disabled={loadingMultiples}
           >
-            Ejecutar {selected.length} consulta
-            {selected.length > 1 ? "s" : ""} seleccionada
-            {selected.length > 1 ? "s" : ""}
+            <RefreshCcw
+              className={`w-4 h-4 ${loadingMultiples ? "animate-spin" : ""}`}
+            />
+            {loadingMultiples
+              ? `Ejecutando ${selected.length} consulta${
+                  selected.length > 1 ? "s" : ""
+                }...`
+              : `Ejecutar ${selected.length} consulta${
+                  selected.length > 1 ? "s" : ""
+                } seleccionada${selected.length > 1 ? "s" : ""}`}
           </button>
+
           <button
             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
             onClick={enviarSeleccionadasADashboard}

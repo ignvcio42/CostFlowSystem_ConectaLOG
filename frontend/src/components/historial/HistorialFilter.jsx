@@ -8,7 +8,7 @@ const HistorialFilter = ({
   productoOptions,
 }) => {
   return (
-    <div className="bg-white dark:bg-muted rounded-2xl shadow-lg p-6 mb-6 flex flex-wrap gap-4 border border-zinc-200 dark:border-white transition-colors">
+    <div className="bg-white  rounded-2xl shadow-lg p-6 mb-6 flex flex-wrap gap-4 dark:bg-black/20 transition-colors">
       <div>
         <label className="block text-sm font-medium mb-1 dark:text-white">
           Fecha

@@ -13,13 +13,13 @@ export default function GlosarioSection({ title, items }) {
   );
 
   return (
-    <Card className="p-4 my-4 hover:shadow-lg">
+    <Card className="p-4 my-4 hover:shadow-lg dark:bg-black/20 border-none">
       <h2 className="text-xl font-bold mb-2 dark:text-white">{title}</h2>
       <Input
         placeholder="Buscar..."
         value={search}
         onChange={e => setSearch(e.target.value)}
-        className="mb-4 rounded dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="mb-4 rounded dark:bg-white dark:text-black dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         id="buscador-glosario"
       />
       <List

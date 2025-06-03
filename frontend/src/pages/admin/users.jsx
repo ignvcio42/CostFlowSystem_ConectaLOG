@@ -16,6 +16,11 @@ const estados = [
   { value: "rechazado", label: "Rechazados" },
 ];
 
+const cerrarHistorial = () => {
+  setUsuarioHistorial(null);
+  setHistorial([]);
+};
+
 function badgeColor(motivo) {
   switch (motivo) {
     case "pendiente":
@@ -39,6 +44,32 @@ export default function UsuariosAdmin() {
   const [filtroEstado, setFiltroEstado] = useState("todos");
   const [busqueda, setBusqueda] = useState("");
   const { user } = useStore((state) => state);
+
+  // Estados para modal de historial
+  const [usuarioHistorial, setUsuarioHistorial] = useState(null);
+  const [historial, setHistorial] = useState([]);
+  const [loadingHistorial, setLoadingHistorial] = useState(false);
+
+  // Función para abrir historial
+  const handleVerHistorial = async (usuario) => {
+    setUsuarioHistorial(usuario);
+    setLoadingHistorial(true);
+    try {
+      const res = await api.get(
+        `/consultas-historicas/admin/historial/${usuario.id}`
+      );
+      console.log("Historial de consultas:", res.data);
+      setHistorial(res.data || []);
+    } catch (e) {
+      toast.error("No se pudo obtener el historial");
+    }
+    setLoadingHistorial(false);
+  };
+
+  const cerrarHistorial = () => {
+    setUsuarioHistorial(null);
+    setHistorial([]);
+  };
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -158,7 +189,7 @@ export default function UsuariosAdmin() {
       {/* Filtros */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <select
-          className="p-2 rounded border dark:bg-slate-800 dark:text-white"
+          className="p-2 rounded border dark:bg-black/20 dark:text-white"
           value={filtroEstado}
           onChange={(e) => {
             setFiltroEstado(e.target.value);
@@ -172,7 +203,7 @@ export default function UsuariosAdmin() {
           ))}
         </select>
         <input
-          className="p-2 rounded border dark:bg-slate-800 dark:text-white"
+          className="p-2 rounded border dark:bg-white dark:text-black"
           type="text"
           placeholder="Buscar por nombre o correo"
           value={busqueda}
@@ -182,7 +213,7 @@ export default function UsuariosAdmin() {
           }}
         />
         <Button
-          className="ml-auto dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
+          className="ml-auto dark:text-white dark:bg-black/20 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
           onClick={fetchUsuarios}
           variant="outline"
         >
@@ -194,7 +225,7 @@ export default function UsuariosAdmin() {
       <div className="overflow-x-auto">
         <table className="w-full bg-white dark:bg-muted rounded-xl overflow-hidden shadow dark:shadow-slate-800 border dark:border-slate-700">
           <thead>
-            <tr className="bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-white">
+            <tr className="bg-gray-200 dark:bg-black/20 text-gray-700 dark:text-white">
               <th
                 className="p-3 text-left cursor-pointer select-none"
                 onClick={() => cambiarOrden("firstname")}
@@ -274,7 +305,7 @@ export default function UsuariosAdmin() {
                     {usuario.motivo_estado === "pendiente" && (
                       <>
                         <Button
-                          className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
+                          className="dark:text-white dark:bg-gray-800 hover:bg-green-200 dark:border-gray-700 dark:hover:bg-green-200 dark:hover:text-gray-900 rounded"
                           disabled={actualizando === usuario.id}
                           onClick={() =>
                             cambiarEstadoUsuario(
@@ -289,7 +320,7 @@ export default function UsuariosAdmin() {
                           Aceptar
                         </Button>
                         <Button
-                          className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
+                          className="dark:text-white dark:bg-gray-800 hover:bg-red-200 dark:border-gray-700 dark:hover:bg-red-200 dark:hover:text-gray-900 rounded"
                           variant="destructive"
                           disabled={actualizando === usuario.id}
                           onClick={() =>
@@ -361,6 +392,16 @@ export default function UsuariosAdmin() {
                         Marcar como pendiente
                       </Button>
                     )}
+                    {usuario.motivo_estado === "aceptado" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="dark:text-white hover:bg-cyan-200 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-cyan-200 dark:hover:text-gray-900 rounded"
+                        onClick={() => handleVerHistorial(usuario)}
+                      >
+                        Ver historial
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))
@@ -372,7 +413,7 @@ export default function UsuariosAdmin() {
       {/* Paginación */}
       <div className="flex items-center justify-center mt-4 gap-2">
         <Button
-          className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
+          className="dark:text-white dark:bg-black/20 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           variant="outline"
@@ -383,7 +424,7 @@ export default function UsuariosAdmin() {
           Página {currentPage} de {totalPaginas}
         </span>
         <Button
-          className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
+          className="dark:text-white dark:bg-black/20 hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700 rounded"
           disabled={currentPage === totalPaginas || totalPaginas === 0}
           onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPaginas))}
           variant="outline"
@@ -391,6 +432,139 @@ export default function UsuariosAdmin() {
           Siguiente
         </Button>
       </div>
+      {usuarioHistorial && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
+          <Card className="w-full md:w-1/2 max-h-[80vh] overflow-auto rounded-2xl shadow-2xl border-2 border-gray-300 dark:border-gray-700 relative bg-white dark:bg-slate-900">
+            <CardContent className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="font-bold text-xl dark:text-white">
+                    Historial de {usuarioHistorial.firstname}{" "}
+                    {usuarioHistorial.lastname}
+                  </h3>
+                  <span className="text-sm text-gray-500">
+                    {usuarioHistorial.email}
+                  </span>
+                </div>
+                <Button
+                  className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded"
+                  onClick={cerrarHistorial}
+                >
+                  Cerrar
+                </Button>
+              </div>
+              {loadingHistorial ? (
+                <Skeleton className="h-40 w-full rounded" />
+              ) : (
+                <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-2">
+                  {historial.length === 0 ? (
+                    <div className="text-center text-gray-500 dark:text-gray-300">
+                      Sin consultas realizadas.
+                    </div>
+                  ) : (
+                    historial.map((consulta, idx) => (
+                      <Card
+                        key={consulta.historial_id || idx}
+                        className={`
+    mb-2 border-l-4 border-blue-500 shadow
+    transition-all duration-200
+    bg-white dark:bg-slate-800
+    hover:bg-blue-50 dark:hover:bg-slate-700
+    hover:shadow-md
+    cursor-pointer
+    rounded-xl
+  `}
+                      >
+                        <CardContent className="p-4">
+                          <p className="text-sm font-semibold mb-2 dark:text-white">
+                            <u>Consulta #{idx + 1}</u> -{" "}
+                            {new Date(consulta.fecha_consulta).toLocaleString()}
+                          </p>
+
+                          {/* Nacional */}
+                          {consulta.respuesta_json?.Nacional && (
+                            <>
+                              <p className="dark:text-white text-sm mb-1">
+                                <strong>Origen:</strong>{" "}
+                                {consulta.respuesta_json.Nacional[
+                                  "origen local"
+                                ] ?? consulta.comuna}
+                              </p>
+                              <p className="dark:text-white text-sm mb-1">
+                                <strong>Destino:</strong>{" "}
+                                {consulta.respuesta_json.Nacional[
+                                  "destino local"
+                                ] ??
+                                  consulta.puerto ??
+                                  consulta.puerto_ext ??
+                                  "-"}
+                              </p>
+                              <p className="dark:text-white text-sm mb-1">
+                                <strong>Capítulo:</strong>{" "}
+                                {consulta.respuesta_json.Nacional.producto
+                                  ?.Capitulo ?? "-"}
+                              </p>
+                              <p className="dark:text-white text-sm mb-1">
+                                <strong>Producto:</strong>{" "}
+                                {consulta.respuesta_json.Nacional.producto
+                                  ?.Partida ??
+                                  consulta.producto ??
+                                  "-"}
+                              </p>
+                              {consulta.respuesta_json.Nacional.producto
+                                ?.Glosa && (
+                                <p className="dark:text-white text-sm mb-1">
+                                  <strong>Glosa:</strong>{" "}
+                                  {
+                                    consulta.respuesta_json.Nacional.producto
+                                      .Glosa
+                                  }
+                                </p>
+                              )}
+                            </>
+                          )}
+
+                          {/* Internacional */}
+                          {consulta.respuesta_json?.Internacional && (
+                            <>
+                              <p className="dark:text-white text-sm mb-1">
+                                <strong>Sector Productivo:</strong>{" "}
+                                {consulta.respuesta_json.Internacional[
+                                  "Sector Productivo"
+                                ] ?? "-"}
+                              </p>
+                            </>
+                          )}
+
+                          {/* Modo de Transporte */}
+                          <p className="dark:text-white text-sm mb-1">
+                            <strong>Modo de Transporte:</strong>{" "}
+                            {consulta.modo ?? "-"}
+                          </p>
+
+                          {/* Errores */}
+                          {consulta.respuesta_json?.Internacional?.ERROR && (
+                            <p className="text-xs text-red-500 mb-1">
+                              <strong>Error Internacional:</strong>{" "}
+                              {consulta.respuesta_json.Internacional.ERROR}
+                            </p>
+                          )}
+                          {consulta.respuesta_json?.Nacional?.ERROR && (
+                            <p className="text-xs text-red-500 mb-1">
+                              <strong>Error Nacional:</strong>{" "}
+                              {consulta.respuesta_json.Nacional.ERROR}
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
