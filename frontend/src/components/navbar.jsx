@@ -23,9 +23,9 @@ const links = [
   // { label: "Formulario CSV", link: "/csv" },
   { label: "Formulario Excel", link: "/excel" },
   // { label: "Accounts", link: "/accounts" },
-  { label: "History", link: "/history" },
-  { label: "Settings", link: "/settings" },
-  { label: "Glosary", link: "/glosary" },
+  { label: "Historial", link: "/history" },
+  { label: "Configuracion", link: "/settings" },
+  { label: "Glosario", link: "/glosary" },
 ];
 
 const UserMenu = () => {

@@ -39,11 +39,8 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Mostrar toast si la sesión expiró y limpiar el flag
     if (localStorage.getItem("sessionExpired") === "1") {
-      toast.error(
-        "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
-      );
+      toast.error("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
       localStorage.removeItem("sessionExpired");
     }
   }, []);
@@ -55,107 +52,91 @@ const SignIn = () => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
       const { data: res } = await api.post("/auth/sign-in", data);
 
       if (res?.user) {
         toast.success(res?.message);
-
         const userInfo = { ...res?.user, token: res.token };
         localStorage.setItem("user", JSON.stringify(userInfo));
-
         setCredentails(userInfo);
-
-        setTimeout(() => {
-          navigate("/overview");
-        }, 1500);
+        setTimeout(() => navigate("/overview"), 1500);
       }
     } catch (error) {
       console.log(error);
-      toast.error(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Something went wrong"
-      );
+      toast.error(error?.response?.data?.message || error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center w-full min-h-screen py-10">
-      <Card className="w-[400px] bg-white dark:bg-black/20 shadow-md overflow-hidden">
-        <div className="py-0">
-          <CardHeader>
-            <CardTitle className="mb-8 text-center dark:text-white">
-              Sign in
-            </CardTitle>
-          </CardHeader>
+    <div className="flex items-center justify-center w-full min-h-screen py-10 bg-gray-50  bg-[url('/img/logistica-scaled.jpeg')] bg-cover bg-center backdrop-blur-xl">
+      <Card className="w-[400px] bg-white  shadow-xl rounded-xl overflow-hidden">
+        <CardHeader className="flex flex-col items-center gap-4 pt-6">
+          <img
+            src="/img/conecta_log.webp"
+            alt="ConectaLOG Logo"
+            className="h-20 w-auto object-contain hover:scale-105 transition-transform duration-300"
+          />
+          <CardTitle className="text-xl font-bold text-center">
+            Iniciar Sesión
+          </CardTitle>
+        </CardHeader>
 
-          <CardContent className="p-0">
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="space-y-6 px-6 pb-6"
-            >
-              <div className="space-y-2 dark:text-white">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="email@example.com"
-                  disabled={loading}
-                  {...register("email")}
-                />
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2 dark:text-white">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  disabled={loading}
-                  {...register("password")}
-                />
-                {errors.password && (
-                  <p className="text-sm text-red-500">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              <button
-                type="submit"
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-2 ">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="email@example.com"
                 disabled={loading}
-                className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition dark:bg-white dark:text-black dark:hover:bg-gray-200"
-              >
-                {loading ? "Signing in..." : "Sign in"}
-              </button>
-            </form>
-          </CardContent>
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
 
-          <CardFooter className="justify-center gap-2">
-            <p className="text-sm text-gray-600">Don't have an account?</p>
-            <Link
-              to="/sign-up"
-              className="text-sm text-blue-500 hover:underline"
+            <div className="space-y-2 ">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                disabled={loading}
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password.message}</p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition  "
             >
-              Sign up
+              {loading ? "Ingresando..." : "Ingresar"}
+            </button>
+          </form>
+        </CardContent>
+
+        <CardFooter className="flex flex-col gap-2 pb-6">
+          <p className="text-sm text-gray-600">
+            ¿No tienes una cuenta?{" "}
+            <Link to="/sign-up" className="text-blue-500 hover:underline">
+              Regístrate
             </Link>
-          </CardFooter>
-          <CardFooter className="justify-center gap-2">
-            <p className="text-sm text-gray-600">Forgot your password?</p>
-            <Link
-              to="/forgot-password"
-              className="text-sm text-blue-500 hover:underline"
-            >
-              Reset password
+          </p>
+          <p className="text-sm text-gray-600">
+            ¿Olvidaste tu contraseña?{" "}
+            <Link to="/forgot-password" className="text-blue-500 hover:underline">
+              Recuperar acceso
             </Link>
-          </CardFooter>
-        </div>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );

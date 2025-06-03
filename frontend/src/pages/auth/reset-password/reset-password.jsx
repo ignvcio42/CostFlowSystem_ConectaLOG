@@ -54,7 +54,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-slate-900">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-slate-900 ">
       <div className="bg-white dark:bg-[#222c38] rounded-xl p-8 shadow text-center w-full max-w-md">
         <h2 className="text-2xl mb-4 dark:text-white">Restablecer contraseña</h2>
         {done ? (
