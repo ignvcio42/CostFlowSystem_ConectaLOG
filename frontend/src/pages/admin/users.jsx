@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useStore from "@/store";
 import { ArrowDown, ArrowUp } from "lucide-react"; // O cualquier ícono de flecha
 import { toast } from "sonner";
+import { HistorialModalAdmin } from "./HistorialModalAdmin";
 
 const estados = [
   { value: "todos", label: "Todos" },
@@ -432,139 +433,12 @@ export default function UsuariosAdmin() {
           Siguiente
         </Button>
       </div>
-      {usuarioHistorial && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-          <Card className="w-full md:w-1/2 max-h-[80vh] overflow-auto rounded-2xl shadow-2xl border-2 border-gray-300 dark:border-gray-700 relative bg-white dark:bg-slate-900">
-            <CardContent className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <h3 className="font-bold text-xl dark:text-white">
-                    Historial de {usuarioHistorial.firstname}{" "}
-                    {usuarioHistorial.lastname}
-                  </h3>
-                  <span className="text-sm text-gray-500">
-                    {usuarioHistorial.email}
-                  </span>
-                </div>
-                <Button
-                  className="dark:text-white dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded"
-                  onClick={cerrarHistorial}
-                >
-                  Cerrar
-                </Button>
-              </div>
-              {loadingHistorial ? (
-                <Skeleton className="h-40 w-full rounded" />
-              ) : (
-                <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-2">
-                  {historial.length === 0 ? (
-                    <div className="text-center text-gray-500 dark:text-gray-300">
-                      Sin consultas realizadas.
-                    </div>
-                  ) : (
-                    historial.map((consulta, idx) => (
-                      <Card
-                        key={consulta.historial_id || idx}
-                        className={`
-    mb-2 border-l-4 border-blue-500 shadow
-    transition-all duration-200
-    bg-white dark:bg-slate-800
-    hover:bg-blue-50 dark:hover:bg-slate-700
-    hover:shadow-md
-    cursor-pointer
-    rounded-xl
-  `}
-                      >
-                        <CardContent className="p-4">
-                          <p className="text-sm font-semibold mb-2 dark:text-white">
-                            <u>Consulta #{idx + 1}</u> -{" "}
-                            {new Date(consulta.fecha_consulta).toLocaleString()}
-                          </p>
-
-                          {/* Nacional */}
-                          {consulta.respuesta_json?.Nacional && (
-                            <>
-                              <p className="dark:text-white text-sm mb-1">
-                                <strong>Origen:</strong>{" "}
-                                {consulta.respuesta_json.Nacional[
-                                  "origen local"
-                                ] ?? consulta.comuna}
-                              </p>
-                              <p className="dark:text-white text-sm mb-1">
-                                <strong>Destino:</strong>{" "}
-                                {consulta.respuesta_json.Nacional[
-                                  "destino local"
-                                ] ??
-                                  consulta.puerto ??
-                                  consulta.puerto_ext ??
-                                  "-"}
-                              </p>
-                              <p className="dark:text-white text-sm mb-1">
-                                <strong>Capítulo:</strong>{" "}
-                                {consulta.respuesta_json.Nacional.producto
-                                  ?.Capitulo ?? "-"}
-                              </p>
-                              <p className="dark:text-white text-sm mb-1">
-                                <strong>Producto:</strong>{" "}
-                                {consulta.respuesta_json.Nacional.producto
-                                  ?.Partida ??
-                                  consulta.producto ??
-                                  "-"}
-                              </p>
-                              {consulta.respuesta_json.Nacional.producto
-                                ?.Glosa && (
-                                <p className="dark:text-white text-sm mb-1">
-                                  <strong>Glosa:</strong>{" "}
-                                  {
-                                    consulta.respuesta_json.Nacional.producto
-                                      .Glosa
-                                  }
-                                </p>
-                              )}
-                            </>
-                          )}
-
-                          {/* Internacional */}
-                          {consulta.respuesta_json?.Internacional && (
-                            <>
-                              <p className="dark:text-white text-sm mb-1">
-                                <strong>Sector Productivo:</strong>{" "}
-                                {consulta.respuesta_json.Internacional[
-                                  "Sector Productivo"
-                                ] ?? "-"}
-                              </p>
-                            </>
-                          )}
-
-                          {/* Modo de Transporte */}
-                          <p className="dark:text-white text-sm mb-1">
-                            <strong>Modo de Transporte:</strong>{" "}
-                            {consulta.modo ?? "-"}
-                          </p>
-
-                          {/* Errores */}
-                          {consulta.respuesta_json?.Internacional?.ERROR && (
-                            <p className="text-xs text-red-500 mb-1">
-                              <strong>Error Internacional:</strong>{" "}
-                              {consulta.respuesta_json.Internacional.ERROR}
-                            </p>
-                          )}
-                          {consulta.respuesta_json?.Nacional?.ERROR && (
-                            <p className="text-xs text-red-500 mb-1">
-                              <strong>Error Nacional:</strong>{" "}
-                              {consulta.respuesta_json.Nacional.ERROR}
-                            </p>
-                          )}
-                        </CardContent>
-                      </Card>
-                    ))
-                  )}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      <HistorialModalAdmin
+        usuarioHistorial={usuarioHistorial}
+        cerrarHistorial={cerrarHistorial}
+        loadingHistorial={loadingHistorial}
+        historial={historial}
+      />
     </div>
   );
 }

@@ -21,6 +21,7 @@ import ForgotPassword from "./pages/auth/reset-password/forgot-password";
 import ResetPassword from "./pages/auth/reset-password/reset-password";
 import Glosary from "./pages/glosary";
 import Footer from "./components/footer";
+import NotFound from "./pages/NotFound";
 
 const RootLayout = () => {
   const { user } = useStore((state) => state);
@@ -68,6 +69,7 @@ function App() {
           {/* <Route path="/csv" element={<DashboardCsv />} /> */}
           <Route path="/excel" element={<DashboardExcel />} />
 
+
           {/* Ruta protegida solo para rol ADMIN */}
           <Route
             path="/admin/users"
@@ -85,6 +87,8 @@ function App() {
         <Route path="/verificar-correo" element={<ProcessVerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Toaster richColors position="top-right" />
