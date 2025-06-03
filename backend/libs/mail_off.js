@@ -1,37 +1,28 @@
 // libs/email.js
-import nodemailer from "nodemailer";
 import { Resend } from "resend";
 
-// const resend = new Resend("re_5W2PUdB7_K7kK1ozrXstiWQedQWQovwWt"); // pon tu API key de Resend
+const resend = new Resend("re_5W2PUdB7_K7kK1ozrXstiWQedQWQovwWt"); // Reemplaza con tu API Key real
 
-// Usando el transporter Resend para nodemailer
-// Usando mailtrap para pruebas
-const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
-  auth: {
-    user: "37a50261d9fe5b",
-    pass: "bab2990c5c35fd",
-  },
-});
+const FROM_EMAIL = "noreply@pruebastestcostflow.store"; // Cambia por tu dominio
 
 export async function sendVerificationEmail(to, token) {
-  const verifyUrl = `http://localhost:5173/verificar-correo?token=${token}`; // Ajusta tu frontend
-  const mailOptions = {
-    from: '"Tu App" <noreply@mailtrap.io>', // Puedes dejarlo así para pruebas
+  const verifyUrl = `http://localhost:5173/verificar-correo?token=${token}`;
+  await resend.emails.send({
+    from: `"Tu App" <${FROM_EMAIL}>`,
     to,
     subject: "Verifica tu correo electrónico",
-    html: `<p>Haz click en el siguiente enlace para verificar tu correo:</p>
-           <a href="${verifyUrl}">${verifyUrl}</a>
-           <p>Este enlace expirará en 24 horas.</p>`,
-  };
-  await transporter.sendMail(mailOptions);
+    html: `
+      <p>Haz click en el siguiente enlace para verificar tu correo:</p>
+      <a href="${verifyUrl}">${verifyUrl}</a>
+      <p>Este enlace expirará en 24 horas.</p>
+    `,
+  });
 }
 
 export async function sendResetPasswordEmail(to, token) {
   const resetUrl = `http://localhost:5173/reset-password?token=${token}`;
-  const mailOptions = {
-    from: '"Tu App" <noreply@mailtrap.io>',
+  await resend.emails.send({
+    from: `"Tu App" <${FROM_EMAIL}>`,
     to,
     subject: "Recuperar contraseña",
     html: `
@@ -39,56 +30,54 @@ export async function sendResetPasswordEmail(to, token) {
       <a href="${resetUrl}">${resetUrl}</a>
       <p>Este enlace expira en 1 hora.</p>
     `,
-  };
-  await transporter.sendMail(mailOptions);
+  });
 }
 
 export async function sendEmailToAdmins(adminEmails, user) {
   const subject = "Nuevo usuario esperando confirmación";
   const html = `
-    <p>El usuario <b>${user?.firstname}</b> con correo <b>${user?.email}</b> ha verificado su correo y está esperando ser confirmado.</p>
+    <p>El usuario "<b>${user?.firstname}</b>" con correo "<b>${user?.email}</b>" ha verificado su correo y está esperando ser confirmado.</p>
     <p>Por favor ingresa al panel de administración para aceptar o rechazar la cuenta.</p>
   `;
-  await transporter.sendMail({
-    from: '"Sistema" <noreply@mailtrap.io>',
-    to: adminEmails.join(","),
+  await resend.emails.send({
+    from: `"Sistema" <${FROM_EMAIL}>`,
+    to: adminEmails,
     subject,
     html,
   });
 }
 
-export async function sendUserAcceptedEmail(userEmail, nombre) {
-  await transporter.sendMail({
-    from: '"Plataforma" <noreply@mailtrap.io>',
+export async function sendUserAcceptedEmail(userEmail, nuevo_estado, comentario) {
+  const subject = nuevo_estado
+    ? "¡Tu cuenta ha sido aceptada!"
+    : "Tu cuenta fue rechazada";
+  const html = nuevo_estado
+    ? `<p>¡Felicitaciones! Tu cuenta ha sido activada y ya puedes iniciar sesión.</p>`
+    : `<p>Lamentablemente, tu cuenta fue rechazada. Comentario del admin: <br>${comentario || "(Sin comentario)"}.</p>`;
+
+  await resend.emails.send({
+    from: `"Sistema" <${FROM_EMAIL}>`,
     to: userEmail,
-    subject: "¡Tu cuenta ha sido aceptada!",
-    html: `
-      <h2>¡Bienvenido/a, ${nombre}!</h2>
-      <p>Tu cuenta ha sido <strong>aceptada</strong> por un administrador.</p>
-      <p>Ahora puedes iniciar sesión en la plataforma.</p>
-      <a href="https://tusistema.com/sign-in" style="display:inline-block;margin-top:12px;padding:10px 20px;background:#22c55e;color:white;text-decoration:none;border-radius:8px;">Iniciar sesión</a>
-      <p style="color:#888;margin-top:16px;font-size:13px;">Si tienes dudas o problemas, contáctanos.</p>
-    `,
+    subject,
+    html,
   });
 }
 
-export async function sendUserRejectedEmail(userEmail, nombre, comentario) {
-  await transporter.sendMail({
-    from: '"Plataforma" <noreply@mailtrap.io>',
+export async function sendUserRejectedEmail(userEmail, nombre, comentario = "") {
+  await resend.emails.send({
+    from: `"Sistema" <${FROM_EMAIL}>`,
     to: userEmail,
     subject: "Tu cuenta fue rechazada",
     html: `
-      <h2>Hola, ${nombre}</h2>
-      <p>Lamentablemente, tu cuenta fue <strong>rechazada</strong> por el administrador.</p>
-      <p><b>Motivo:</b> ${comentario ? comentario : "No se indicó un motivo."}</p>
-      <p style="color:#888;margin-top:16px;font-size:13px;">Si crees que esto fue un error o tienes preguntas, responde a este correo.</p>
+      <p>Hola ${nombre},</p>
+      <p>Lamentablemente tu cuenta fue rechazada.</p>
+      <p>${comentario ? `Motivo: <i>${comentario}</i>` : ""}</p>
     `,
   });
 }
-
 export async function sendUserDisabledEmail(userEmail, nombre, comentario) {
-  await transporter.sendMail({
-    from: '"Plataforma" <noreply@mailtrap.io>',
+  await resend.emails.send({
+    from: `"Plataforma" <${FROM_EMAIL}>`,
     to: userEmail,
     subject: "Tu cuenta fue deshabilitada",
     html: `
@@ -102,8 +91,8 @@ export async function sendUserDisabledEmail(userEmail, nombre, comentario) {
 }
 
 export async function sendUserEnabledEmail(userEmail, nombre) {
-  await transporter.sendMail({
-    from: '"Plataforma" <noreply@mailtrap.io>',
+  await resend.emails.send({
+    from: `"Plataforma" <${FROM_EMAIL}>`,
     to: userEmail,
     subject: "¡Tu cuenta ha sido habilitada de nuevo!",
     html: `
@@ -226,11 +215,12 @@ export async function sendUserQuerySummary(to, resultados) {
   }
 
   // ==== ENVÍA EL CORREO ====
-  await transporter.sendMail({
-    from: '"Tu App" <noreply@mailtrap.io>',
+  await resend.emails.send({
+    from: `"Tu App" <${FROM_EMAIL}>`,
     to,
     subject: "Respaldo resumido de tus consultas (no responder)",
     html,
     ...(attachments.length > 0 && { attachments }),
   });
 }
+
