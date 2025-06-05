@@ -11,14 +11,14 @@ import TutorialFormulario from "@/components/tutoriales/TutorialFormulario";
 
 const emptyQuery = {
   producto: "",
-  carga: 0, // Cambiado a número
-  modo: "",
+  carga: null, // Cambiado a número
+  modo: "", // Cambiado a string
   toneladas: 0.0, // Cambiado a número
-  importacion: 0, // Cambiado a número
-  comuna: 0, // Cambiado a número
-  puerto: 0, // Cambiado a número
+  importacion: null, // Cambiado a número
+  comuna: null, // Cambiado a número
+  puerto: null, // Cambiado a número
   puerto_ext: 0, // Cambiado a número
-  pais: 0, // Cambiado a número
+  pais: null, // Cambiado a número
   cargapeligrosa: 0, // Cambiado a número
 };
 
@@ -92,29 +92,46 @@ const Dashboard = () => {
         ? response.data
         : [response.data];
 
-      // Manejo inteligente de errores y estados
-      let anyApiDown = results.some((r) => r.code === "API_DOWN");
-      let anyInvalid = results.some((r) => r.code === "QUERY_INVALID");
-      let anyOk = results.some((r) => !r.code); // sin error
+      // Clasifica buenas y malas (usa 'code' para detectar error)
+      const good = [];
+      const bad = [];
+      results.forEach((r, idx) => {
+        if (!r.code) {
+          good.push({ ...r, idx }); // idx: posición en queries
+        } else {
+          bad.push({ ...r, idx });
+        }
+      });
+
+      const anyApiDown = results.some((r) => r.code === "API_DOWN");
 
       if (anyApiDown) {
         setError(
           "Error: El sistema de consultas está temporalmente fuera de servicio. Intenta más tarde."
         );
-      } else if (anyInvalid && !anyOk) {
-        setError(
-          "Error: Al menos una de las consultas no es válida. Revisa los parámetros e intenta de nuevo."
-        );
-      } else if (anyInvalid && anyOk) {
-        setError(
-          "Algunas consultas no se pudieron procesar. Solo se mostrarán las válidas."
-        );
-        setResultados(results);
-      } else {
-        setResultados(results);
-        toast.success("Consultas realizadas con éxito");
-        setTimeout(() => navigate("/history"), 1000);
+        setResultados([]);
+        return;
       }
+
+      if (bad.length > 0) {
+        let msg = "";
+        if (good.length > 0) {
+          msg = `⚠️ Algunas consultas fueron exitosas, pero otras tienen errores. Revisa y corrige las consultas con error antes de continuar.`;
+        } else {
+          msg = `❌ Todas las consultas tienen errores. Corrige para continuar.`;
+        }
+        setError(msg);
+        setResultados(results);
+
+        // Deja solo las consultas malas para que el usuario las corrija
+        setQueries(bad.map((badItem) => queries[badItem.idx]));
+        return;
+      }
+
+      // Si todas son buenas
+      setResultados(results);
+      toast.success("Consultas realizadas con éxito");
+      setTimeout(() => navigate("/history"), 1000);
     } catch (err) {
       setError(
         "No se pudo contactar con el servidor. Intenta de nuevo más tarde."
@@ -127,9 +144,42 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Limpia errores previos
+
+    const vaciosPorConsulta = validarQueries(queries);
+
+    // Busca si alguna consulta tiene campos vacíos
+    const consultasInvalidas = vaciosPorConsulta
+      .map((campos, idx) =>
+        campos.length > 0
+          ? `Consulta #${idx + 1}: ${campos
+              .map((c) => fieldLabels[c] || c)
+              .join(", ")}`
+          : null
+      )
+      .filter(Boolean);
+
+    if (consultasInvalidas.length > 0) {
+      setError(
+        `Faltan valores por responder:\n` + consultasInvalidas.join("\n")
+      );
+      return;
+    }
+
     setShowConfirmation(true);
   };
-  
+
+  const validarQueries = (queries) => {
+    return queries.map((q) => {
+      const vacios = [];
+      Object.entries(q).forEach(([key, val]) => {
+        if (val === "" || val === null || val === undefined) {
+          vacios.push(key);
+        }
+      });
+      return vacios;
+    });
+  };
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -417,9 +467,40 @@ const Dashboard = () => {
           </div>
         </form>
 
+        {resultados.length > 0 && (
+          <div className="mt-4">
+            {resultados.map((r, idx) =>
+              r.code ? (
+                <div
+                  key={idx}
+                  className="p-2 mb-2 bg-red-100 text-red-800 rounded"
+                >
+                  Consulta #{idx + 1}: <b>Error</b> -{" "}
+                  {r.error || "Consulta inválida"}
+                </div>
+              ) : (
+                <div
+                  key={idx}
+                  className="p-2 mb-2 bg-green-100 text-green-800 rounded"
+                >
+                  Consulta #{idx + 1}: <b>Exitosa</b>
+                </div>
+              )
+            )}
+          </div>
+        )}
+
         {error && (
           <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md text-red-600 dark:text-red-300">
-            {error}
+            {Array.isArray(error) ? (
+              <ul className="space-y-1">
+                {error.map((err, i) => (
+                  <li key={i}>{err}</li>
+                ))}
+              </ul>
+            ) : (
+              error.split("\n").map((line, i) => <div key={i}>{line}</div>)
+            )}
           </div>
         )}
 

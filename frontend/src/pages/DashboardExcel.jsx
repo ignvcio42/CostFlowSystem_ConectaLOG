@@ -225,12 +225,70 @@ const DashboardExcel = () => {
           "/consultas-historicas/consultar",
           queries
         );
+
+        // 1. Detecta si la API está caída
+        if (
+          !response ||
+          !response.data ||
+          (Array.isArray(response.data) && response.data.length === 0)
+        ) {
+          toast.error(
+            "El sistema de consultas está temporalmente fuera de servicio. Intenta más tarde."
+          );
+          setCargando(false);
+          return;
+        }
+
+        // 2. Procesa la respuesta para identificar errores individuales (malas consultas)
+        const resultados = Array.isArray(response.data)
+          ? response.data
+          : [response.data];
+        const erroresApi = [];
+        const exitosas = [];
+
+        resultados.forEach((res, idx) => {
+          if (res.code === "API_DOWN") {
+            erroresApi.push(
+              `Fila ${idx + 2}: La API externa no está disponible.`
+            );
+          } else if (
+            res.code === "QUERY_INVALID" ||
+            res.code === "API_UNKNOWN"
+          ) {
+            erroresApi.push(
+              `Fila ${idx + 2}: ${res.error || "Consulta inválida"}`
+            );
+          } else if (res.error) {
+            erroresApi.push(`Fila ${idx + 2}: ${res.error}`);
+          } else {
+            exitosas.push(res);
+          }
+        });
+
+        if (erroresApi.length > 0) {
+          setErrores(erroresApi); // Se muestran los errores en el card de errores
+          setCargando(false);
+          return;
+        }
+
+        // 3. Si no hay errores, éxito
         toast.success("Consultas realizadas con éxito");
         setTimeout(() => navigate("/history"), 1000);
       } catch (err) {
         console.error(err);
-        toast.error("Error en la consulta, revise el archivo.");
-        setTimeout(() => window.location.reload(), 1000);
+
+        // Detecta si es caída de la API (sin respuesta del servidor)
+        if (err.response === undefined) {
+          toast.error(
+            "El sistema de consultas está temporalmente fuera de servicio. Intenta más tarde."
+          );
+        } else if (err.response?.data?.message) {
+          toast.error(`Error: ${err.response.data.message}`);
+        } else {
+          toast.error("Error en la consulta, revise el archivo.");
+        }
+
+        setTimeout(() => window.location.reload(), 1500);
       } finally {
         setCargando(false);
       }
@@ -331,7 +389,7 @@ const DashboardExcel = () => {
         <code>'123</code>) se ven igual pero se guardan como texto.
       </div>
 
-      <ToastContainer position="bottom-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={5000} />
 
       {errores.length > 0 && (
         <div className="mt-6 p-4 rounded-xl shadow-lg border border-red-400 bg-red-50 dark:bg-red-900 dark:border-red-700">
