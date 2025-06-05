@@ -397,7 +397,7 @@ const History = () => {
       setTimeout(() => window.location.reload(), 1000); // o tu lógica previa
     } catch (err) {
       toast.error(
-        "No se pudo ejecutar la consulta. Por favor, inténtalo de nuevo."
+        "Error: El sistema de consultas está temporalmente fuera de servicio. Intenta más tarde."
       );
       setTimeout(() => window.location.reload(), 1000);
     } finally {

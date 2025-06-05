@@ -3,13 +3,13 @@ import axios from "axios";
 import { generarHashConsulta } from "../libs/hash.js";
 import { sendUserQuerySummary } from "../libs/mail.js";
 
+const API_URL = "http://localhost:8000/query";
+
 export const realizarConsulta = async (req, res) => {
   const userId = req.user.userId;
   const parametros = req.body;
-
   const isArray = Array.isArray(parametros);
   const queries = isArray ? parametros : [parametros];
-
   let resultados = [];
 
   try {
@@ -21,7 +21,6 @@ export const realizarConsulta = async (req, res) => {
         "SELECT * FROM tbl_consulta_unica WHERE hash_request = $1",
         [hash]
       );
-
       if (consultaExistente.rows.length > 0) {
         const consultaId = consultaExistente.rows[0].id;
         await pool.query(
@@ -32,21 +31,36 @@ export const realizarConsulta = async (req, res) => {
         continue;
       }
 
-      // Si no existe → intentar llamar API externa
+      // Llamada a la API externa
       let data;
       try {
-        const response = await axios.get("http://localhost:8000/query", {
-          params: query,
-        });
+        const response = await axios.get(API_URL, { params: query });
         data = response.data;
+
+        // Si la respuesta trae un error de validación de la API externa
+        if (data && data.error) {
+          resultados.push({ error: "Consulta inválida: " + data.error, code: "QUERY_INVALID" });
+          continue;
+        }
       } catch (apiError) {
-        resultados.push({
-          error: "La API externa no está disponible para una de las consultas.",
-        });
+        // API externa caída o error de red
+        if (apiError.code === "ECONNREFUSED" || apiError.code === "ENOTFOUND" || apiError.response === undefined) {
+          // API caída
+          resultados.push({ error: "La API externa no está disponible.", code: "API_DOWN" });
+        } else if (apiError.response) {
+          // Error conocido de la API (ej: 400)
+          resultados.push({
+            error: apiError.response.data?.error || "Error en la consulta a la API externa.",
+            code: "QUERY_INVALID"
+          });
+        } else {
+          // Otro error
+          resultados.push({ error: "Error desconocido al consultar la API externa.", code: "API_UNKNOWN" });
+        }
         continue;
       }
 
-      // Insertar en consulta única
+      // Guardar si todo salió bien
       const insert = await pool.query(
         `INSERT INTO tbl_consulta_unica (
           hash_request, producto, carga, modo, toneladas, importacion,
@@ -79,12 +93,9 @@ export const realizarConsulta = async (req, res) => {
       resultados.push(data);
     }
 
-    // Devolver los resultados (uno o varios)
     res.json(isArray ? resultados : resultados[0]);
 
-    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    // ENVÍA EL CORREO SOLO UNA VEZ CON TODAS LAS CONSULTAS
-    setTimeout(async () => {
+     setTimeout(async () => {
       try {
         let userEmail = req.user?.email;
         if (!userEmail) {
@@ -108,12 +119,12 @@ export const realizarConsulta = async (req, res) => {
       }
     }, 0);
 
-    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al procesar la consulta." });
+    res.status(500).json({ message: "Error al procesar la consulta.", code: "INTERNAL_ERROR" });
   }
 };
+
 
 export const obtenerHistorial = async (req, res) => {
   const userId = req.user.userId;
