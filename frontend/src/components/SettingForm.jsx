@@ -62,7 +62,9 @@ export const SettingForm = () => {
             type="text"
             placeholder="Doe"
             error={errors.firstname?.message}
-            {...register("firstname")}
+            {...register("firstname", {
+              required: "El nombre no puede estar vacío",
+            })}
             className="bg-transparent appearance-none border border-gray-300 dark:border-gray-800 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-500 outline-none focus:ring-1 ring-blue-500 dark:placeholder:text-gray-700"
           />
         </div>
@@ -74,7 +76,9 @@ export const SettingForm = () => {
             type="text"
             placeholder="John"
             error={errors.lastname?.message}
-            {...register("lastname")}
+            {...register("lastname", {
+              required: "El apellido no puede estar vacío",
+            })}
             className="bg-transparent appearance-none border border-gray-300 dark:border-gray-800 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-500 outline-none focus:ring-1 ring-blue-500 dark:placeholder:text-gray-700"
           />
         </div>
@@ -87,7 +91,7 @@ export const SettingForm = () => {
             label="Email"
             type="text"
             placeholder="Doe@gmail.com"
-            error={errors.firstname?.message}
+            error={errors.email?.message}
             {...register("email")}
             className="bg-transparent appearance-none border border-gray-300 dark:border-gray-800 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-500 outline-none focus:ring-1 ring-blue-500 dark:placeholder:text-gray-700"
           />
@@ -99,8 +103,10 @@ export const SettingForm = () => {
             label="Phone"
             type="text"
             placeholder="+56912345678"
-            error={errors.lastname?.message}
-            {...register("contact")}
+            error={errors.contact?.message}
+            {...register("contact", {
+              required: "El contacto no puede estar vacío",
+            })}
             className="bg-transparent appearance-none border border-gray-300 dark:border-gray-800 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-500 outline-none focus:ring-1 ring-blue-500 dark:placeholder:text-gray-700"
           />
         </div>

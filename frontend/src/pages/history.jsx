@@ -497,11 +497,15 @@ const History = () => {
       )}
 
       {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-      {historial.length === 0 ? (
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-xl" />
-          ))}
+      {error ? (
+        <p className="text-center text-red-500 mt-8">{error}</p>
+      ) : historial.length === 0 ? (
+        <div className="text-center mt-8 text-gray-600 dark:text-white">
+          No se encontraron consultas previas.
+        </div>
+      ) : filteredHistorial.length === 0 ? (
+        <div className="text-center mt-8 text-gray-600 dark:text-white">
+          No hay resultados que coincidan con los filtros aplicados.
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 ">

@@ -17,21 +17,26 @@ export function setAuthToken(token) {
 
 // INTERCEPTOR GLOBAL PARA TOKEN EXPIRADO
 api.interceptors.response.use(
-  response => response,
-  error => {
-    if (
-      error.response &&
-      (error.response.status === 401 ||
-        error.response.data?.message?.toLowerCase().includes("jwt expired"))
-    ) {
+  (response) => response,
+  (error) => {
+    const requestUrl = error.config?.url || "";
+
+    const isTokenExpired =
+      error.response?.data?.message?.toLowerCase().includes("jwt expired");
+
+    const isUnauthorized =
+      error.response?.status === 401 && !requestUrl.includes("/user/change-password");
+
+    if (error.response && (isUnauthorized || isTokenExpired)) {
       localStorage.removeItem("user");
-      // GUARDAR FLAG
       localStorage.setItem("sessionExpired", "1");
       window.location.href = "/sign-in";
     }
+
     return Promise.reject(error);
   }
 );
+
 
 
 export default api;

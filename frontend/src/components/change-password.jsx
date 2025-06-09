@@ -28,10 +28,16 @@ const ChangePassword = () => {
       }
     } catch (error) {
       console.error("Error changing password:", error);
+
+      if (error?.response?.status === 401) {
+        toast.error("La contraseña actual ingresada es incorrecta.");
+        return;
+      }
+
       toast.error(
         error?.response?.data?.message ||
           error?.message ||
-          "Something went wrong!"
+          "Ocurrió un error inesperado al cambiar la contraseña."
       );
     } finally {
       setLoading(false);
@@ -50,31 +56,39 @@ const ChangePassword = () => {
           </span>
           <div className="mt-6 space-y-6">
             <Input_2
-              className="w-full text-sm border dark:border-gray-800 dark:bg-transparent dark:placeholder:text-gray-700 dark:text-gray-400 dark:outline-none"
+              className="..."
               disabled={loading}
               type="password"
               name="currentPassword"
               label="Current Password"
               {...register("currentPassword", {
                 required: "Current password is required",
+                minLength: {
+                  value: 3,
+                  message: "Password must be at least 6 characters",
+                },
               })}
-              error={
-                errors.currentPassword ? errors.currentPassword.message : ""
-              }
+              error={errors.currentPassword?.message}
             />
+
             <Input_2
-              className="w-full text-sm border dark:border-gray-800 dark:bg-transparent dark:placeholder:text-gray-700 dark:text-gray-400 dark:outline-none"
+              className="..."
               disabled={loading}
               type="password"
               name="newPassword"
               label="New Password"
               {...register("newPassword", {
                 required: "New password is required",
+                minLength: {
+                  value: 4,
+                  message: "Password must be at least 8 characters",
+                },
               })}
-              error={errors.newPassword ? errors.newPassword.message : ""}
+              error={errors.newPassword?.message}
             />
+
             <Input_2
-              className="w-full text-sm border dark:border-gray-800 dark:bg-transparent dark:placeholder:text-gray-700 dark:text-gray-400 dark:outline-none"
+              className="..."
               disabled={loading}
               type="password"
               name="confirmPassword"
@@ -83,13 +97,10 @@ const ChangePassword = () => {
                 required: "Confirm password is required",
                 validate: (value) => {
                   const { newPassword } = getValues();
-
                   return newPassword === value || "Passwords do not match";
                 },
               })}
-              error={
-                errors.confirmPassword ? errors.confirmPassword.message : ""
-              }
+              error={errors.confirmPassword?.message}
             />
           </div>
         </div>
