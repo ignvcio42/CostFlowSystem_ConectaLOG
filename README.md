@@ -2,9 +2,9 @@
 
 *Optimice costos, potencie las decisiones e impulse el éxito*
 
-![last commit](https://img.shields.io/github/last-commit/tu-usuario/tu-repo)
-![build](https://img.shields.io/github/workflow/status/tu-usuario/tu-repo/build)
-![language](https://img.shields.io/github/languages/top/tu-usuario/tu-repo)
+![last commit](https://img.shields.io/github/last-commit/ignvcio42/https://github.com/ignvcio42/CostFlowSystem_ConectaLOG)
+![build](https://img.shields.io/github/workflow/status/ignvcio42/https://github.com/ignvcio42/CostFlowSystem_ConectaLOG/build)
+![language](https://img.shields.io/github/languages/top/ignvcio42/https://github.com/ignvcio42/CostFlowSystem_ConectaLOG)
 
 > Construido con las herramientas y tecnologías:
 
