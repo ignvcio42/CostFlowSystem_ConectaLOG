@@ -23,17 +23,6 @@
 
 ---
 
-## 📑 Tabla de contenido
-
-- [Descripción general](#descripción-general)
-- [Empezando](#empezando)
-  - [Prerrequisitos](#prerrequisitos)
-  - [Instalación](#instalación)
-- [Uso](#uso)
-- [Pruebas](#pruebas)
-
----
-
 ## 📌 Descripción general
 
 **CostFlowSystem_ConectaLOG** es una poderosa herramienta diseñada para optimizar los procesos de gestión de costos a través de una integración perfecta y un manejo eficiente de datos.
