@@ -198,7 +198,7 @@ export default function UsuariosAdmin() {
           }}
         >
           {estados.map((e) => (
-            <option key={e.value} value={e.value}>
+            <option key={e.value} value={e.value} className="dark:bg-black/20 dark:text-black">
               {e.label}
             </option>
           ))}
