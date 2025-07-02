@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import HistorialFilter from "@/components/historial/HistorialFilter";
 import { useNavigate } from "react-router-dom";
 import { RefreshCcw, Edit2 } from "lucide-react";
+import { AlarmClockOff } from "lucide-react";
 
 const History = () => {
   const [historial, setHistorial] = useState([]);
@@ -169,6 +170,11 @@ const History = () => {
     }
   };
 
+  const consultaExpirada = (consulta) => {
+    if (!consulta.fecha_valida_hasta) return false;
+    return new Date(consulta.fecha_valida_hasta) < new Date();
+  };
+
   const renderConsulta = (consulta, index) => {
     const nacional = consulta.respuesta_json?.Nacional;
     const internacional = consulta.respuesta_json?.Internacional;
@@ -218,6 +224,12 @@ const History = () => {
             </strong>{" "}
             - {new Date(consulta.fecha_consulta).toLocaleString()}
           </p>
+          {consultaExpirada(consulta) && (
+            <div className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400 mt-1">
+              <AlarmClockOff className="w-4 h-4" />
+              Consulta expirada
+            </div>
+          )}
 
           {(nacional || internacional) && (
             <div className="mb-3">

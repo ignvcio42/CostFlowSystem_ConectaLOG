@@ -80,3 +80,12 @@ CREATE INDEX idx_consulta_unica_hash ON tbl_consulta_unica(hash_request);
 TRUNCATE TABLE tbl_consulta_historica, tbl_consulta_unica, tbluser 
 RESTART IDENTITY CASCADE;
 ------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
+--Esto agregue al final
+ALTER TABLE tbluser ADD COLUMN validez_preferida INTEGER DEFAULT 2;
+ALTER TABLE tbl_consulta_historica
+ADD COLUMN periodo_validez INTERVAL NOT NULL DEFAULT INTERVAL '2 months',
+ADD COLUMN fecha_valida_hasta TIMESTAMP WITH TIME ZONE;
+------------------------------------------------------------------------

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import ActualizacionDatos from "@/components/Actualizacion-datos";
 
 const Settings = () => {
   const { user, setCredentails } = useStore((state) => state);
@@ -55,9 +56,12 @@ const Settings = () => {
             </p>
           </div>
           <SettingForm />
+        {/* Sección de Actualizacion de datso historicos */}
+        <ActualizacionDatos />
 
           {!user?.provided && <ChangePassword />}
         </div>
+
 
         {/* Botón para abrir modal */}
         <div className="flex justify-end mt-8">

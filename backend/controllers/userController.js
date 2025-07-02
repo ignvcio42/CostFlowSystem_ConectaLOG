@@ -214,3 +214,51 @@ export const disableOwnUser = async (req, res) => {
     res.status(500).json({ status: "error", message: "Error en el servidor" });
   }
 };
+
+export const actualizarPeriodoValidez = async (req, res) => {
+  const userId = req.user.userId;
+  const { periodo_validez_meses } = req.body;
+
+  if (
+    !periodo_validez_meses ||
+    isNaN(periodo_validez_meses) ||
+    periodo_validez_meses <= 0
+  ) {
+    return res
+      .status(400)
+      .json({ message: "Valor de periodo inválido.", code: "INVALID_VALUE" });
+  }
+
+  try {
+    await pool.query(
+      `UPDATE tbluser
+       SET validez_preferida = $1,
+           updatedAt = CURRENT_TIMESTAMP
+       WHERE id = $2`,
+      [periodo_validez_meses, userId]
+    );
+
+    res.status(200).json({ message: "Periodo actualizado correctamente." });
+  } catch (error) {
+    console.error("Error al actualizar periodo de validez:", error);
+    res
+      .status(500)
+      .json({ message: "Error interno del servidor.", code: "INTERNAL_ERROR" });
+  }
+};
+
+// En controllers/userController.js
+export const obtenerPeriodoValidez = async (req, res) => {
+  const userId = req.user.userId;
+  try {
+    const { rows } = await pool.query(
+      "SELECT validez_preferida FROM tbluser WHERE id = $1",
+      [userId]
+    );
+    const validez = rows[0]?.validez_preferida ?? 2;
+    res.json({ periodo_validez_meses: validez });
+  } catch (error) {
+    console.error("Error al obtener validez:", error);
+    res.status(500).json({ message: "Error interno" });
+  }
+};

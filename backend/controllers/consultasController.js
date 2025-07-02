@@ -10,92 +10,147 @@ export const realizarConsulta = async (req, res) => {
   const parametros = req.body;
   const isArray = Array.isArray(parametros);
   const queries = isArray ? parametros : [parametros];
-  let resultados = [];
+  const resultados = [];
 
   try {
+    // 0. Obtener validez preferida del usuario
+    const { rows: userRows } = await pool.query(
+      "SELECT validez_preferida FROM tbluser WHERE id = $1",
+      [userId]
+    );
+    const meses = userRows[0]?.validez_preferida ?? 2;
+    const periodo_validez = `${meses} months`;
+
     for (const query of queries) {
       const hash = generarHashConsulta(query);
 
-      // Verificar si ya existe la consulta
+      // 1. Buscar si ya existe la consulta única
       const consultaExistente = await pool.query(
         "SELECT * FROM tbl_consulta_unica WHERE hash_request = $1",
         [hash]
       );
+
+      let data;
+      let consultaId = null;
+
       if (consultaExistente.rows.length > 0) {
-        const consultaId = consultaExistente.rows[0].id;
-        await pool.query(
-          "INSERT INTO tbl_consulta_historica (user_id, consulta_id) VALUES ($1, $2)",
+        // 2. Ya existe consulta única, usar su ID
+        const consulta = consultaExistente.rows[0];
+        consultaId = consulta.id;
+
+        // 3. Verificar si hay una entrada vigente en consulta_historica
+        const { rows: historialRows } = await pool.query(
+          `
+          SELECT fecha_valida_hasta
+          FROM tbl_consulta_historica
+          WHERE user_id = $1 AND consulta_id = $2
+          ORDER BY fecha_consulta DESC
+          LIMIT 1
+        `,
           [userId, consultaId]
         );
-        resultados.push(consultaExistente.rows[0].respuesta_json);
-        continue;
-      }
 
-      // Llamada a la API externa
-      let data;
-      try {
-        const response = await axios.get(API_URL, { params: query });
-        data = response.data;
+        const hoy = new Date();
+        const sigueVigente =
+          historialRows.length > 0 &&
+          new Date(historialRows[0].fecha_valida_hasta) > hoy;
 
-        // Si la respuesta trae un error de validación de la API externa
-        if (data && data.error) {
-          resultados.push({ error: "Consulta inválida: " + data.error, code: "QUERY_INVALID" });
+        if (sigueVigente) {
+          // 🔁 Aunque esté vigente, respondemos desde BD...
+          data = consulta.respuesta_json;
+        } else {
+          // 🔁 Si está expirada, consultamos la API
+          try {
+            const response = await axios.get(API_URL, { params: query });
+            data = response.data;
+
+            if (data && data.error) {
+              resultados.push({
+                error: "Consulta inválida: " + data.error,
+                code: "QUERY_INVALID",
+              });
+              continue;
+            }
+
+            // Opcional: podrías actualizar la respuesta antigua si quieres, pero no es necesario.
+          } catch (apiError) {
+            resultados.push({
+              error: "La API externa no está disponible.",
+              code: "API_DOWN",
+            });
+            continue;
+          }
+        }
+      } else {
+        // 4. No existe consulta única → consultar API y guardar
+        try {
+          const response = await axios.get(API_URL, { params: query });
+          data = response.data;
+
+          if (data && data.error) {
+            resultados.push({
+              error: "Consulta inválida: " + data.error,
+              code: "QUERY_INVALID",
+            });
+            continue;
+          }
+        } catch (apiError) {
+          resultados.push({
+            error: "La API externa no está disponible.",
+            code: "API_DOWN",
+          });
           continue;
         }
-      } catch (apiError) {
-        // API externa caída o error de red
-        if (apiError.code === "ECONNREFUSED" || apiError.code === "ENOTFOUND" || apiError.response === undefined) {
-          // API caída
-          resultados.push({ error: "La API externa no está disponible.", code: "API_DOWN" });
-        } else if (apiError.response) {
-          // Error conocido de la API (ej: 400)
-          resultados.push({
-            error: apiError.response.data?.error || "Error en la consulta a la API externa.",
-            code: "QUERY_INVALID"
-          });
-        } else {
-          // Otro error
-          resultados.push({ error: "Error desconocido al consultar la API externa.", code: "API_UNKNOWN" });
-        }
-        continue;
+
+        // 5. Insertar nueva consulta única
+        const insert = await pool.query(
+          `INSERT INTO tbl_consulta_unica (
+            hash_request, producto, carga, modo, toneladas, importacion,
+            comuna, puerto, puerto_ext, pais, cargapeligrosa,
+            respuesta_json, fuente_respuesta
+          ) VALUES (
+            $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'api_externa'
+          ) RETURNING id`,
+          [
+            hash,
+            query.producto,
+            query.carga,
+            query.modo,
+            query.toneladas,
+            query.importacion,
+            query.comuna,
+            query.puerto,
+            query.puerto_ext,
+            query.pais,
+            query.cargapeligrosa,
+            data,
+          ]
+        );
+        consultaId = insert.rows[0].id;
       }
 
-      // Guardar si todo salió bien
-      const insert = await pool.query(
-        `INSERT INTO tbl_consulta_unica (
-          hash_request, producto, carga, modo, toneladas, importacion,
-          comuna, puerto, puerto_ext, pais, cargapeligrosa,
-          respuesta_json, fuente_respuesta
-        ) VALUES (
-          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'api_externa'
-        ) RETURNING id`,
-        [
-          hash,
-          query.producto,
-          query.carga,
-          query.modo,
-          query.toneladas,
-          query.importacion,
-          query.comuna,
-          query.puerto,
-          query.puerto_ext,
-          query.pais,
-          query.cargapeligrosa,
-          data,
-        ]
+      // 6. Registrar en consulta_historica SIEMPRE (vigente o no)
+      const fechaConsulta = new Date();
+      const fechaValidaHasta = new Date(fechaConsulta);
+      fechaValidaHasta.setMonth(fechaValidaHasta.getMonth() + meses);
+
+      await pool.query(
+        `
+        INSERT INTO tbl_consulta_historica (
+          user_id, consulta_id, fecha_consulta, periodo_validez, fecha_valida_hasta
+        ) VALUES ($1, $2, $3, $4, $5)
+      `,
+        [userId, consultaId, fechaConsulta, periodo_validez, fechaValidaHasta]
       );
 
-      const consultaId = insert.rows[0].id;
-      await pool.query(
-        "INSERT INTO tbl_consulta_historica (user_id, consulta_id) VALUES ($1, $2)",
-        [userId, consultaId]
-      );
       resultados.push(data);
     }
 
+    // 7. Enviar respuesta al frontend
     res.json(isArray ? resultados : resultados[0]);
 
-     setTimeout(async () => {
+    // 8. Enviar resumen por correo (no bloquear)
+    setTimeout(async () => {
       try {
         let userEmail = req.user?.email;
         if (!userEmail) {
@@ -105,26 +160,21 @@ export const realizarConsulta = async (req, res) => {
           );
           userEmail = rows[0]?.email;
         }
-        if (!userEmail) {
-          console.error(
-            "No se pudo encontrar el email del usuario, no se envía correo."
-          );
-          return;
-        }
+        if (!userEmail) return;
 
-        // AHORA MANDAS LOS RESULTADOS (RESPUESTA) Y NO LOS QUERIES (PARÁMETROS)
         await sendUserQuerySummary(userEmail, resultados);
       } catch (err) {
         console.error("Error al enviar correo resumen consulta:", err);
       }
     }, 0);
-
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al procesar la consulta.", code: "INTERNAL_ERROR" });
+    res.status(500).json({
+      message: "Error al procesar la consulta.",
+      code: "INTERNAL_ERROR",
+    });
   }
 };
-
 
 export const obtenerHistorial = async (req, res) => {
   const userId = req.user.userId;
@@ -133,26 +183,29 @@ export const obtenerHistorial = async (req, res) => {
     const { rows } = await pool.query(
       `
       SELECT 
-        ch.id AS historial_id,
-        cu.id AS consulta_id,
-        cu.hash_request,
-        ch.fecha_consulta,
-        cu.producto,
-        cu.carga,
-        cu.modo,
-        cu.toneladas,
-        cu.importacion,
-        cu.comuna,
-        cu.puerto,
-        cu.puerto_ext,
-        cu.pais,
-        cu.cargapeligrosa,
-        cu.respuesta_json,
-        cu.fuente_respuesta
-      FROM tbl_consulta_historica ch
-      JOIN tbl_consulta_unica cu ON ch.consulta_id = cu.id
-      WHERE ch.user_id = $1
-      ORDER BY ch.fecha_consulta DESC
+  ch.id AS historial_id,
+  cu.id AS consulta_id,
+  cu.hash_request,
+  ch.fecha_consulta,
+  ch.fecha_valida_hasta,
+  ch.periodo_validez,
+  cu.producto,
+  cu.carga,
+  cu.modo,
+  cu.toneladas,
+  cu.importacion,
+  cu.comuna,
+  cu.puerto,
+  cu.puerto_ext,
+  cu.pais,
+  cu.cargapeligrosa,
+  cu.respuesta_json,
+  cu.fuente_respuesta
+FROM tbl_consulta_historica ch
+JOIN tbl_consulta_unica cu ON ch.consulta_id = cu.id
+WHERE ch.user_id = $1
+ORDER BY ch.fecha_consulta DESC
+
       `,
       [userId]
     );
@@ -165,12 +218,12 @@ export const obtenerHistorial = async (req, res) => {
 };
 
 export const reejecutarConsulta = async (req, res) => {
-  const userId = req.user.userId; // Asegúrate de tener autenticación en la ruta
+  const userId = req.user.userId;
   const parametros = req.body;
   const hash = generarHashConsulta(parametros);
 
   try {
-    // 1. Consulta SIEMPRE la API externa (no importa si existe en BD)
+    // 1. Consultar la API externa
     let data;
     try {
       const response = await axios.get("http://localhost:8000/query", {
@@ -190,17 +243,12 @@ export const reejecutarConsulta = async (req, res) => {
     );
 
     let consultaId;
+
     if (consultaExistente.rows.length > 0) {
-      // 3A. Si existe, ACTUALIZAR respuesta_json y fecha
+      // 2A. Ya existe, no la sobrescribimos, solo usamos el ID
       consultaId = consultaExistente.rows[0].id;
-      await pool.query(
-        `UPDATE tbl_consulta_unica
-         SET respuesta_json = $1, fuente_respuesta = 'api_externa', fecha_consulta = CURRENT_TIMESTAMP
-         WHERE id = $2`,
-        [data, consultaId]
-      );
     } else {
-      // 3B. Si no existe, INSERTAR nuevo registro
+      // 2B. No existe, insertamos una nueva
       const insert = await pool.query(
         `INSERT INTO tbl_consulta_unica (
           hash_request, producto, carga, modo, toneladas, importacion,
@@ -227,16 +275,31 @@ export const reejecutarConsulta = async (req, res) => {
       consultaId = insert.rows[0].id;
     }
 
-    // 4. Registra el uso en el historial
+    // 3. Obtener validez preferida del usuario
+    const { rows: configRows } = await pool.query(
+      "SELECT validez_preferida FROM tbluser WHERE id = $1",
+      [userId]
+    );
+    const meses = configRows[0]?.validez_preferida ?? 2;
+    const periodo_validez = `${meses} months`;
+
+    // 4. Calcular fecha de validez
+    const fechaConsulta = new Date();
+    const fechaValidaHasta = new Date(fechaConsulta);
+    fechaValidaHasta.setMonth(fechaValidaHasta.getMonth() + meses);
+
+    // 5. Registrar en historial con validez personalizada
     await pool.query(
-      "INSERT INTO tbl_consulta_historica (user_id, consulta_id) VALUES ($1, $2)",
-      [userId, consultaId]
+      `INSERT INTO tbl_consulta_historica (
+        user_id, consulta_id, fecha_consulta, periodo_validez, fecha_valida_hasta
+      ) VALUES ($1, $2, $3, $4, $5)`,
+      [userId, consultaId, fechaConsulta, periodo_validez, fechaValidaHasta]
     );
 
-    // 5. Devuelve la respuesta de la API
+    // 6. Devolver respuesta de API
     res.json(data);
   } catch (error) {
-    console.error(error);
+    console.error("Error al re-ejecutar la consulta:", error);
     res.status(500).json({ message: "Error al re-ejecutar la consulta." });
   }
 };
@@ -273,4 +336,3 @@ export const obtenerHistorialDeUsuario = async (req, res) => {
     res.status(500).json({ error: "Error al obtener historial de consultas" });
   }
 };
-
