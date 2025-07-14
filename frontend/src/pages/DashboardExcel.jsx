@@ -313,14 +313,14 @@ const DashboardExcel = () => {
         <button
           id="descarga-plantilla"
           onClick={downloadTemplate}
-          className="px-4 py-2 bg-yellow-400 text-yellow-900 rounded-lg hover:bg-yellow-500 font-semibold transition-colors"
+          className="px-4 py-2 bg-yellow-400 text-yellow-900 rounded-xl hover:bg-yellow-500 font-semibold transition-colors"
         >
           Descargar Plantilla Excel
         </button>
 
         <label
           id="carga-excel"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-colors cursor-pointer text-center flex items-center justify-center gap-2"
+          className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold transition-colors cursor-pointer text-center flex items-center justify-center gap-2"
         >
           <UploadCloud className="w-5 h-5" />
           Subir Archivo Excel

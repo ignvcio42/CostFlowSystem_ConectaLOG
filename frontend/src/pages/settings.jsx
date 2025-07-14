@@ -39,7 +39,7 @@ const Settings = () => {
       <div className="w-full max-w-4xl px-4 py-4 my-6 shadow-lg bg-gray-50 dark:bg-black/20 md:px-10 md:my-10 rounded-xl transition-all duration-300">
         <div className="mt-6 p-4 border-b-2 border-gray-200 dark:border-gray-800 transition-all duration-300">
           <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
-            Settings
+            Configuración
           </h2>
         </div>
 

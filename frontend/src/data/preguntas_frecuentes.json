@@ -1,6 +1,6 @@
 [
   {
-    "categoria": "Formulario",
+    "categoría": "Formulario",
     "preguntas": [
       {
         "pregunta": "¿Qué información debo ingresar en el formulario?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "categoria": "Resultados",
+    "categoría": "Resultados",
     "preguntas": [
       {
         "pregunta": "¿Cuánto tiempo toma obtener los resultados?",
@@ -21,12 +21,17 @@
       },
       {
         "pregunta": "¿En qué formato se presentan los resultados?",
-        "respuesta": "Estructurados en seccion Historial y enviados por correo electrónico."
+        "respuesta": "Estructurados en sección Historial y enviados por correo electrónico."
+      },
+      {
+        "pregunta": "¿Por cuánto tiempo son válidos los resultados de mis consultas?",
+        "respuesta": "Puedes configurar el periodo de validez en la sección de Configuración. Durante ese tiempo, si repites una consulta igual, el sistema reutilizará el resultado anterior sin volver a calcularlo."
       }
+
     ]
 },
 {
-  "categoria": "Errores",
+  "categoría": "Errores",
   "preguntas": [
     {
       "pregunta": "¿Qué hago si el sistema no reconoce mi consulta?",
@@ -35,7 +40,7 @@
   ]
 },
 {
-  "categoria": "Contacto",
+  "categoría": "Contacto",
   "preguntas": [
     {
       "pregunta": "¿Cómo puedo contactar al soporte técnico?",

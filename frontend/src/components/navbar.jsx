@@ -24,7 +24,7 @@ const links = [
   { label: "Formulario Excel", link: "/excel" },
   // { label: "Accounts", link: "/accounts" },
   { label: "Historial", link: "/history" },
-  { label: "Configuracion", link: "/settings" },
+  { label: "Configuración", link: "/settings" },
   { label: "Glosario", link: "/glosary" },
 ];
 
@@ -71,7 +71,7 @@ const UserMenu = () => {
                         : "text-gray-900 dark:text-gray-500"
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   >
-                    Profile
+                    Configuración
                   </button>
                 </Link>
               )}
@@ -86,7 +86,7 @@ const UserMenu = () => {
                       : "text-gray-900 dark:text-gray-500"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
-                  Sign Out
+                  Cerrar sesión
                 </button>
               )}
             </MenuItem>
