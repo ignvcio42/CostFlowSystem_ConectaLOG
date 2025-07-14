@@ -41,13 +41,6 @@ export default function GlosarioSection({ title, items }) {
           )}
         </List>
       )}
-      <List height={400} itemCount={filtered.length} itemSize={60} width="100%">
-        {({ index, style }) => (
-          <div style={style}>
-            <GlosarioItem item={filtered[index]} />
-          </div>
-        )}
-      </List>
     </Card>
   );
 }

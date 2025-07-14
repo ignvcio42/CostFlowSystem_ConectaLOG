@@ -225,9 +225,11 @@ const History = () => {
             - {new Date(consulta.fecha_consulta).toLocaleString()}
           </p>
           {consultaExpirada(consulta) && (
-            <div className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400 mt-1">
-              <AlarmClockOff className="w-4 h-4" />
-              Consulta expirada
+            <div className="flex items-center gap-1 text-sm mt-1">
+              <span className="flex items-center gap-1 px-2 py-1 rounded bg-red-400 text-white dark:bg-red-800/20 dark:text-red-400 hover:bg-red-500 transition-all duration-300 hover:dark:bg-red-700">
+                <AlarmClockOff className="w-4 h-4" />
+                Consulta expirada
+              </span>
             </div>
           )}
 
